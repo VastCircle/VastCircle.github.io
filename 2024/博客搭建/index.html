@@ -15,107 +15,106 @@ on-phone--column extended"><div id=article-toolbar><a href=https://VastCircle.gi
 <svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
 <span>Dark Mode</span></li></ol></aside><main class="main full-width"><article class=main-article><header class=article-header><div class=article-details><h2 class=article-title><a href=/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/>博客搭建</a></h2><h3 class=article-subtitle>使用hugo + stack 搭建自己的博客</h3><footer class=article-time><div><svg class="icon icon-tabler icon-tabler-calendar-time" width="56" height="56" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><path d="M11.795 21H5a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v4"/><circle cx="18" cy="18" r="4"/><path d="M15 3v4"/><path d="M7 3v4"/><path d="M3 11h16"/><path d="M18 16.496V18l1 1"/></svg>
 <time class=article-time--published>Oct 06, 2024</time></div><div><svg class="icon icon-tabler icon-tabler-clock" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg>
-<time class=article-words>1882字</time></div></footer></div></header><section class=article-content><h2 id=安装hugo>安装Hugo</h2><p>ubuntu 系统使用</p><pre><code>sudo apt install hugo 
-</code></pre><p>使用以下命令进行验证</p><pre><code>hugo version
-</code></pre><h2 id=创建-hugo-网站>创建 Hugo 网站</h2><p>通过上述命令安装 hugo 程序后，就可以通过 <code>hugo new site</code> 命令进行网站创建、配置与本地调试了。</p><pre><code class=language-shell>hugo new site robin-site
-</code></pre><h2 id=配置主题>配置主题</h2><p>当通过上文命令创建我们的站点后，需要进行主题配置，Hugo 社区有了很丰富的主题，可以通过官网 <a class=link href=https://themes.gohugo.io/ target=_blank rel=noopener>Themes</a> 菜单选择自己喜欢的风格，查看预览效果，选择后可以进入主题项目仓库，一般都会有很详细的安装及配置说明。</p><p>官方主题网站: <a class=link href=https://themes.gohugo.io/ target=_blank rel=noopener>https://themes.gohugo.io/</a></p><p>主题推荐:</p><ul><li>Pure: <a class=link href=https://themes.gohugo.io/hugo-theme-pure/ target=_blank rel=noopener>https://themes.gohugo.io/hugo-theme-pure/</a></li></ul><h3 id=关联主题仓库>关联主题仓库</h3><p><a class=link href=https://github.com/reuixiy/hugo-theme-meme/blob/main/README.zh-cn.md target=_blank rel=noopener>https://github.com/reuixiy/hugo-theme-meme/blob/main/README.zh-cn.md</a></p><p>我们可以将主题仓库直接 <code>git clone</code> 下来进行使用，例如在根目录robin-site下运行以下代码，即可下载pure主题.</p><pre><code class=language-sh>git clone https://github.com/xiaoheiAh/hugo-theme-pure themes/pure
-</code></pre><p>这种方式有一些弊端，当之后自己对主题进行修改后，可能会与原主题产生一些冲突，不方便版本管理与后续更新。官方更推荐使用的是将原主题仓库 <code>fork</code> 到自己的账户，并使用 <code>git submodule</code> 方式进行仓库链接，这样后续可以对主题的修改进行单独维护。</p><pre><code class=language-bash>cd  robin-site/
-git init
-git submodule add https://github.com/pseudoyu/pure themes/pure
-</code></pre><p>然后在根目录下的 <code>config.toml</code>文件中添加新的一行:</p><pre><code class=language-sh>theme = &quot;pure&quot;
-</code></pre><h3 id=更新主题>更新主题</h3><p>如果是 clone 了其他人的博客项目进行修改，则需要用以下命令进行初始化：</p><pre><code class=language-bash>git submodule update --init --recursive
-</code></pre><p>如果需要同步主题仓库的最新修改，需要运行以下命令：</p><pre><code class=language-bash>git submodule update --remote
-</code></pre><h3 id=hugo-theme-meme主题配置>hugo-theme-meme主题配置</h3><pre><code class=language-shell>## 安装meme
-git submodule add --depth 1 https://github.com/reuixiy/hugo-theme-meme.git themes/meme
-## 替换配置
-rm config.toml &amp;&amp; cp themes/meme/config-examples/zh-cn/config.toml config.toml
-</code></pre><h3 id=zozo-主题配置>zozo 主题配置</h3><pre><code>git submodule add https://github.com/varkai/hugo-theme-zozo themes/zozo  
+<time class=article-words>1882字</time></div></footer></div></header><section class=article-content><h2 id=安装hugo>安装Hugo</h2><p>ubuntu 系统使用</p><pre tabindex=0><code>sudo apt install hugo 
+</code></pre><p>使用以下命令进行验证</p><pre tabindex=0><code>hugo version
+</code></pre><h2 id=创建-hugo-网站>创建 Hugo 网站</h2><p>通过上述命令安装 hugo 程序后，就可以通过 <code>hugo new site</code> 命令进行网站创建、配置与本地调试了。</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>hugo new site robin-site
+</span></span></code></pre></div><h2 id=配置主题>配置主题</h2><p>当通过上文命令创建我们的站点后，需要进行主题配置，Hugo 社区有了很丰富的主题，可以通过官网 <a class=link href=https://themes.gohugo.io/ target=_blank rel=noopener>Themes</a> 菜单选择自己喜欢的风格，查看预览效果，选择后可以进入主题项目仓库，一般都会有很详细的安装及配置说明。</p><p>官方主题网站: <a class=link href=https://themes.gohugo.io/ target=_blank rel=noopener>https://themes.gohugo.io/</a></p><p>主题推荐:</p><ul><li>Pure: <a class=link href=https://themes.gohugo.io/hugo-theme-pure/ target=_blank rel=noopener>https://themes.gohugo.io/hugo-theme-pure/</a></li></ul><h3 id=关联主题仓库>关联主题仓库</h3><p><a class=link href=https://github.com/reuixiy/hugo-theme-meme/blob/main/README.zh-cn.md target=_blank rel=noopener>https://github.com/reuixiy/hugo-theme-meme/blob/main/README.zh-cn.md</a></p><p>我们可以将主题仓库直接 <code>git clone</code> 下来进行使用，例如在根目录robin-site下运行以下代码，即可下载pure主题.</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>git clone https://github.com/xiaoheiAh/hugo-theme-pure themes/pure
+</span></span></code></pre></div><p>这种方式有一些弊端，当之后自己对主题进行修改后，可能会与原主题产生一些冲突，不方便版本管理与后续更新。官方更推荐使用的是将原主题仓库 <code>fork</code> 到自己的账户，并使用 <code>git submodule</code> 方式进行仓库链接，这样后续可以对主题的修改进行单独维护。</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span><span style=color:#e5c07b>cd</span>  robin-site/
+</span></span><span style=display:flex><span>git init
+</span></span><span style=display:flex><span>git submodule add https://github.com/pseudoyu/pure themes/pure
+</span></span></code></pre></div><p>然后在根目录下的 <code>config.toml</code>文件中添加新的一行:</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span><span style=color:#e06c75>theme</span> <span style=color:#56b6c2>=</span> <span style=color:#98c379>&#34;pure&#34;</span>
+</span></span></code></pre></div><h3 id=更新主题>更新主题</h3><p>如果是 clone 了其他人的博客项目进行修改，则需要用以下命令进行初始化：</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git submodule update --init --recursive
+</span></span></code></pre></div><p>如果需要同步主题仓库的最新修改，需要运行以下命令：</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>git submodule update --remote
+</span></span></code></pre></div><h3 id=hugo-theme-meme主题配置>hugo-theme-meme主题配置</h3><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#7f848e>## 安装meme</span>
+</span></span><span style=display:flex><span>git submodule add --depth <span style=color:#d19a66>1</span> https://github.com/reuixiy/hugo-theme-meme.git themes/meme
+</span></span><span style=display:flex><span><span style=color:#7f848e>## 替换配置</span>
+</span></span><span style=display:flex><span>rm config.toml <span style=color:#56b6c2>&amp;&amp;</span> cp themes/meme/config-examples/zh-cn/config.toml config.toml
+</span></span></code></pre></div><h3 id=zozo-主题配置>zozo 主题配置</h3><pre tabindex=0><code>git submodule add https://github.com/varkai/hugo-theme-zozo themes/zozo  
 rm config.toml &amp;&amp; cp themes/zozo/config.toml config.toml
-</code></pre><p><a class=link href=https://gojun.me/posts/hello-hugo-blog/ target=_blank rel=noopener>https://gojun.me/posts/hello-hugo-blog/</a></p><h3 id=hugo-theme-stack主题配置>Hugo-theme-stack主题配置</h3><p><a class=link href=https://stack.jimmycai.com/guide/getting-started target=_blank rel=noopener>https://stack.jimmycai.com/guide/getting-started</a></p><h2 id=新建博文>新建博文</h2><p>完成后，可以通过 <code>hugo new</code> 命令发布新文章。</p><pre><code class=language-bash>hugo new posts/test.md
----
-title: &quot;Test&quot;
-date: 2022-10-21T19:00:43+08:00
-draft: true
----
-</code></pre><p>这个命令会在 <code>content</code> 目录下建立 <code>post</code> 目录，并在 <code>post</code> 下生成 <code>test.md</code> 文件，博文书写就在这个文件里使用 Markdown 语法完成。博文的 front matter 里<code>draft</code> 选项默认为 <code>true</code>，需要改为 <code>false</code> 才能发表博文，建议直接更改上面说的<code>archetypes</code> 目录下的 <code>default</code> 文件，把 <code>draft: true</code> 改为 <code>draft: false</code>，这样生成的博文就是默认可以发表的。</p><h2 id=生成网页>生成网页</h2><p>为了查看生成的博客的效果，我们在本地编辑调试时可以通过 <code>hugo server</code> 命令进行本地实时调试预览，无须每次都重新生成。在cmd中运行以下命令，即我们可以通过浏览器 http://localhost:1313/ 地址访问我们的本地预览网页。</p><pre><code class=language-fallback>hugo server -D
-</code></pre><p>但此时只能在本地访问，如果想发布到 <code>Github Pages</code> ， 还需要借助 GithubPages 工具。</p><h2 id=配置文件><strong>配置文件</strong></h2><p>打开配置config.toml可以看到很多的参数可以配置，这里只描述最基本的内容，不同的主题可能会支持不同的参数配置，具体请看对应主题的说明文档。baseURL是站点的域名。title是站点的名称。theme是站点的主题。还有关于评论和打赏的相关配置，这些配置都可以参考官网主题的说明。</p><p>每次发布的时候，都需要先执行hugo，把新写的文档按照主题进行渲染，所有生成的文件默认都在当前pulic的子目录下，可以在config里面配置到其他目录。然后把所有新的文件提交到github。提交代码之后，要等一段时间才生效。</p><h2 id=github-actions-部署>github actions 部署</h2><h3 id=两个仓库>两个仓库</h3><p>如果想使用 Github Actions 自动部署 hugo 博客，则最起码需要创建两个 Github 的仓库。</p><blockquote><ol><li>第一个，便是存储博客 .md 源文件的地方，其实就是 hugo 系统；</li><li>第二个，则是部署 Github Pages 的仓库，仓库名必须是 <code>&lt;username>.github.io</code>，这是 github 官方要求的。</li></ol></blockquote><h2 id=最终版>最终版</h2><h3 id=主题>主题</h3><p>使用的是大佬美化后的版本 <a class=link href=https://github.com/Mantyke/Hugo-stack-theme-mod target=_blank rel=noopener>Mantyke/Hugo-stack-theme-mod</a>。</p><p>因为还是想用github工作流，不使用vercel,所以接下来结合前面的多篇文章操作,第一步是clone fork 之后的仓库，然后修改remote为一个创建好的私人仓库</p><pre><code>git clone git@github.com:VastCircle/Hugo-stack.git
+</code></pre><p><a class=link href=https://gojun.me/posts/hello-hugo-blog/ target=_blank rel=noopener>https://gojun.me/posts/hello-hugo-blog/</a></p><h3 id=hugo-theme-stack主题配置>Hugo-theme-stack主题配置</h3><p><a class=link href=https://stack.jimmycai.com/guide/getting-started target=_blank rel=noopener>https://stack.jimmycai.com/guide/getting-started</a></p><h2 id=新建博文>新建博文</h2><p>完成后，可以通过 <code>hugo new</code> 命令发布新文章。</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>hugo new posts/test.md
+</span></span><span style=display:flex><span>---
+</span></span><span style=display:flex><span>title: <span style=color:#98c379>&#34;Test&#34;</span>
+</span></span><span style=display:flex><span>date: 2022-10-21T19:00:43+08:00
+</span></span><span style=display:flex><span>draft: <span style=color:#e5c07b>true</span>
+</span></span><span style=display:flex><span>---
+</span></span></code></pre></div><p>这个命令会在 <code>content</code> 目录下建立 <code>post</code> 目录，并在 <code>post</code> 下生成 <code>test.md</code> 文件，博文书写就在这个文件里使用 Markdown 语法完成。博文的 front matter 里<code>draft</code> 选项默认为 <code>true</code>，需要改为 <code>false</code> 才能发表博文，建议直接更改上面说的<code>archetypes</code> 目录下的 <code>default</code> 文件，把 <code>draft: true</code> 改为 <code>draft: false</code>，这样生成的博文就是默认可以发表的。</p><h2 id=生成网页>生成网页</h2><p>为了查看生成的博客的效果，我们在本地编辑调试时可以通过 <code>hugo server</code> 命令进行本地实时调试预览，无须每次都重新生成。在cmd中运行以下命令，即我们可以通过浏览器 http://localhost:1313/ 地址访问我们的本地预览网页。</p><pre tabindex=0><code class=language-fallback data-lang=fallback>hugo server -D
+</code></pre><p>但此时只能在本地访问，如果想发布到 <code>Github Pages</code> ， 还需要借助 GithubPages 工具。</p><h2 id=配置文件><strong>配置文件</strong></h2><p>打开配置config.toml可以看到很多的参数可以配置，这里只描述最基本的内容，不同的主题可能会支持不同的参数配置，具体请看对应主题的说明文档。baseURL是站点的域名。title是站点的名称。theme是站点的主题。还有关于评论和打赏的相关配置，这些配置都可以参考官网主题的说明。</p><p>每次发布的时候，都需要先执行hugo，把新写的文档按照主题进行渲染，所有生成的文件默认都在当前pulic的子目录下，可以在config里面配置到其他目录。然后把所有新的文件提交到github。提交代码之后，要等一段时间才生效。</p><h2 id=github-actions-部署>github actions 部署</h2><h3 id=两个仓库>两个仓库</h3><p>如果想使用 Github Actions 自动部署 hugo 博客，则最起码需要创建两个 Github 的仓库。</p><blockquote><ol><li>第一个，便是存储博客 .md 源文件的地方，其实就是 hugo 系统；</li><li>第二个，则是部署 Github Pages 的仓库，仓库名必须是 <code>&lt;username>.github.io</code>，这是 github 官方要求的。</li></ol></blockquote><h2 id=最终版>最终版</h2><h3 id=主题>主题</h3><p>使用的是大佬美化后的版本 <a class=link href=https://github.com/Mantyke/Hugo-stack-theme-mod target=_blank rel=noopener>Mantyke/Hugo-stack-theme-mod</a>。</p><p>因为还是想用github工作流，不使用vercel,所以接下来结合前面的多篇文章操作,第一步是clone fork 之后的仓库，然后修改remote为一个创建好的私人仓库</p><pre tabindex=0><code>git clone git@github.com:VastCircle/Hugo-stack.git
 git remote set-url origin git@github.com:VastCircle/hugostack.git
-</code></pre><p>之后通过一系列的git操作将网页部署到gh-pages分支上</p><pre><code class=language-shell>rm -rf public
-
-git add .
-git commit -m 'hugo project init'
-git push -u origin master
-
-## create a new orphand branch (no commit history) named gh-pages
-git checkout --orphan gh-pages
-
-## Unstage all files
-git rm -rf --cached $(git ls-files)
-
-## Add and commit that file
-git add .
-git commit -m &quot;INIT: initial commit on gh-pages branch&quot;
-
-## Push to remote gh-pages branch
-git push origin gh-pages
-## Return to master branch
-git checkout master
-
-## Add the gh-pages branch of the repository. It will look like a folder named public
-git subtree add --prefix=public git@github.com:VastCircle/hugostack.git gh-pages --squash
-## Pull down the file we just committed. This helps avoid merge conflicts
-git subtree pull --prefix=public git@github.com:VastCircle/hugostack.git gh-pages
-## Push the public subtree to the gh-pages branch
-git subtree push --prefix=public git@github.com:VastCircle/hugostack.git gh-pages
-</code></pre><p>貌似失败了</p><h3 id=再来一次>再来一次</h3><p>这次把public作为一个独立的仓库，通过.gitignore去屏蔽public ,使得 主仓库不包括 public ,</p><pre><code class=language-shell>rm -rf public
-
-## 主仓库
-git add .
-git commit -m 'hugo project init'
-git push -u origin master
-
-## 推送仓库
-hugo 
-cd public 
-git remote add origin https://github.com/VastCircle/VastCircle.github.io.git 
-git add .
-git commit -m &quot;INIT: initial commit on public&quot;
-git push -u origin master
-
-</code></pre><p>shell 脚本</p><pre><code class=language-shell>#deploy.sh
-#!/bin/bash
-
-echo -e &quot;\033[0;32mDeploying updates to GitHub...\033[0m&quot;
-
-# Build the project.
-hugo # if using a theme, replace by `hugo -t &lt;yourtheme&gt;`
-
-# Go To Public folder
-cd public
-# Add changes to git.
-git add -A
-
-# Commit changes.
-msg=&quot;rebuilding site `date`&quot;
-if [ $# -eq 1 ]
-  then msg=&quot;$1&quot;
-fi
-git commit -m &quot;$msg&quot;
-
-# Push source and build repos.
-git push origin master
-
-# Come Back
-cd ..
-</code></pre><h3 id=添加-github-action>添加 github action</h3><p>.github/workflows/deploy-site.yaml</p><pre><code>name: deploy
+</code></pre><p>之后通过一系列的git操作将网页部署到gh-pages分支上</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>rm -rf public
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>git add .
+</span></span><span style=display:flex><span>git commit -m <span style=color:#98c379>&#39;hugo project init&#39;</span>
+</span></span><span style=display:flex><span>git push -u origin master
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## create a new orphand branch (no commit history) named gh-pages</span>
+</span></span><span style=display:flex><span>git checkout --orphan gh-pages
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Unstage all files</span>
+</span></span><span style=display:flex><span>git rm -rf --cached <span style=color:#c678dd>$(</span>git ls-files<span style=color:#c678dd>)</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Add and commit that file</span>
+</span></span><span style=display:flex><span>git add .
+</span></span><span style=display:flex><span>git commit -m <span style=color:#98c379>&#34;INIT: initial commit on gh-pages branch&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Push to remote gh-pages branch</span>
+</span></span><span style=display:flex><span>git push origin gh-pages
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Return to master branch</span>
+</span></span><span style=display:flex><span>git checkout master
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Add the gh-pages branch of the repository. It will look like a folder named public</span>
+</span></span><span style=display:flex><span>git subtree add --prefix<span style=color:#56b6c2>=</span>public git@github.com:VastCircle/hugostack.git gh-pages --squash
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Pull down the file we just committed. This helps avoid merge conflicts</span>
+</span></span><span style=display:flex><span>git subtree pull --prefix<span style=color:#56b6c2>=</span>public git@github.com:VastCircle/hugostack.git gh-pages
+</span></span><span style=display:flex><span><span style=color:#7f848e>## Push the public subtree to the gh-pages branch</span>
+</span></span><span style=display:flex><span>git subtree push --prefix<span style=color:#56b6c2>=</span>public git@github.com:VastCircle/hugostack.git gh-pages
+</span></span></code></pre></div><p>貌似失败了</p><h3 id=再来一次>再来一次</h3><p>这次把public作为一个独立的仓库，通过.gitignore去屏蔽public ,使得 主仓库不包括 public ,</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span>rm -rf public
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## 主仓库</span>
+</span></span><span style=display:flex><span>git add .
+</span></span><span style=display:flex><span>git commit -m <span style=color:#98c379>&#39;hugo project init&#39;</span>
+</span></span><span style=display:flex><span>git push -u origin master
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>## 推送仓库</span>
+</span></span><span style=display:flex><span>hugo 
+</span></span><span style=display:flex><span><span style=color:#e5c07b>cd</span> public 
+</span></span><span style=display:flex><span>git remote add origin https://github.com/VastCircle/VastCircle.github.io.git 
+</span></span><span style=display:flex><span>git add .
+</span></span><span style=display:flex><span>git commit -m <span style=color:#98c379>&#34;INIT: initial commit on public&#34;</span>
+</span></span><span style=display:flex><span>git push -u origin master
+</span></span></code></pre></div><p>shell 脚本</p><div class=highlight><pre tabindex=0 style=color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-shell data-lang=shell><span style=display:flex><span><span style=color:#7f848e>#deploy.sh</span>
+</span></span><span style=display:flex><span><span style=color:#7f848e>#!/bin/bash</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#e5c07b>echo</span> -e <span style=color:#98c379>&#34;\033[0;32mDeploying updates to GitHub...\033[0m&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e># Build the project.</span>
+</span></span><span style=display:flex><span>hugo <span style=color:#7f848e># if using a theme, replace by `hugo -t &lt;yourtheme&gt;`</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e># Go To Public folder</span>
+</span></span><span style=display:flex><span><span style=color:#e5c07b>cd</span> public
+</span></span><span style=display:flex><span><span style=color:#7f848e># Add changes to git.</span>
+</span></span><span style=display:flex><span>git add -A
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e># Commit changes.</span>
+</span></span><span style=display:flex><span><span style=color:#e06c75>msg</span><span style=color:#56b6c2>=</span><span style=color:#98c379>&#34;rebuilding site `date`&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#c678dd>if</span> <span style=color:#56b6c2>[</span> <span style=color:#e06c75>$#</span> -eq <span style=color:#d19a66>1</span> <span style=color:#56b6c2>]</span>
+</span></span><span style=display:flex><span>  <span style=color:#c678dd>then</span> <span style=color:#e06c75>msg</span><span style=color:#56b6c2>=</span><span style=color:#98c379>&#34;</span><span style=color:#e06c75>$1</span><span style=color:#98c379>&#34;</span>
+</span></span><span style=display:flex><span><span style=color:#c678dd>fi</span>
+</span></span><span style=display:flex><span>git commit -m <span style=color:#98c379>&#34;</span><span style=color:#e06c75>$msg</span><span style=color:#98c379>&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e># Push source and build repos.</span>
+</span></span><span style=display:flex><span>git push origin master
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#7f848e># Come Back</span>
+</span></span><span style=display:flex><span><span style=color:#e5c07b>cd</span> ..
+</span></span></code></pre></div><h3 id=添加-github-action>添加 github action</h3><p>.github/workflows/deploy-site.yaml</p><pre tabindex=0><code>name: deploy
 
 on:
     push:
-      branches: [&quot;master&quot;]
+      branches: [&#34;master&#34;]
     workflow_dispatch:
     # schedule:
     #     # Runs everyday at 8:00 AM
-    #     - cron: &quot;0 0 * * *&quot;
+    #     - cron: &#34;0 0 * * *&#34;
 
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
@@ -125,7 +124,7 @@ permissions:
 
 # Allow one concurrent deployment
 concurrency:
-  group: &quot;pages&quot;
+  group: &#34;pages&#34;
   cancel-in-progress: true
 
 # Default to bash
@@ -151,7 +150,7 @@ jobs:
               id: pages
               uses: peaceiris/actions-hugo@v2
               with:
-                hugo-version: '0.134.0'
+                hugo-version: &#39;0.134.0&#39;
                 extended: true
 
             - name: Build Hugo

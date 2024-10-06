@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 06 Oct 2024 21:57:38 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
 &lt;p>ubuntu 系统使用&lt;/p>
-&lt;pre>&lt;code>sudo apt install hugo
-&lt;/code>&lt;/pre>
-&lt;p>使用以下命令进行验证&lt;/p>
-&lt;pre>&lt;code>hugo version
-&lt;/code>&lt;/pre>
-&lt;h2 id="创建-hugo-网站">创建 Hugo 网站&lt;/h2>
+&lt;pre tabindex="0">&lt;code>sudo apt install hugo
+&lt;/code>&lt;/pre>&lt;p>使用以下命令进行验证&lt;/p>
+&lt;pre tabindex="0">&lt;code>hugo version
+&lt;/code>&lt;/pre>&lt;h2 id="创建-hugo-网站">创建 Hugo 网站&lt;/h2>
 &lt;p>通过上述命令安装 hugo 程序后，就可以通过 &lt;code>hugo new site&lt;/code> 命令进行网站创建、配置与本地调试了。&lt;/p>
-&lt;pre>&lt;code class="language-shell">hugo new site robin-site
-&lt;/code>&lt;/pre>
-&lt;h2 id="配置主题">配置主题&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>hugo new site robin-site
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="配置主题">配置主题&lt;/h2>
 &lt;p>当通过上文命令创建我们的站点后，需要进行主题配置，Hugo 社区有了很丰富的主题，可以通过官网 &lt;a class="link" href="https://themes.gohugo.io/" target="_blank" rel="noopener"
 >Themes&lt;/a> 菜单选择自己喜欢的风格，查看预览效果，选择后可以进入主题项目仓库，一般都会有很详细的安装及配置说明。&lt;/p>
 &lt;p>官方主题网站: &lt;a class="link" href="https://themes.gohugo.io/" target="_blank" rel="noopener"
@@ -23,53 +20,44 @@
 &lt;p>&lt;a class="link" href="https://github.com/reuixiy/hugo-theme-meme/blob/main/README.zh-cn.md" target="_blank" rel="noopener"
 >https://github.com/reuixiy/hugo-theme-meme/blob/main/README.zh-cn.md&lt;/a>&lt;/p>
 &lt;p>我们可以将主题仓库直接 &lt;code>git clone&lt;/code> 下来进行使用，例如在根目录robin-site下运行以下代码，即可下载pure主题.&lt;/p>
-&lt;pre>&lt;code class="language-sh">git clone https://github.com/xiaoheiAh/hugo-theme-pure themes/pure
-&lt;/code>&lt;/pre>
-&lt;p>这种方式有一些弊端，当之后自己对主题进行修改后，可能会与原主题产生一些冲突，不方便版本管理与后续更新。官方更推荐使用的是将原主题仓库 &lt;code>fork&lt;/code> 到自己的账户，并使用 &lt;code>git submodule&lt;/code> 方式进行仓库链接，这样后续可以对主题的修改进行单独维护。&lt;/p>
-&lt;pre>&lt;code class="language-bash">cd robin-site/
-git init
-git submodule add https://github.com/pseudoyu/pure themes/pure
-&lt;/code>&lt;/pre>
-&lt;p>然后在根目录下的 &lt;code>config.toml&lt;/code>文件中添加新的一行:&lt;/p>
-&lt;pre>&lt;code class="language-sh">theme = &amp;quot;pure&amp;quot;
-&lt;/code>&lt;/pre>
-&lt;h3 id="更新主题">更新主题&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>git clone https://github.com/xiaoheiAh/hugo-theme-pure themes/pure
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这种方式有一些弊端，当之后自己对主题进行修改后，可能会与原主题产生一些冲突，不方便版本管理与后续更新。官方更推荐使用的是将原主题仓库 &lt;code>fork&lt;/code> 到自己的账户，并使用 &lt;code>git submodule&lt;/code> 方式进行仓库链接，这样后续可以对主题的修改进行单独维护。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> robin-site/
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git init
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git submodule add https://github.com/pseudoyu/pure themes/pure
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>然后在根目录下的 &lt;code>config.toml&lt;/code>文件中添加新的一行:&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">theme&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#34;pure&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="更新主题">更新主题&lt;/h3>
 &lt;p>如果是 clone 了其他人的博客项目进行修改，则需要用以下命令进行初始化：&lt;/p>
-&lt;pre>&lt;code class="language-bash">git submodule update --init --recursive
-&lt;/code>&lt;/pre>
-&lt;p>如果需要同步主题仓库的最新修改，需要运行以下命令：&lt;/p>
-&lt;pre>&lt;code class="language-bash">git submodule update --remote
-&lt;/code>&lt;/pre>
-&lt;h3 id="hugo-theme-meme主题配置">hugo-theme-meme主题配置&lt;/h3>
-&lt;pre>&lt;code class="language-shell">## 安装meme
-git submodule add --depth 1 https://github.com/reuixiy/hugo-theme-meme.git themes/meme
-## 替换配置
-rm config.toml &amp;amp;&amp;amp; cp themes/meme/config-examples/zh-cn/config.toml config.toml
-&lt;/code>&lt;/pre>
-&lt;h3 id="zozo-主题配置">zozo 主题配置&lt;/h3>
-&lt;pre>&lt;code>git submodule add https://github.com/varkai/hugo-theme-zozo themes/zozo
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git submodule update --init --recursive
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>如果需要同步主题仓库的最新修改，需要运行以下命令：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>git submodule update --remote
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="hugo-theme-meme主题配置">hugo-theme-meme主题配置&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 安装meme&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git submodule add --depth &lt;span style="color:#d19a66">1&lt;/span> https://github.com/reuixiy/hugo-theme-meme.git themes/meme
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 替换配置&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rm config.toml &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> cp themes/meme/config-examples/zh-cn/config.toml config.toml
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="zozo-主题配置">zozo 主题配置&lt;/h3>
+&lt;pre tabindex="0">&lt;code>git submodule add https://github.com/varkai/hugo-theme-zozo themes/zozo
 rm config.toml &amp;amp;&amp;amp; cp themes/zozo/config.toml config.toml
-&lt;/code>&lt;/pre>
-&lt;p>&lt;a class="link" href="https://gojun.me/posts/hello-hugo-blog/" target="_blank" rel="noopener"
+&lt;/code>&lt;/pre>&lt;p>&lt;a class="link" href="https://gojun.me/posts/hello-hugo-blog/" target="_blank" rel="noopener"
 >https://gojun.me/posts/hello-hugo-blog/&lt;/a>&lt;/p>
 &lt;h3 id="hugo-theme-stack主题配置">Hugo-theme-stack主题配置&lt;/h3>
 &lt;p>&lt;a class="link" href="https://stack.jimmycai.com/guide/getting-started" target="_blank" rel="noopener"
 >https://stack.jimmycai.com/guide/getting-started&lt;/a>&lt;/p>
 &lt;h2 id="新建博文">新建博文&lt;/h2>
 &lt;p>完成后，可以通过 &lt;code>hugo new&lt;/code> 命令发布新文章。&lt;/p>
-&lt;pre>&lt;code class="language-bash">hugo new posts/test.md
----
-title: &amp;quot;Test&amp;quot;
-date: 2022-10-21T19:00:43+08:00
-draft: true
----
-&lt;/code>&lt;/pre>
-&lt;p>这个命令会在 &lt;code>content&lt;/code> 目录下建立 &lt;code>post&lt;/code> 目录，并在 &lt;code>post&lt;/code> 下生成 &lt;code>test.md&lt;/code> 文件，博文书写就在这个文件里使用 Markdown 语法完成。博文的 front matter 里&lt;code>draft&lt;/code> 选项默认为 &lt;code>true&lt;/code>，需要改为 &lt;code>false&lt;/code> 才能发表博文，建议直接更改上面说的&lt;code>archetypes&lt;/code> 目录下的 &lt;code>default&lt;/code> 文件，把 &lt;code>draft: true&lt;/code> 改为 &lt;code>draft: false&lt;/code>，这样生成的博文就是默认可以发表的。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>hugo new posts/test.md
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title: &lt;span style="color:#98c379">&amp;#34;Test&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>date: 2022-10-21T19:00:43+08:00
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>draft: &lt;span style="color:#e5c07b">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这个命令会在 &lt;code>content&lt;/code> 目录下建立 &lt;code>post&lt;/code> 目录，并在 &lt;code>post&lt;/code> 下生成 &lt;code>test.md&lt;/code> 文件，博文书写就在这个文件里使用 Markdown 语法完成。博文的 front matter 里&lt;code>draft&lt;/code> 选项默认为 &lt;code>true&lt;/code>，需要改为 &lt;code>false&lt;/code> 才能发表博文，建议直接更改上面说的&lt;code>archetypes&lt;/code> 目录下的 &lt;code>default&lt;/code> 文件，把 &lt;code>draft: true&lt;/code> 改为 &lt;code>draft: false&lt;/code>，这样生成的博文就是默认可以发表的。&lt;/p>
 &lt;h2 id="生成网页">生成网页&lt;/h2>
 &lt;p>为了查看生成的博客的效果，我们在本地编辑调试时可以通过 &lt;code>hugo server&lt;/code> 命令进行本地实时调试预览，无须每次都重新生成。在cmd中运行以下命令，即我们可以通过浏览器 http://localhost:1313/ 地址访问我们的本地预览网页。&lt;/p>
-&lt;pre>&lt;code class="language-fallback">hugo server -D
-&lt;/code>&lt;/pre>
-&lt;p>但此时只能在本地访问，如果想发布到 &lt;code>Github Pages&lt;/code> ， 还需要借助 GithubPages 工具。&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-fallback" data-lang="fallback">hugo server -D
+&lt;/code>&lt;/pre>&lt;p>但此时只能在本地访问，如果想发布到 &lt;code>Github Pages&lt;/code> ， 还需要借助 GithubPages 工具。&lt;/p>
 &lt;h2 id="配置文件">&lt;strong>配置文件&lt;/strong>&lt;/h2>
 &lt;p>打开配置config.toml可以看到很多的参数可以配置，这里只描述最基本的内容，不同的主题可能会支持不同的参数配置，具体请看对应主题的说明文档。baseURL是站点的域名。title是站点的名称。theme是站点的主题。还有关于评论和打赏的相关配置，这些配置都可以参考官网主题的说明。&lt;/p>
 &lt;p>每次发布的时候，都需要先执行hugo，把新写的文档按照主题进行渲染，所有生成的文件默认都在当前pulic的子目录下，可以在config里面配置到其他目录。然后把所有新的文件提交到github。提交代码之后，要等一段时间才生效。&lt;/p>
@@ -87,79 +75,89 @@ draft: true
 &lt;p>使用的是大佬美化后的版本 &lt;a class="link" href="https://github.com/Mantyke/Hugo-stack-theme-mod" target="_blank" rel="noopener"
 >Mantyke/Hugo-stack-theme-mod&lt;/a>。&lt;/p>
 &lt;p>因为还是想用github工作流，不使用vercel,所以接下来结合前面的多篇文章操作,第一步是clone fork 之后的仓库，然后修改remote为一个创建好的私人仓库&lt;/p>
-&lt;pre>&lt;code>git clone git@github.com:VastCircle/Hugo-stack.git
+&lt;pre tabindex="0">&lt;code>git clone git@github.com:VastCircle/Hugo-stack.git
 git remote set-url origin git@github.com:VastCircle/hugostack.git
-&lt;/code>&lt;/pre>
-&lt;p>之后通过一系列的git操作将网页部署到gh-pages分支上&lt;/p>
-&lt;pre>&lt;code class="language-shell">rm -rf public
-git add .
-git commit -m 'hugo project init'
-git push -u origin master
-## create a new orphand branch (no commit history) named gh-pages
-git checkout --orphan gh-pages
-## Unstage all files
-git rm -rf --cached $(git ls-files)
-## Add and commit that file
-git add .
-git commit -m &amp;quot;INIT: initial commit on gh-pages branch&amp;quot;
-## Push to remote gh-pages branch
-git push origin gh-pages
-## Return to master branch
-git checkout master
-## Add the gh-pages branch of the repository. It will look like a folder named public
-git subtree add --prefix=public git@github.com:VastCircle/hugostack.git gh-pages --squash
-## Pull down the file we just committed. This helps avoid merge conflicts
-git subtree pull --prefix=public git@github.com:VastCircle/hugostack.git gh-pages
-## Push the public subtree to the gh-pages branch
-git subtree push --prefix=public git@github.com:VastCircle/hugostack.git gh-pages
-&lt;/code>&lt;/pre>
-&lt;p>貌似失败了&lt;/p>
+&lt;/code>&lt;/pre>&lt;p>之后通过一系列的git操作将网页部署到gh-pages分支上&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>rm -rf public
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git commit -m &lt;span style="color:#98c379">&amp;#39;hugo project init&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push -u origin master
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## create a new orphand branch (no commit history) named gh-pages&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git checkout --orphan gh-pages
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Unstage all files&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git rm -rf --cached &lt;span style="color:#c678dd">$(&lt;/span>git ls-files&lt;span style="color:#c678dd">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Add and commit that file&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git commit -m &lt;span style="color:#98c379">&amp;#34;INIT: initial commit on gh-pages branch&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Push to remote gh-pages branch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push origin gh-pages
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Return to master branch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git checkout master
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Add the gh-pages branch of the repository. It will look like a folder named public&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git subtree add --prefix&lt;span style="color:#56b6c2">=&lt;/span>public git@github.com:VastCircle/hugostack.git gh-pages --squash
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Pull down the file we just committed. This helps avoid merge conflicts&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git subtree pull --prefix&lt;span style="color:#56b6c2">=&lt;/span>public git@github.com:VastCircle/hugostack.git gh-pages
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## Push the public subtree to the gh-pages branch&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git subtree push --prefix&lt;span style="color:#56b6c2">=&lt;/span>public git@github.com:VastCircle/hugostack.git gh-pages
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>貌似失败了&lt;/p>
 &lt;h3 id="再来一次">再来一次&lt;/h3>
 &lt;p>这次把public作为一个独立的仓库，通过.gitignore去屏蔽public ,使得 主仓库不包括 public ,&lt;/p>
-&lt;pre>&lt;code class="language-shell">rm -rf public
-## 主仓库
-git add .
-git commit -m 'hugo project init'
-git push -u origin master
-## 推送仓库
-hugo
-cd public
-git remote add origin https://github.com/VastCircle/VastCircle.github.io.git
-git add .
-git commit -m &amp;quot;INIT: initial commit on public&amp;quot;
-git push -u origin master
-&lt;/code>&lt;/pre>
-&lt;p>shell 脚本&lt;/p>
-&lt;pre>&lt;code class="language-shell">#deploy.sh
-#!/bin/bash
-echo -e &amp;quot;\033[0;32mDeploying updates to GitHub...\033[0m&amp;quot;
-# Build the project.
-hugo # if using a theme, replace by `hugo -t &amp;lt;yourtheme&amp;gt;`
-# Go To Public folder
-cd public
-# Add changes to git.
-git add -A
-# Commit changes.
-msg=&amp;quot;rebuilding site `date`&amp;quot;
-if [ $# -eq 1 ]
-then msg=&amp;quot;$1&amp;quot;
-fi
-git commit -m &amp;quot;$msg&amp;quot;
-# Push source and build repos.
-git push origin master
-# Come Back
-cd ..
-&lt;/code>&lt;/pre>
-&lt;h3 id="添加-github-action">添加 github action&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>rm -rf public
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 主仓库&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git commit -m &lt;span style="color:#98c379">&amp;#39;hugo project init&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push -u origin master
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 推送仓库&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> public
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git remote add origin https://github.com/VastCircle/VastCircle.github.io.git
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add .
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git commit -m &lt;span style="color:#98c379">&amp;#34;INIT: initial commit on public&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push -u origin master
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>shell 脚本&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#deploy.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#!/bin/bash&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">echo&lt;/span> -e &lt;span style="color:#98c379">&amp;#34;\033[0;32mDeploying updates to GitHub...\033[0m&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Build the project.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo &lt;span style="color:#7f848e"># if using a theme, replace by `hugo -t &amp;lt;yourtheme&amp;gt;`&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Go To Public folder&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> public
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Add changes to git.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add -A
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Commit changes.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">msg&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;rebuilding site `date`&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">[&lt;/span> &lt;span style="color:#e06c75">$#&lt;/span> -eq &lt;span style="color:#d19a66">1&lt;/span> &lt;span style="color:#56b6c2">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">then&lt;/span> &lt;span style="color:#e06c75">msg&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$1&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git commit -m &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$msg&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Push source and build repos.&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git push origin master
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Come Back&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> ..
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="添加-github-action">添加 github action&lt;/h3>
 &lt;p>.github/workflows/deploy-site.yaml&lt;/p>
-&lt;pre>&lt;code>name: deploy
+&lt;pre tabindex="0">&lt;code>name: deploy
 on:
 push:
-branches: [&amp;quot;master&amp;quot;]
+branches: [&amp;#34;master&amp;#34;]
 workflow_dispatch:
 # schedule:
 # # Runs everyday at 8:00 AM
-# - cron: &amp;quot;0 0 * * *&amp;quot;
+# - cron: &amp;#34;0 0 * * *&amp;#34;
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
 contents: read
@@ -167,7 +165,7 @@ pages: write
 id-token: write
 # Allow one concurrent deployment
 concurrency:
-group: &amp;quot;pages&amp;quot;
+group: &amp;#34;pages&amp;#34;
 cancel-in-progress: true
 # Default to bash
 defaults:
@@ -190,7 +188,7 @@ fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
 id: pages
 uses: peaceiris/actions-hugo@v2
 with:
-hugo-version: '0.134.0'
+hugo-version: &amp;#39;0.134.0&amp;#39;
 extended: true
 - name: Build Hugo
 env:
@@ -207,8 +205,7 @@ EXTERNAL_REPOSITORY: VastCircle/VastCircle.github.io
 PUBLISH_BRANCH: master
 PUBLISH_DIR: ./public
 commit_message: ${{ github.event.head_commit.message }}
-&lt;/code>&lt;/pre>
-&lt;h2 id="引用">引用&lt;/h2>
+&lt;/code>&lt;/pre>&lt;h2 id="引用">引用&lt;/h2>
 &lt;p>&lt;a class="link" href="https://hk.v2ex.com/t/1009591" target="_blank" rel="noopener"
 >https://hk.v2ex.com/t/1009591&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://jianzhnie.github.io/post/hugo_site/" target="_blank" rel="noopener"
@@ -254,98 +251,91 @@ commit_message: ${{ github.event.head_commit.message }}
 &lt;h2 id="部分使用说明">部分使用说明&lt;/h2>
 &lt;h3 id="引用样式短代码">引用样式短代码&lt;/h3>
 &lt;p>（注：实际使用请补全花括号&lt;/p>
-&lt;pre>&lt;code class="language-fallback">{&amp;lt; quote &amp;gt;}}}
+&lt;pre tabindex="0">&lt;code class="language-fallback" data-lang="fallback">{&amp;lt; quote &amp;gt;}}}
 三月，因久旱不雨，苏轼赴郿，祈雨于太白山之上清宫。数日后，虽有微雨，父老以为不足，于是，再陪宋太守亲往祭祷，回程路上，便见道中有云气自山中来，如群马奔突而至车座左右，苏轼一时好奇心起，开笼收云归家，作《攓云篇》。
 {&amp;lt; /quote &amp;gt;}}
-&lt;/code>&lt;/pre>
-&lt;p>
+&lt;/code>&lt;/pre>&lt;p>
 &lt;blockquote class="quote">
 &lt;p>三月，因久旱不雨，苏轼赴郿，祈雨于太白山之上清宫。数日后，虽有微雨，父老以为不足，于是，再陪宋太守亲往祭祷，回程路上，便见道中有云气自山中来，如群马奔突而至车座左右，苏轼一时好奇心起，开笼收云归家，作《攓云篇》。&lt;/p>&lt;/blockquote>
 &lt;br>&lt;/p>
 &lt;h3 id="友情链接使用方式">友情链接使用方式&lt;/h3>
 &lt;p>友链头像放在&lt;code>/assets/link-img&lt;/code>，友链数据放在&lt;code>/data/links.json&lt;/code>&lt;/p>
-&lt;pre>&lt;code>[
+&lt;pre tabindex="0">&lt;code>[
 {
-&amp;quot;title&amp;quot;: &amp;quot;小球飞鱼&amp;quot;,
-&amp;quot;website&amp;quot;: &amp;quot;https://mantyke.icu/&amp;quot;,
-&amp;quot;image&amp;quot;: &amp;quot;mantyke.png&amp;quot;,
-&amp;quot;description&amp;quot;: &amp;quot;我们会一起遇见鲸鱼吗？&amp;quot;
+&amp;#34;title&amp;#34;: &amp;#34;小球飞鱼&amp;#34;,
+&amp;#34;website&amp;#34;: &amp;#34;https://mantyke.icu/&amp;#34;,
+&amp;#34;image&amp;#34;: &amp;#34;mantyke.png&amp;#34;,
+&amp;#34;description&amp;#34;: &amp;#34;我们会一起遇见鲸鱼吗？&amp;#34;
 },
 {
-&amp;quot;title&amp;quot;: &amp;quot;友情链接2&amp;quot;,
-&amp;quot;website&amp;quot;: &amp;quot;&amp;quot;,
-&amp;quot;image&amp;quot;: &amp;quot;&amp;quot;,
-&amp;quot;description&amp;quot;: &amp;quot;&amp;quot;
+&amp;#34;title&amp;#34;: &amp;#34;友情链接2&amp;#34;,
+&amp;#34;website&amp;#34;: &amp;#34;&amp;#34;,
+&amp;#34;image&amp;#34;: &amp;#34;&amp;#34;,
+&amp;#34;description&amp;#34;: &amp;#34;&amp;#34;
 }
 ]
-&lt;/code>&lt;/pre>
-&lt;br>
+&lt;/code>&lt;/pre>&lt;br>
 &lt;h3 id="修改页尾信息">修改页尾信息&lt;/h3>
 &lt;p>站点名称及建站时间请修改以下代码&lt;/p>
 &lt;p>站点名称及链接：&lt;/p>
-&lt;pre>&lt;code>#位置：layout/partials/footer/footer.html
-&amp;lt;section class=&amp;quot;copyright&amp;quot;&amp;gt;
+&lt;pre tabindex="0">&lt;code>#位置：layout/partials/footer/footer.html
+&amp;lt;section class=&amp;#34;copyright&amp;#34;&amp;gt;
 &amp;amp;copy;
-{{ if and (.Site.Params.footer.since) (ne .Site.Params.footer.since (int (now.Format &amp;quot;2006&amp;quot;))) }}
+{{ if and (.Site.Params.footer.since) (ne .Site.Params.footer.since (int (now.Format &amp;#34;2006&amp;#34;))) }}
 {{ .Site.Params.footer.since }} -
 {{ end }}
-{{ now.Format &amp;quot;2006&amp;quot; }} &amp;lt;a href=&amp;quot;https://stack-theme-mod.vercel.app/&amp;quot;&amp;gt;Example Site&amp;lt;/a&amp;gt;·&amp;lt;i class=&amp;quot;fas fa-bell&amp;quot;&amp;gt;&amp;lt;/i&amp;gt; &amp;lt;a id=&amp;quot;days&amp;quot;&amp;gt;0&amp;lt;/a&amp;gt;Days&amp;lt;br&amp;gt;
-{{$var := $scratch.Get &amp;quot;total&amp;quot;}}{{$var = div $var 100.0}}{{$var = math.Ceil $var}}{{$var = div $var 10.0}}共书写了{{$var}}k字·共 {{ len (where .Site.RegularPages &amp;quot;Section&amp;quot; &amp;quot;post&amp;quot;) }}篇文章&amp;lt;/br&amp;gt;&amp;lt;span&amp;gt;&amp;lt;p&amp;gt;
+{{ now.Format &amp;#34;2006&amp;#34; }} &amp;lt;a href=&amp;#34;https://stack-theme-mod.vercel.app/&amp;#34;&amp;gt;Example Site&amp;lt;/a&amp;gt;·&amp;lt;i class=&amp;#34;fas fa-bell&amp;#34;&amp;gt;&amp;lt;/i&amp;gt; &amp;lt;a id=&amp;#34;days&amp;#34;&amp;gt;0&amp;lt;/a&amp;gt;Days&amp;lt;br&amp;gt;
+{{$var := $scratch.Get &amp;#34;total&amp;#34;}}{{$var = div $var 100.0}}{{$var = math.Ceil $var}}{{$var = div $var 10.0}}共书写了{{$var}}k字·共 {{ len (where .Site.RegularPages &amp;#34;Section&amp;#34; &amp;#34;post&amp;#34;) }}篇文章&amp;lt;/br&amp;gt;&amp;lt;span&amp;gt;&amp;lt;p&amp;gt;
 &amp;lt;/section&amp;gt;
-&lt;/code>&lt;/pre>
-&lt;pre>&lt;code>#位置：layout/partials/footer/footer.html
-var s1 = '2022-02-13';//设置为建站时间
-s1 = new Date(s1.replace(/-/g, &amp;quot;/&amp;quot;));
+&lt;/code>&lt;/pre>&lt;pre tabindex="0">&lt;code>#位置：layout/partials/footer/footer.html
+var s1 = &amp;#39;2022-02-13&amp;#39;;//设置为建站时间
+s1 = new Date(s1.replace(/-/g, &amp;#34;/&amp;#34;));
 s2 = new Date();
 var days = s2.getTime() - s1.getTime();
 var number_of_days = parseInt(days / (1000 * 60 * 60 * 24));
-document.getElementById('days').innerHTML = number_of_days;
-&lt;/code>&lt;/pre>
-&lt;br>
+document.getElementById(&amp;#39;days&amp;#39;).innerHTML = number_of_days;
+&lt;/code>&lt;/pre>&lt;br>
 &lt;h2 id="其他常见修改">其他常见修改&lt;/h2>
 &lt;h3 id="设置博客头像">设置博客头像&lt;/h3>
 &lt;p>位置：&lt;code>/assets/img&lt;/code>，请将头像命名为&lt;code>avatar.png&lt;/code>，替换原头像文件&lt;/p>
 &lt;h3 id="删除博客头像">删除博客头像&lt;/h3>
 &lt;p>位置：&lt;code>/layouts/partials/sidebar/left.html&lt;/code>，注释或删去以下部分：&lt;/p>
-&lt;pre>&lt;code> {{ with .Site.Params.sidebar.avatar }}
+&lt;pre tabindex="0">&lt;code> {{ with .Site.Params.sidebar.avatar }}
 {{ if (default true .enabled) }}
-&amp;lt;figure class=&amp;quot;site-avatar&amp;quot;&amp;gt;
-&amp;lt;a href=&amp;quot;{{ .Site.BaseURL | relLangURL }}&amp;quot;&amp;gt;
+&amp;lt;figure class=&amp;#34;site-avatar&amp;#34;&amp;gt;
+&amp;lt;a href=&amp;#34;{{ .Site.BaseURL | relLangURL }}&amp;#34;&amp;gt;
 {{ if not .local }}
-&amp;lt;img src=&amp;quot;{{ .src }}&amp;quot; width=&amp;quot;300&amp;quot; height=&amp;quot;300&amp;quot; class=&amp;quot;site-logo&amp;quot; loading=&amp;quot;lazy&amp;quot; alt=&amp;quot;Avatar&amp;quot;&amp;gt;
+&amp;lt;img src=&amp;#34;{{ .src }}&amp;#34; width=&amp;#34;300&amp;#34; height=&amp;#34;300&amp;#34; class=&amp;#34;site-logo&amp;#34; loading=&amp;#34;lazy&amp;#34; alt=&amp;#34;Avatar&amp;#34;&amp;gt;
 {{ else }}
 {{ $avatar := resources.Get (.src) }}
 {{ if $avatar }}
-{{ $avatarResized := $avatar.Resize &amp;quot;300x&amp;quot; }}
-&amp;lt;img src=&amp;quot;{{ $avatarResized.RelPermalink }}&amp;quot; width=&amp;quot;{{ $avatarResized.Width }}&amp;quot;
-height=&amp;quot;{{ $avatarResized.Height }}&amp;quot; class=&amp;quot;site-logo&amp;quot; loading=&amp;quot;lazy&amp;quot; alt=&amp;quot;Avatar&amp;quot;&amp;gt;
+{{ $avatarResized := $avatar.Resize &amp;#34;300x&amp;#34; }}
+&amp;lt;img src=&amp;#34;{{ $avatarResized.RelPermalink }}&amp;#34; width=&amp;#34;{{ $avatarResized.Width }}&amp;#34;
+height=&amp;#34;{{ $avatarResized.Height }}&amp;#34; class=&amp;#34;site-logo&amp;#34; loading=&amp;#34;lazy&amp;#34; alt=&amp;#34;Avatar&amp;#34;&amp;gt;
 {{ else }}
-{{ errorf &amp;quot;Failed loading avatar from %q&amp;quot; . }}
+{{ errorf &amp;#34;Failed loading avatar from %q&amp;#34; . }}
 {{ end }}
 {{ end }}
 &amp;lt;/a&amp;gt;
 {{ with $.Site.Params.sidebar.emoji }}
-&amp;lt;span class=&amp;quot;emoji&amp;quot;&amp;gt;{{ . }}&amp;lt;/span&amp;gt;
+&amp;lt;span class=&amp;#34;emoji&amp;#34;&amp;gt;{{ . }}&amp;lt;/span&amp;gt;
 {{ end }}
 &amp;lt;/figure&amp;gt;
 {{ end }}
 {{ end }}
-&lt;/code>&lt;/pre>
-&lt;h3 id="修改博客背景颜色">修改博客背景颜色&lt;/h3>
+&lt;/code>&lt;/pre>&lt;h3 id="修改博客背景颜色">修改博客背景颜色&lt;/h3>
 &lt;p>位置：&lt;code>assets\scss\variables.scss&lt;/code>&lt;/p>
-&lt;pre>&lt;code>--body-background: #f6f6f6;
-&lt;/code>&lt;/pre>
-&lt;h3 id="指定首页分类标签颜色">指定首页分类标签颜色&lt;/h3>
+&lt;pre tabindex="0">&lt;code>--body-background: #f6f6f6;
+&lt;/code>&lt;/pre>&lt;h3 id="指定首页分类标签颜色">指定首页分类标签颜色&lt;/h3>
 &lt;p>位置：&lt;code>content\categories&lt;/code>，创建分类同名文件夹后，在文件夹内创建&lt;code>_index.md&lt;/code>文件，写入frontmatter&lt;/p>
-&lt;pre>&lt;code>title: &amp;quot;做猫贵在折腾&amp;quot; //分类名称
-description: &amp;quot;简介 Blablabla&amp;quot; //不需要可以删了
-image: &amp;quot;ffxiv_20210830_230509_817.png&amp;quot; //分类题图，不需要也可以删了
+&lt;pre tabindex="0">&lt;code>title: &amp;#34;做猫贵在折腾&amp;#34; //分类名称
+description: &amp;#34;简介 Blablabla&amp;#34; //不需要可以删了
+image: &amp;#34;ffxiv_20210830_230509_817.png&amp;#34; //分类题图，不需要也可以删了
 style:
-background: &amp;quot;#80aba9&amp;quot; //分类标签底色
-color: &amp;quot;#fff&amp;quot;
+background: &amp;#34;#80aba9&amp;#34; //分类标签底色
+color: &amp;#34;#fff&amp;#34;
 ---
-&lt;/code>&lt;/pre>
-&lt;h3 id="配置各类图标">配置各类图标&lt;/h3>
+&lt;/code>&lt;/pre>&lt;h3 id="配置各类图标">配置各类图标&lt;/h3>
 &lt;p>图标放在：&lt;code>/assets/icons&lt;/code>，svg格式，配置方式参考&lt;a class="link" href="https://docs.stack.jimmycai.com/zh/configuration/custom-menu" target="_blank" rel="noopener"
 >文档&lt;/a>&lt;/p>
 &lt;br>
@@ -446,10 +436,10 @@ alt="Photo by Hudai Gayiran on Unsplash">
 &lt;/a>
 &lt;figcaption>Photo by Hudai Gayiran on Unsplash&lt;/figcaption>
 &lt;/figure>&lt;/p>
-&lt;pre>&lt;code class="language-markdown">![Photo by Florian Klauer on Unsplash](florian-klauer-nptLmg6jqDo-unsplash.jpg) ![Photo by Luca Bravo on Unsplash](luca-bravo-alS7ewQ41M8-unsplash.jpg)
-![Photo by Helena Hertz on Unsplash](helena-hertz-wWZzXlDpMog-unsplash.jpg) ![Photo by Hudai Gayiran on Unsplash](hudai-gayiran-3Od_VKcDEAA-unsplash.jpg)
-&lt;/code>&lt;/pre>
-&lt;p>相册语法来自 &lt;a class="link" href="https://typlog.com/" target="_blank" rel="noopener"
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-markdown" data-lang="markdown">&lt;span style="display:flex;">&lt;span>![&lt;span style="color:#e06c75">Photo by Florian Klauer on Unsplash&lt;/span>](&lt;span style="color:#e06c75">florian-klauer-nptLmg6jqDo-unsplash.jpg&lt;/span>) ![&lt;span style="color:#e06c75">Photo by Luca Bravo on Unsplash&lt;/span>](&lt;span style="color:#e06c75">luca-bravo-alS7ewQ41M8-unsplash.jpg&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>![&lt;span style="color:#e06c75">Photo by Helena Hertz on Unsplash&lt;/span>](&lt;span style="color:#e06c75">helena-hertz-wWZzXlDpMog-unsplash.jpg&lt;/span>) ![&lt;span style="color:#e06c75">Photo by Hudai Gayiran on Unsplash&lt;/span>](&lt;span style="color:#e06c75">hudai-gayiran-3Od_VKcDEAA-unsplash.jpg&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>相册语法来自 &lt;a class="link" href="https://typlog.com/" target="_blank" rel="noopener"
 >Typlog&lt;/a>&lt;/p></description></item><item><title>Markdown Syntax Guide</title><link>https://VastCircle.github.io/2019/markdown-syntax-guide/</link><pubDate>Mon, 11 Mar 2019 00:00:00 +0000</pubDate><guid>https://VastCircle.github.io/2019/markdown-syntax-guide/</guid><description>&lt;img src="https://VastCircle.github.io/2019/markdown-syntax-guide/pawel-czerwinski-8uZPynIu-rQ-unsplash.jpg" alt="Featured image of post Markdown Syntax Guide" />&lt;p>This article offers a sample of basic Markdown syntax that can be used in Hugo content files, also it shows whether basic HTML elements are decorated with CSS in a Hugo theme.&lt;/p>
 &lt;h2 id="headings">Headings&lt;/h2>
 &lt;p>The following HTML &lt;code>&amp;lt;h1&amp;gt;&lt;/code>—&lt;code>&amp;lt;h6&amp;gt;&lt;/code> elements represent six levels of section headings. &lt;code>&amp;lt;h1&amp;gt;&lt;/code> is the highest section level while &lt;code>&amp;lt;h6&amp;gt;&lt;/code> is the lowest.&lt;/p>
@@ -535,18 +525,17 @@ alt="Photo by Hudai Gayiran on Unsplash">
 &lt;/table>
 &lt;h2 id="code-blocks">Code Blocks&lt;/h2>
 &lt;h4 id="code-block-with-backticks">Code block with backticks&lt;/h4>
-&lt;pre>&lt;code class="language-html">&amp;lt;!doctype html&amp;gt;
-&amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
-&amp;lt;head&amp;gt;
-&amp;lt;meta charset=&amp;quot;utf-8&amp;quot;&amp;gt;
-&amp;lt;title&amp;gt;Example HTML5 Document&amp;lt;/title&amp;gt;
-&amp;lt;/head&amp;gt;
-&amp;lt;body&amp;gt;
-&amp;lt;p&amp;gt;Test&amp;lt;/p&amp;gt;
-&amp;lt;/body&amp;gt;
-&amp;lt;/html&amp;gt;
-&lt;/code>&lt;/pre>
-&lt;h4 id="code-block-indented-with-four-spaces">Code block indented with four spaces&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&amp;lt;!doctype html&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#e06c75">html&lt;/span> &lt;span style="color:#e06c75">lang&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;en&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#e06c75">head&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#e06c75">meta&lt;/span> &lt;span style="color:#e06c75">charset&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;utf-8&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#e06c75">title&lt;/span>&amp;gt;Example HTML5 Document&amp;lt;/&lt;span style="color:#e06c75">title&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#e06c75">head&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#e06c75">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#e06c75">p&lt;/span>&amp;gt;Test&amp;lt;/&lt;span style="color:#e06c75">p&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#e06c75">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#e06c75">html&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="code-block-indented-with-four-spaces">Code block indented with four spaces&lt;/h4>
 &lt;pre>&lt;code>&amp;lt;!doctype html&amp;gt;
 &amp;lt;html lang=&amp;quot;en&amp;quot;&amp;gt;
 &amp;lt;head&amp;gt;
@@ -559,40 +548,23 @@ alt="Photo by Hudai Gayiran on Unsplash">
 &amp;lt;/html&amp;gt;
 &lt;/code>&lt;/pre>
 &lt;h4 id="code-block-with-hugos-internal-highlight-shortcode">Code block with Hugo&amp;rsquo;s internal highlight shortcode&lt;/h4>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
-&lt;/span>&lt;span class="lnt"> 2
-&lt;/span>&lt;span class="lnt"> 3
-&lt;/span>&lt;span class="lnt"> 4
-&lt;/span>&lt;span class="lnt"> 5
-&lt;/span>&lt;span class="lnt"> 6
-&lt;/span>&lt;span class="lnt"> 7
-&lt;/span>&lt;span class="lnt"> 8
-&lt;/span>&lt;span class="lnt"> 9
-&lt;/span>&lt;span class="lnt">10
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&amp;lt;!doctype html&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">html&lt;/span> &lt;span class="na">lang&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;en&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">head&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">meta&lt;/span> &lt;span class="na">charset&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s">&amp;#34;utf-8&amp;#34;&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">title&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>Example HTML5 Document&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">title&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">head&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">body&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="p">&amp;lt;&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>Test&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">p&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">body&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="p">&amp;lt;/&lt;/span>&lt;span class="nt">html&lt;/span>&lt;span class="p">&amp;gt;&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&amp;lt;!doctype html&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#e06c75">html&lt;/span> &lt;span style="color:#e06c75">lang&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;en&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#e06c75">head&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#e06c75">meta&lt;/span> &lt;span style="color:#e06c75">charset&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;utf-8&amp;#34;&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#e06c75">title&lt;/span>&amp;gt;Example HTML5 Document&amp;lt;/&lt;span style="color:#e06c75">title&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#e06c75">head&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;&lt;span style="color:#e06c75">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &amp;lt;&lt;span style="color:#e06c75">p&lt;/span>&amp;gt;Test&amp;lt;/&lt;span style="color:#e06c75">p&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#e06c75">body&lt;/span>&amp;gt;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&amp;lt;/&lt;span style="color:#e06c75">html&lt;/span>&amp;gt;&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>
 &lt;h4 id="diff-code-block">Diff code block&lt;/h4>
-&lt;pre>&lt;code class="language-diff">[dependencies.bevy]
-git = &amp;quot;https://github.com/bevyengine/bevy&amp;quot;
-rev = &amp;quot;11f52b8c72fc3a568e8bb4a4cd1f3eb025ac2e13&amp;quot;
-- features = [&amp;quot;dynamic&amp;quot;]
-+ features = [&amp;quot;jpeg&amp;quot;, &amp;quot;dynamic&amp;quot;]
-&lt;/code>&lt;/pre>
-&lt;h2 id="list-types">List Types&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-diff" data-lang="diff">&lt;span style="display:flex;">&lt;span>[dependencies.bevy]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git = &amp;#34;https://github.com/bevyengine/bevy&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rev = &amp;#34;11f52b8c72fc3a568e8bb4a4cd1f3eb025ac2e13&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">- features = [&amp;#34;dynamic&amp;#34;]
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">&lt;/span>&lt;span style="color:#98c379;font-weight:bold">+ features = [&amp;#34;jpeg&amp;#34;, &amp;#34;dynamic&amp;#34;]
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="list-types">List Types&lt;/h2>
 &lt;h4 id="ordered-list">Ordered List&lt;/h4>
 &lt;ol>
 &lt;li>First item&lt;/li>
@@ -678,11 +650,10 @@ alt="Google">
 >Auto-render Extension&lt;/a> or host these scripts locally.&lt;/li>
 &lt;li>Include the partial in your templates like so:&lt;/li>
 &lt;/ul>
-&lt;pre>&lt;code class="language-bash">{{ if or .Params.math .Site.Params.math }}
-{{ partial &amp;quot;math.html&amp;quot; . }}
-{{ end }}
-&lt;/code>&lt;/pre>
-&lt;ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-bash" data-lang="bash">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">{{&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> or .Params.math .Site.Params.math &lt;span style="color:#56b6c2">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">{{&lt;/span> partial &lt;span style="color:#98c379">&amp;#34;math.html&amp;#34;&lt;/span> . &lt;span style="color:#56b6c2">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">{{&lt;/span> end &lt;span style="color:#56b6c2">}}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ul>
 &lt;li>To enable KaTex globally set the parameter &lt;code>math&lt;/code> to &lt;code>true&lt;/code> in a project&amp;rsquo;s configuration&lt;/li>
 &lt;li>To enable KaTex on a per page basis include the parameter &lt;code>math: true&lt;/code> in content files&lt;/li>
 &lt;/ul>
@@ -704,15 +675,6 @@ $$&lt;/p></description></item><item><title>Emoji Support</title><link>https://Va
 >Emoji cheat sheet&lt;/a> is a useful reference for emoji shorthand codes.&lt;/p>
 &lt;hr>
 &lt;p>&lt;strong>N.B.&lt;/strong> The above steps enable Unicode Standard emoji characters and sequences in Hugo, however the rendering of these glyphs depends on the browser and the platform. To style the emoji you can either use a third party emoji font or a font stack; e.g.&lt;/p>
-&lt;div class="highlight">&lt;div class="chroma">
-&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
-&lt;/span>&lt;span class="lnt">2
-&lt;/span>&lt;span class="lnt">3
-&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
-&lt;td class="lntd">
-&lt;pre tabindex="0" class="chroma">&lt;code class="language-html" data-lang="html">&lt;span class="line">&lt;span class="cl">.emoji {
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> font-family: Apple Color Emoji, Segoe UI Emoji, NotoColorEmoji, Segoe UI Symbol, Android Emoji, EmojiSymbols;
-&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">}&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
-&lt;/div>
-&lt;/div></description></item></channel></rss>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-html" data-lang="html">&lt;span style="display:flex;">&lt;span>.emoji {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> font-family: Apple Color Emoji, Segoe UI Emoji, NotoColorEmoji, Segoe UI Symbol, Android Emoji, EmojiSymbols;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div></description></item></channel></rss>
