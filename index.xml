@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 06 Oct 2024 21:57:38 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
 &lt;p>ubuntu 系统使用&lt;/p>
-&lt;pre tabindex="0">&lt;code>sudo apt install hugo
-&lt;/code>&lt;/pre>&lt;p>使用以下命令进行验证&lt;/p>
-&lt;pre tabindex="0">&lt;code>hugo version
-&lt;/code>&lt;/pre>&lt;h2 id="创建-hugo-网站">创建 Hugo 网站&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>sudo apt install hugo
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>使用以下命令进行验证&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>hugo version
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="创建-hugo-网站">创建 Hugo 网站&lt;/h2>
 &lt;p>通过上述命令安装 hugo 程序后，就可以通过 &lt;code>hugo new site&lt;/code> 命令进行网站创建、配置与本地调试了。&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>hugo new site robin-site
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="配置主题">配置主题&lt;/h2>
@@ -38,9 +38,9 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 替换配置&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rm config.toml &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> cp themes/meme/config-examples/zh-cn/config.toml config.toml
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="zozo-主题配置">zozo 主题配置&lt;/h3>
-&lt;pre tabindex="0">&lt;code>git submodule add https://github.com/varkai/hugo-theme-zozo themes/zozo
-rm config.toml &amp;amp;&amp;amp; cp themes/zozo/config.toml config.toml
-&lt;/code>&lt;/pre>&lt;p>&lt;a class="link" href="https://gojun.me/posts/hello-hugo-blog/" target="_blank" rel="noopener"
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>git submodule add https://github.com/varkai/hugo-theme-zozo themes/zozo
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rm config.toml &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> cp themes/zozo/config.toml config.toml
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;a class="link" href="https://gojun.me/posts/hello-hugo-blog/" target="_blank" rel="noopener"
 >https://gojun.me/posts/hello-hugo-blog/&lt;/a>&lt;/p>
 &lt;h3 id="hugo-theme-stack主题配置">Hugo-theme-stack主题配置&lt;/h3>
 &lt;p>&lt;a class="link" href="https://stack.jimmycai.com/guide/getting-started" target="_blank" rel="noopener"
@@ -75,9 +75,9 @@ rm config.toml &amp;amp;&amp;amp; cp themes/zozo/config.toml config.toml
 &lt;p>使用的是大佬美化后的版本 &lt;a class="link" href="https://github.com/Mantyke/Hugo-stack-theme-mod" target="_blank" rel="noopener"
 >Mantyke/Hugo-stack-theme-mod&lt;/a>。&lt;/p>
 &lt;p>因为还是想用github工作流，不使用vercel,所以接下来结合前面的多篇文章操作,第一步是clone fork 之后的仓库，然后修改remote为一个创建好的私人仓库&lt;/p>
-&lt;pre tabindex="0">&lt;code>git clone git@github.com:VastCircle/Hugo-stack.git
-git remote set-url origin git@github.com:VastCircle/hugostack.git
-&lt;/code>&lt;/pre>&lt;p>之后通过一系列的git操作将网页部署到gh-pages分支上&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>git clone git@github.com:VastCircle/Hugo-stack.git
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git remote set-url origin git@github.com:VastCircle/hugostack.git
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>之后通过一系列的git操作将网页部署到gh-pages分支上&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>rm -rf public
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git add .
@@ -150,62 +150,166 @@ git remote set-url origin git@github.com:VastCircle/hugostack.git
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> ..
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="添加-github-action">添加 github action&lt;/h3>
 &lt;p>.github/workflows/deploy-site.yaml&lt;/p>
-&lt;pre tabindex="0">&lt;code>name: deploy
-on:
-push:
-branches: [&amp;#34;master&amp;#34;]
-workflow_dispatch:
-# schedule:
-# # Runs everyday at 8:00 AM
-# - cron: &amp;#34;0 0 * * *&amp;#34;
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-contents: read
-pages: write
-id-token: write
-# Allow one concurrent deployment
-concurrency:
-group: &amp;#34;pages&amp;#34;
-cancel-in-progress: true
-# Default to bash
-defaults:
-run:
-shell: bash
-jobs:
-# BUild job
-build:
-runs-on: ubuntu-latest
-env:
-HUGO_VERSION: 0.134.0
-TZ: America/Los_Angeles
-steps:
-- name: Checkout
-uses: actions/checkout@v3
-with:
-submodules: true # Fetch Hugo themes (true OR recursive)
-fetch-depth: 0 # Fetch all history for .GitInfo and .Lastmod
-- name: Setup Hugo
-id: pages
-uses: peaceiris/actions-hugo@v2
-with:
-hugo-version: &amp;#39;0.134.0&amp;#39;
-extended: true
-- name: Build Hugo
-env:
-# For maximum backward compatibility with Hugo modules
-HUGO_ENVIRONMENT: production
-HUGO_ENV: production
-run: hugo --minify
-- name: Deploy Web
-id: deployment
-uses: peaceiris/actions-gh-pages@v3
-with:
-PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
-EXTERNAL_REPOSITORY: VastCircle/VastCircle.github.io
-PUBLISH_BRANCH: master
-PUBLISH_DIR: ./public
-commit_message: ${{ github.event.head_commit.message }}
-&lt;/code>&lt;/pre>&lt;h2 id="引用">引用&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>name: deploy
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>on:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> push:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> branches: &lt;span style="color:#56b6c2">[&lt;/span>&lt;span style="color:#98c379">&amp;#34;master&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">]&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> workflow_dispatch:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># schedule:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># # Runs everyday at 8:00 AM&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># - cron: &amp;#34;0 0 * * *&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>permissions:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> contents: &lt;span style="color:#e5c07b">read&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> pages: write
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> id-token: write
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Allow one concurrent deployment&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>concurrency:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> group: &lt;span style="color:#98c379">&amp;#34;pages&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> cancel-in-progress: &lt;span style="color:#e5c07b">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># Default to bash&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>defaults:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> run:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> shell: bash
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>jobs:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># BUild job&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> build:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> runs-on: ubuntu-latest
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> env:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> HUGO_VERSION: 0.134.0
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> TZ: America/Los_Angeles
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> steps:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - name: Checkout
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> uses: actions/checkout@v3
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> with:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> submodules: &lt;span style="color:#e5c07b">true&lt;/span> &lt;span style="color:#7f848e"># Fetch Hugo themes (true OR recursive)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> fetch-depth: &lt;span style="color:#d19a66">0&lt;/span> &lt;span style="color:#7f848e"># Fetch all history for .GitInfo and .Lastmod&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - name: Setup Hugo
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> id: pages
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> uses: peaceiris/actions-hugo@v2
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> with:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> hugo-version: &lt;span style="color:#98c379">&amp;#39;0.134.0&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> extended: &lt;span style="color:#e5c07b">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - name: Build Hugo
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> env:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># For maximum backward compatibility with Hugo modules&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> HUGO_ENVIRONMENT: production
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> HUGO_ENV: production
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> run: hugo --minify
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - name: Deploy Web
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> id: deployment
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> uses: peaceiris/actions-gh-pages@v3
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> with:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PERSONAL_TOKEN: &lt;span style="color:#98c379">${&lt;/span>{ secrets.PERSONAL_TOKEN &lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> EXTERNAL_REPOSITORY: VastCircle/VastCircle.github.io
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PUBLISH_BRANCH: master
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> PUBLISH_DIR: ./public
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> commit_message: &lt;span style="color:#98c379">${&lt;/span>{ github.event.head_commit.message &lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="如何编写博客">如何编写博客&lt;/h2>
+&lt;p>正如同其他的博客，使用 &lt;strong>Markdown 语言&lt;/strong>来编写博客。Markdown 流行且极易上手，因此这里就不多介绍语法，如果不会的可以自己搜索了解。&lt;/p>
+&lt;h3 id="使用-hugo-创建文章">使用 Hugo 创建文章&lt;/h3>
+&lt;p>在博客根目录下运行：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>hugo new post/untitled.md
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>为什么要用 hugo 来新建而不是创建一个 &lt;code>.md&lt;/code> 文件呢？这是因为使用 hugo 创建会自动使用已填入 &lt;code>Front Matter&lt;/code>的模板。&lt;/p>
+&lt;p>&lt;code>Front Matter&lt;/code> 用于标识文章的标题、时间等信息，hugo 就是据此来生成静态页面。关于属性的含义和用法可以参考 &lt;a class="link" href="https://www.gohugo.org/doc/content/front-matter/" target="_blank" rel="noopener"
+>Hugo 中文文档&lt;/a>。&lt;/p>
+&lt;p>模板可以在 &lt;code>\archetypes\default.md&lt;/code> 下找到：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-markdown" data-lang="markdown">&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title: &amp;#34;{{ replace .Name &amp;#34;-&amp;#34; &amp;#34; &amp;#34; | title }}&amp;#34; # 标题，创建时自动填充
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>description: # 文章简介
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>date: {{ .Date }} # 日期，创建时自动填充，格式同 2023-01-15T12:00:00+08:00
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>image: # 文章的封面，留空就是没有，填文章所在位置的相对地址，通常放在同目录下，
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>math: # 是否启用 KaTex，填 true 启用
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>license: # 文章尾部显示的协议，false 为隐藏，其他作为内容，留空就是使用 config.yaml 里默认的
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hidden: false # 是否隐藏，一般用不到
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>comments: true # 因为 bug 所以这个属性只要存在，不管是 true 还是 false 都会导致回复无法显示，需要删掉
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>draft: true # 是否为草稿，建议改为 false 或者删掉这个属性以防止忘记修改，毕竟我们一般都是写好了才部署到服务器上
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>为了方便，我参考网络以及 stack-mod 的功能对模板进行了一些改造：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-markdown" data-lang="markdown">&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title: &amp;#34;{{ replace .Name &amp;#34;-&amp;#34; &amp;#34; &amp;#34; | title }}&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>slug: &amp;#34;{{ replace .Name &amp;#34;-&amp;#34; &amp;#34; &amp;#34; | title }}&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>description:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>date: &amp;#34;{{ .Date }}&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>lastmod: &amp;#34;{{ .Date }}&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>image: cover.png
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>math:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>license:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hidden: false
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>draft: false
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>categories: [&amp;#34;&amp;#34;]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tags: [&amp;#34;&amp;#34;]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>## 附录
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>### 参考文献
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>### 版权信息
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>本文原载于 [&lt;span style="color:#e06c75">reincarnatey.net&lt;/span>](&lt;span style="color:#e06c75">https://blog.reincarnatey.net&lt;/span>)，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>因此我们可以编写一个批处理程序来快速帮我们生成文章：&lt;/p>
+&lt;p>&lt;code>create_post.sh&lt;/code>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>#!/bin/bash
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span># 输出提示信息
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">echo&lt;/span> &lt;span style="color:#98c379">&amp;#34;【创建文章】&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span># 读取用户输入的 Slug
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>read -p &lt;span style="color:#98c379">&amp;#34;请输入Slug: &amp;#34;&lt;/span> input
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span># 获取当前日期
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>current_date=$(date +&lt;span style="color:#e06c75">%Y%&lt;/span>m%d)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span># 使用 Hugo 创建新文章
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new post/$current_date-$input/index.md
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span># 暂停，提示用户操作完成
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>read -p &lt;span style="color:#98c379">&amp;#34;按任意键继续...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>用此批处理程序生成的文章会创建在 &lt;code>\content\post\2023\0115-test\index.md&lt;/code>，便于我们整理文章资料，同时后续在同目录下存放文章的封面也不会导致内容很乱。&lt;/p>
+&lt;h3 id="使用-hugo-创建类别标签">使用 Hugo 创建类别、标签&lt;/h3>
+&lt;p>创建 Categories 和 Tag 也同理：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>hugo new categories/testcat.md
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new tags/testtag.md
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>hugo 会自动应用 &lt;code>\archetypes\categories.md&lt;/code> 和 &lt;code>\archetypes\tags.md&lt;/code> 的模板，但是这两个模板都不太好，建议都改为：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-markdown" data-lang="markdown">&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>title: &amp;#34;{{ replace .Name &amp;#34;-&amp;#34; &amp;#34; &amp;#34; | title }}&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>slug: &amp;#34;{{ replace .Name &amp;#34;-&amp;#34; &amp;#34; &amp;#34; | title }}&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>description:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>image: cover.png
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>style:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> background: &amp;#34;#2a9d8f&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> color: &amp;#34;#fff&amp;#34;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>---
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>create_Categories.sh&lt;/code>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#c678dd">echo&lt;/span> off
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">echo&lt;/span> 【创建类别】
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">set&lt;/span> &lt;span style="color:#c678dd">/p&lt;/span> &lt;span style="color:#e06c75">input&lt;/span>= 请输入类别名:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new categories/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Copy&lt;/p>
+&lt;p>&lt;code>创建标签.bat&lt;/code>：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#c678dd">echo&lt;/span> off
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">echo&lt;/span> 【创建标签】
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">set&lt;/span> &lt;span style="color:#c678dd">/p&lt;/span> &lt;span style="color:#e06c75">input&lt;/span>= 请输入标签名:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new tags/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Copy&lt;/p>
+&lt;p>&lt;strong>注意&lt;/strong>：如果创建多级文件夹时文章文件名不是 &lt;code>index.md&lt;/code> 或者类别、标签文件名不是 &lt;code>_index.md&lt;/code> 的话，设置封面图片会出现问题。&lt;/p>
+&lt;h2 id="引用">引用&lt;/h2>
 &lt;p>&lt;a class="link" href="https://hk.v2ex.com/t/1009591" target="_blank" rel="noopener"
 >https://hk.v2ex.com/t/1009591&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://jianzhnie.github.io/post/hugo_site/" target="_blank" rel="noopener"
