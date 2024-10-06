@@ -50,5 +50,12 @@
       <guid>https://vastcircle.github.io/2019/emoji-support/</guid>
       <description>&lt;p&gt;Emoji can be enabled in a Hugo project in a number of ways.&lt;/p&gt;</description>
     </item>
+    <item>
+      <title></title>
+      <link>https://vastcircle.github.io/1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://vastcircle.github.io/1/</guid>
+      <description>&lt;h1 id=&#34;博客搭建&#34;&gt;博客搭建&lt;/h1&gt;&#xA;&lt;h2 id=&#34;安装hugo&#34;&gt;安装Hugo&lt;/h2&gt;&#xA;&lt;p&gt;ubuntu 系统使用&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;sudo apt install hugo &#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;p&gt;使用以下命令进行验证&lt;/p&gt;&#xA;&lt;pre&gt;&lt;code&gt;hugo version&#xA;&lt;/code&gt;&lt;/pre&gt;&#xA;&lt;h2 id=&#34;创建-hugo-网站&#34;&gt;创建 Hugo 网站&lt;/h2&gt;&#xA;&lt;p&gt;通过上述命令安装 hugo 程序后，就可以通过 &lt;code&gt;hugo new site&lt;/code&gt; 命令进行网站创建、配置与本地调试了。&lt;/p&gt;</description>
+    </item>
   </channel>
 </rss>
