@@ -2,8 +2,7 @@
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
->vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Untitled</title><link>https://VastCircle.github.io/2024/untitled/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/untitled/</guid><description/></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h1 id="博客搭建">博客搭建&lt;/h1>
-&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Untitled</title><link>https://VastCircle.github.io/2024/untitled/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/untitled/</guid><description/></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
 &lt;p>ubuntu 系统使用&lt;/p>
 &lt;pre>&lt;code>sudo apt install hugo
 &lt;/code>&lt;/pre>
