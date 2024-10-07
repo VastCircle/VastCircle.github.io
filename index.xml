@@ -301,9 +301,16 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new categories/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 632;
+flex-basis: 1518px"
 >
-&lt;a href="https://VastCircle.github.io/image1.png" >
-&lt;img src="https://VastCircle.github.io/image1.png"
+&lt;a href="https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image1.png" data-size="1050x166">
+&lt;img src="https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image1.png"
+width="1050"
+height="166"
+srcset="https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image1_hu14227645176143580784.png 480w, https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image1_hu14426535897027265073.png 1024w"
 loading="lazy"
 alt="image1">
 &lt;/a>
