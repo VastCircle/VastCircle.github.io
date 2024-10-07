@@ -302,12 +302,12 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
 >
-&lt;a href="https://VastCircle.github.io/image-20241007144729251.png" >
-&lt;img src="https://VastCircle.github.io/image-20241007144729251.png"
+&lt;a href="https://VastCircle.github.io/image1.png" >
+&lt;img src="https://VastCircle.github.io/image1.png"
 loading="lazy"
-alt="image-20241007144729251">
+alt="image1">
 &lt;/a>
-&lt;figcaption>image-20241007144729251&lt;/figcaption>
+&lt;figcaption>image1&lt;/figcaption>
 &lt;/figure>&lt;/p>
 &lt;p>&lt;code>create_tag.sh&lt;/code>：&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#c678dd">echo&lt;/span> off
