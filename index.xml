@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 06 Oct 2024 21:57:38 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 07 Oct 2024 13:23:21 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>20241007 量化研究方法</title><link>https://VastCircle.github.io/2024/20241007-%E9%87%8F%E5%8C%96%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/</link><pubDate>Mon, 07 Oct 2024 13:23:21 +0800</pubDate><guid>https://VastCircle.github.io/2024/20241007-%E9%87%8F%E5%8C%96%E7%A0%94%E7%A9%B6%E6%96%B9%E6%B3%95/</guid><description>&lt;img src="https://VastCircle.github.io/cover.png" alt="Featured image of post 20241007 量化研究方法" />&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
 &lt;p>ubuntu 系统使用&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>sudo apt install hugo
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>使用以下命令进行验证&lt;/p>
@@ -300,15 +304,13 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">set&lt;/span> &lt;span style="color:#c678dd">/p&lt;/span> &lt;span style="color:#e06c75">input&lt;/span>= 请输入类别名:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new categories/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Copy&lt;/p>
-&lt;p>&lt;code>创建标签.bat&lt;/code>：&lt;/p>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>create_tag.sh&lt;/code>：&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#c678dd">echo&lt;/span> off
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">echo&lt;/span> 【创建标签】
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">set&lt;/span> &lt;span style="color:#c678dd">/p&lt;/span> &lt;span style="color:#e06c75">input&lt;/span>= 请输入标签名:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new tags/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>Copy&lt;/p>
-&lt;p>&lt;strong>注意&lt;/strong>：如果创建多级文件夹时文章文件名不是 &lt;code>index.md&lt;/code> 或者类别、标签文件名不是 &lt;code>_index.md&lt;/code> 的话，设置封面图片会出现问题。&lt;/p>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意&lt;/strong>：如果创建多级文件夹时文章文件名不是 &lt;code>index.md&lt;/code> 或者类别、标签文件名不是 &lt;code>_index.md&lt;/code> 的话，设置封面图片会出现问题。&lt;/p>
 &lt;h2 id="引用">引用&lt;/h2>
 &lt;p>&lt;a class="link" href="https://hk.v2ex.com/t/1009591" target="_blank" rel="noopener"
 >https://hk.v2ex.com/t/1009591&lt;/a>&lt;/p>
@@ -321,7 +323,9 @@
 &lt;p>&lt;a class="link" href="https://blog.reincarnatey.net/2023/build-hugo-blog-with-stack-mod/" target="_blank" rel="noopener"
 >https://blog.reincarnatey.net/2023/build-hugo-blog-with-stack-mod/&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://kaichu.io/posts/my-first-post/" target="_blank" rel="noopener"
->https://kaichu.io/posts/my-first-post/&lt;/a>&lt;/p></description></item><item><title>Hugo | Hugo-stack-theme主题魔改版</title><link>https://VastCircle.github.io/2022/stack-theme-mod/</link><pubDate>Sun, 13 Feb 2022 03:02:52 +0800</pubDate><guid>https://VastCircle.github.io/2022/stack-theme-mod/</guid><description>&lt;p>Github仓库地址：&lt;a class="link" href="https://github.com/Mantyke" target="_blank" rel="noopener"
+>https://kaichu.io/posts/my-first-post/&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://stack.jimmycai.com/" target="_blank" rel="noopener"
+>stack 手册&lt;/a>&lt;/p></description></item><item><title>Hugo | Hugo-stack-theme主题魔改版</title><link>https://VastCircle.github.io/2022/stack-theme-mod/</link><pubDate>Sun, 13 Feb 2022 03:02:52 +0800</pubDate><guid>https://VastCircle.github.io/2022/stack-theme-mod/</guid><description>&lt;p>Github仓库地址：&lt;a class="link" href="https://github.com/Mantyke" target="_blank" rel="noopener"
 >Mantyke&lt;/a>/&lt;a class="link" href="https://github.com/Mantyke/Hugo-stack-theme-mod" target="_blank" rel="noopener"
 >stack-theme-mod&lt;/a>&lt;/p>
 &lt;p>本主题由&lt;a class="link" href="https://github.com/CaiJimmy" target="_blank" rel="noopener"
