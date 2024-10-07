@@ -317,12 +317,37 @@ alt="image1">
 &lt;figcaption>image1&lt;/figcaption>
 &lt;/figure>&lt;/p>
 &lt;p>&lt;code>create_tag.sh&lt;/code>：&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 232;
+flex-basis: 558px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20241007154700103.png" data-size="950x408">
+&lt;img src="https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20241007154700103.png"
+width="950"
+height="408"
+srcset="https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20241007154700103_hu11777415785563724921.png 480w, https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/image-20241007154700103_hu3572255715678478679.png 1024w"
+loading="lazy"
+alt="image-20241007154700103">
+&lt;/a>
+&lt;figcaption>image-20241007154700103&lt;/figcaption>
+&lt;/figure>&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-batch" data-lang="batch">&lt;span style="display:flex;">&lt;span>@&lt;span style="color:#c678dd">echo&lt;/span> off
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">echo&lt;/span> 【创建标签】
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">set&lt;/span> &lt;span style="color:#c678dd">/p&lt;/span> &lt;span style="color:#e06c75">input&lt;/span>= 请输入标签名:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new tags/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;strong>注意&lt;/strong>：如果创建多级文件夹时文章文件名不是 &lt;code>index.md&lt;/code> 或者类别、标签文件名不是 &lt;code>_index.md&lt;/code> 的话，设置封面图片会出现问题。&lt;/p>
+&lt;p>&lt;figure
+>
+&lt;a href="https://VastCircle.github.io/image-20241007154641144.png" >
+&lt;img src="https://VastCircle.github.io/image-20241007154641144.png"
+loading="lazy"
+alt="image-20241007154622297">
+&lt;/a>
+&lt;figcaption>image-20241007154622297&lt;/figcaption>
+&lt;/figure>&lt;/p>
 &lt;h2 id="引用">引用&lt;/h2>
 &lt;p>&lt;a class="link" href="https://hk.v2ex.com/t/1009591" target="_blank" rel="noopener"
 >https://hk.v2ex.com/t/1009591&lt;/a>&lt;/p>
@@ -333,7 +358,7 @@ alt="image1">
 &lt;p>&lt;a class="link" href="https://smc.im/post/deploy-hugo-blog-with-github-actions/" target="_blank" rel="noopener"
 >https://smc.im/post/deploy-hugo-blog-with-github-actions/&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://blog.reincarnatey.net/2023/build-hugo-blog-with-stack-mod/" target="_blank" rel="noopener"
->https://blog.reincarnatey.net/2023/build-hugo-blog-with-stack-mod/&lt;/a>&lt;/p>
+>建站技术 | 使用 Hugo + Stack 简单搭建一个博客&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://kaichu.io/posts/my-first-post/" target="_blank" rel="noopener"
 >https://kaichu.io/posts/my-first-post/&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://stack.jimmycai.com/" target="_blank" rel="noopener"
