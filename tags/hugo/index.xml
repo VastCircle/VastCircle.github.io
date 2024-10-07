@@ -4,10 +4,4 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>使用以下命令进行验证&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>hugo version
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="创建-hugo-网站">创建 Hugo 网站&lt;/h2>
-&lt;p>通过上述命令安装 hugo 程序后，就可以通过 &lt;code>hugo new site&lt;/code> 命令进行网站创建、配置与本地调试了。&lt;/p></description></item><item><title>Hugo | Hugo-stack-theme主题魔改版</title><link>https://VastCircle.github.io/2022/stack-theme-mod/</link><pubDate>Sun, 13 Feb 2022 03:02:52 +0800</pubDate><guid>https://VastCircle.github.io/2022/stack-theme-mod/</guid><description>&lt;p>Github仓库地址：&lt;a class="link" href="https://github.com/Mantyke" target="_blank" rel="noopener"
- >Mantyke&lt;/a>/&lt;a class="link" href="https://github.com/Mantyke/Hugo-stack-theme-mod" target="_blank" rel="noopener"
- >stack-theme-mod&lt;/a>&lt;/p>
-&lt;p>本主题由&lt;a class="link" href="https://github.com/CaiJimmy" target="_blank" rel="noopener"
- >CaiJimmy&lt;/a>制作并&lt;a class="link" href="https://github.com/CaiJimmy/hugo-theme-stack" target="_blank" rel="noopener"
- >发布&lt;/a>，这个仓库是由&lt;a class="link" href="https://mantyke.icu/" target="_blank" rel="noopener"
- >Mantyke&lt;/a>修改的魔改版本&lt;/p></description></item></channel></rss>
+&lt;p>通过上述命令安装 hugo 程序后，就可以通过 &lt;code>hugo new site&lt;/code> 命令进行网站创建、配置与本地调试了。&lt;/p></description></item></channel></rss>
