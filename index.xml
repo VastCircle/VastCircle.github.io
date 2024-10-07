@@ -300,7 +300,8 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">set&lt;/span> &lt;span style="color:#c678dd">/p&lt;/span> &lt;span style="color:#e06c75">input&lt;/span>= 请输入类别名:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>hugo new categories/&lt;span style="color:#e06c75">%input%&lt;/span>/_index.md
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">pause&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>生成的categories就是在改变如下图所示的界面&lt;/p>
+&lt;p>&lt;figure
 class="gallery-image"
 style="
 flex-grow: 632;
