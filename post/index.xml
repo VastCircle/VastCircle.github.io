@@ -1,8 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 07 Oct 2024 16:15:07 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard Learning</title><link>https://VastCircle.github.io/2024/chipyard-learning/</link><pubDate>Mon, 07 Oct 2024 16:15:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard-learning/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 07 Oct 2024 16:15:07 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard Learning</title><link>https://VastCircle.github.io/2024/chipyard-learning/</link><pubDate>Mon, 07 Oct 2024 16:15:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard-learning/</guid><description>&lt;h2 id="chipyard-从下载到构建">chipyard 从下载到构建&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>git clone https://github.com/ucb-bar/chipyard.git
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> chipyard
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git checkout 1.10.0
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 为了使得clone顺利，把http都换成ssh ，使用命令&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>find . -name &lt;span style="color:#98c379">&amp;#34;.gitmodules&amp;#34;&lt;/span> -type f -exec sed -i &lt;span style="color:#98c379">&amp;#39;s/https:\/\/github.com\//git@github.com:/g&amp;#39;&lt;/span> &lt;span style="color:#56b6c2">{}&lt;/span> +
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 同步&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git submodule sync
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 运行初始化脚本&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./build-setup.sh 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 导入conda环境&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">source&lt;/span> ./env.sh 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">## 初始化software ，例如coremark&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ./scripts/init-software.sh
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
 &lt;p>ubuntu 系统使用&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>sudo apt install hugo 
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>使用以下命令进行验证&lt;/p>
