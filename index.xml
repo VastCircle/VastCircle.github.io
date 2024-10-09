@@ -66,7 +66,7 @@
 &lt;p>每个 CPU 块都有一个 L1 指令缓存和 L1 数据缓存。这些缓存的大小和关联性可以配置。默认&lt;code>RocketConfig&lt;/code> 使用 16 KiB、4 路组关联指令和数据缓存&lt;/p>
 &lt;h4 id="memory-system">Memory System&lt;/h4>
 &lt;p>这些图块(Tiles)连接到&lt;code>SystemBus&lt;/code>，后者将其连接到 L2 缓存组。然后，L2 缓存组连接到&lt;code>MemoryBus&lt;/code>，后者通过 TileLink 到 AXI 转换器连接到 DRAM 控制器&lt;/p>
-&lt;img src="image-20241009152035016.png" alt="Momory System" style="zoom:50%;" />
+&lt;div align=center>&lt;img src="image-20241009152035016.png" alt="Momory System" style="zoom:50%;" /> &lt;/div>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;p>&lt;a class="link" href="https://chipyard.readthedocs.io/en/1.10.0/" target="_blank" rel="noopener"
