@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>超标量处理器 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8/</link><description>Recent content in 超标量处理器 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 14 Oct 2024 16:43:30 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>超标量处理器学习笔记1</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link><pubDate>Mon, 14 Oct 2024 16:43:30 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="超标量处理器概览">超标量处理器概览&lt;/h2>
+&lt;h3 id="超标量处理器的流水线">超标量处理器的流水线&lt;/h3>
+&lt;h4 id="顺序执行">顺序执行&lt;/h4>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 248; 
+			flex-basis: 596px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017.png" data-size="1111x447">
+		&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017.png"
+			width="1111"
+			height="447"
+			srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017_hu6270803957762553776.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017_hu2445645561301413447.png 1024w"
+			loading="lazy"
+			alt="in-order pipline">
+	&lt;/a>
+	
+	&lt;figcaption>in-order pipline&lt;/figcaption>
+	
+&lt;/figure>&lt;/p></description></item></channel></rss>

@@ -1,4 +1,28 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 07 Oct 2024 16:15:07 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard Learning</title><link>https://VastCircle.github.io/2024/chipyard-learning/</link><pubDate>Mon, 07 Oct 2024 16:15:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard-learning/</guid><description>&lt;h2 id="chipyard-从下载到构建">chipyard 从下载到构建&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 14 Oct 2024 16:43:30 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>超标量处理器学习笔记1</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link><pubDate>Mon, 14 Oct 2024 16:43:30 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="超标量处理器概览">超标量处理器概览&lt;/h2>
+&lt;h3 id="超标量处理器的流水线">超标量处理器的流水线&lt;/h3>
+&lt;h4 id="顺序执行">顺序执行&lt;/h4>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 248; 
+			flex-basis: 596px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017.png" data-size="1111x447">
+		&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017.png"
+			width="1111"
+			height="447"
+			srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017_hu6270803957762553776.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017_hu2445645561301413447.png 1024w"
+			loading="lazy"
+			alt="in-order pipline">
+	&lt;/a>
+	
+	&lt;figcaption>in-order pipline&lt;/figcaption>
+	
+&lt;/figure>&lt;/p></description></item><item><title>乱序执行CPU</title><link>https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/</link><pubDate>Sat, 12 Oct 2024 16:08:08 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/</guid><description>&lt;h2 id="tomasulos-algorithm">Tomasulo&amp;rsquo;s algorithm&lt;/h2>
+&lt;h3 id="tomasulos-algorithm创新">Tomasulo‘s algorithm创新&lt;/h3>
+&lt;p>Tomasulo算法的主要创新包括硬件实现的寄存器重命名、为所有执行单元设计的保留站（reservation stations），以及一个公共数据总线（CDB），通过该总线计算出的值可以广播到所有可能需要它们的保留站。这些创新使得指令能够实现更好的并行执行，避免在使用记分板或其他早期算法时可能导致的停滞.&lt;/p></description></item><item><title>Runahead_Execution_An_Alternative_to_Very_Large_Instruction_Windows_for_Out of Order_Processors</title><link>https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/</link><pubDate>Thu, 10 Oct 2024 14:23:54 +0800</pubDate><guid>https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>当今的高性能处理器通过乱序执行来容忍长延迟操作。然而，随着延迟的增加，如果我们要继续容忍这些延迟，指令窗口的大小必须增加得更快。本文提出先行(runahead)执行是提高乱序处理器内存延迟容忍度(memory latency tolerance)的有效方法，而不需要不合理的大指令窗口。超前执行可解除因长延迟操作而阻塞的指令窗口的阻塞，从而使处理器能够在程序路径中提前执行,这会导致数据在需要之前就被预取到缓存中。&lt;/p></description></item><item><title>Chipyard Learning</title><link>https://VastCircle.github.io/2024/chipyard-learning/</link><pubDate>Mon, 07 Oct 2024 16:15:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard-learning/</guid><description>&lt;h2 id="chipyard-从下载到构建">chipyard 从下载到构建&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>git clone https://github.com/ucb-bar/chipyard.git
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> chipyard
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git checkout 1.10.0

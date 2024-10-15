@@ -1,4 +1,320 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 07 Oct 2024 16:15:07 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard Learning</title><link>https://VastCircle.github.io/2024/chipyard-learning/</link><pubDate>Mon, 07 Oct 2024 16:15:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard-learning/</guid><description>&lt;h2 id="chipyard-从下载到构建">chipyard 从下载到构建&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 14 Oct 2024 16:43:30 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>超标量处理器学习笔记1</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link><pubDate>Mon, 14 Oct 2024 16:43:30 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="超标量处理器概览">超标量处理器概览&lt;/h2>
+&lt;h3 id="超标量处理器的流水线">超标量处理器的流水线&lt;/h3>
+&lt;h4 id="顺序执行">顺序执行&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 248;
+flex-basis: 596px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017.png" data-size="1111x447">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017.png"
+width="1111"
+height="447"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017_hu6270803957762553776.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210154017_hu2445645561301413447.png 1024w"
+loading="lazy"
+alt="in-order pipline">
+&lt;/a>
+&lt;figcaption>in-order pipline&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>假设流水线每周期可以从 I-Cache 中取出两条指令来执行，则称为2-way 的超标量处理器，在指令经过解码之后，需要根据自身的类型，将两条指令送到对应的 FU 中执行，这个过程称为&lt;strong>发射(Issue)&lt;/strong>。在这个阶段，指令会读取寄存器而得到操作数，同时根据指令的类型，将指令送到对应的 FU 中进行执行。在执行阶段使用了三个 FU:第一个 FU 用来执行 ALU 类型的指令，第二个 FU 用来执行访问存储器类型的指令，第三个 FU 用来执行乘法操作，因为要保证流水线的写回(Write back)阶段是顺序执行的，因此所有 FU 都需要经历同样周期数的流水线，ScoreBoard 用来记录流水线中每条指令的执行情况，例如一条指令在哪个 FU 中执行，在什么时候这条指令可以将结果计算出来等， 一个典型的 ScoreBoard如下。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 156;
+flex-basis: 375px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014205855640.png" data-size="443x283">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014205855640.png"
+width="443"
+height="283"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014205855640_hu6690237057733442019.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014205855640_hu17698180965633417655.png 1024w"
+loading="lazy"
+alt="scoreboard">
+&lt;/a>
+&lt;figcaption>scoreboard&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>P: Pending,表示指令的结果还没有写回到逻辑寄存器中。
+F:一条指令在哪个 FU 中执行，在将指令结果进行旁路时会使用这个信息。
+Result Position:在这个部分记录了一条指令到达 FU 中流水段的哪个阶段，3 表示指令处于 FU 流水线的第一个流水段，1 表示指令到达 FU 流水段的最后一个阶段， 0 表示指令处于流水线的写回阶段，在流水线的&lt;strong>发射&lt;/strong>阶段，会将指令的信息写到ScoreBoard 中，同时，这条指令会查询 ScoreBoard 来获知自己的源操作数是否都准备好了，在这条指令被送到 FU 中执行之后的每个周期，都会将这个值右移一位，这样使用这个值就可以表达出指令在 FU 中执行到哪个阶段，对于执行 ALU 类型指令的第一个 FU 来说，当指令到达 3 时，就可以将它的结果进行旁路了；而对于执行乘法指令的第三个 FU 来说，只有当指令到达 1 时，才可以将它的结果进行旁路。本书采取的应该是第二种。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 293;
+flex-basis: 703px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210458774.png" data-size="1179x402">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210458774.png"
+width="1179"
+height="402"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210458774_hu1954438157205633643.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014210458774_hu1187424182315409720.png 1024w"
+loading="lazy"
+alt="image-20241014210458774">
+&lt;/a>
+&lt;figcaption>image-20241014210458774&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>阻塞发生在译码级&lt;/p>
+&lt;p>指令能够跳转到发射级的条件是scoreboard 对应处在级为2&lt;/p>
+&lt;p>&lt;del>？一发就发两条，两条必须要同步吗&lt;/del> 应该只是由于下条导致的等待&lt;/p>
+&lt;p>指令D不能提前发射应该就是由于需要等待指令C发射&lt;/p>
+&lt;p>&lt;del>指令C无法进入执行是由于前递的问题，需要等待指令A的前递&lt;/del>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 289;
+flex-basis: 695px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795.png" data-size="1002x346">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795.png"
+width="1002"
+height="346"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795_hu1110554545418232987.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795_hu2239682821483300699.png 1024w"
+loading="lazy"
+alt="image-20241014212008795">
+&lt;/a>
+&lt;figcaption>image-20241014212008795&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h4 id="乱序执行">乱序执行&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 263;
+flex-basis: 632px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014211829599.png" data-size="1096x416">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014211829599.png"
+width="1096"
+height="416"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014211829599_hu3570244685790815188.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014211829599_hu18113048283906519492.png 1024w"
+loading="lazy"
+alt="乱序执行流水线">
+&lt;/a>
+&lt;figcaption>乱序执行流水线&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;strong>解码(Decode)阶段&lt;/strong>：为了在乱序执行时解决 WAW 和 WAR 这两种相关性，需要对寄存器进行&lt;strong>重命名(register renaming),&lt;strong>这个过程可以在&lt;/strong>流水线的解码(Decode)&lt;strong>阶段完成，也可以单独使用一个流水段来完成，处理器中需要增加&lt;/strong>物理寄存器堆(Physical Register File, PRF)来配合对指令集中定义的寄存器( Architecture Register File,ARF)进行重命名&lt;/strong>，PRF 中寄存器的个数要多于 ARF。
+&lt;strong>Dispatch(分发):&lt;strong>在这个阶段，被重命名之后的指令会按照程序中规定的顺序，写到发射队列(Issue Queue)、重排序缓存(ROB)和 Store Buffer 等部件中，如果在这些部件中没有空闲的空间可以容纳当前的指令，那么这些指令就需要在流水线的重命名阶段进行等待，这就相当于暂停了寄存器重命名以及之前的所有流水线，直到这些部件中有空闲的空间为止。分发阶段可以和寄存器重命名阶段放在一起，在一些对周期时间要求比较紧的处理器中，也可以将这个部分单独使用一个流水段。
+&lt;strong>发射(Issue)阶段&lt;/strong>：一旦指令的操作数准备好了，就可以从发射队列中离开，送到对应的 FU 中执行，因此发射阶段是流水线从&lt;/strong>顺序执行到乱序&lt;/strong>执行的分界点。每个 FU 都有自己的流水线级数，在这种流水线中，由于每个 FU 的执行周期数都不相同，所以指令在流水线的写回(Write Back)阶段是乱序的，在这个阶段，一条指令只要计算完毕， 就会将结果写到 PRF中，由于分支预测失败( mis-prediction)或者异常( exception)的存在，PRF 中的结果未必都会写到 ARF 中，因此也将 PRF 称为 Future File。
+&lt;strong>Register File Read(读取寄存器)&lt;/strong>:被仲裁电路选中的指令需要从物理寄存器堆(Physical Register File,PRF)中读取操作数，一般情况下，被仲裁电路选中的指令可以从PRF 中得到源操作数，当然还有“不一般”的情况，那就是指令不能从 PRF 中得到操作数， 但是却可以在送到 FU 中执行之前，从旁路网络(bypassing network)中得到操作数，事实上很大一部分指令都是通过旁路网络获得操作数的，这也为减少 PRF 的读端口提供了可能。由于超标量处理器每周期需要执行好几条指令，PRF 所需要的端口个数也是比较多的，多端口寄存器堆的访问速度一般都不会很快，因此在现实世界的处理器中，这个阶段都会单独使用一个流水段。
+&lt;strong>提交(Commit)阶段&lt;/strong>：为了保证程序的串行结果，指令需要按照程序中规定的顺序更新处理器的状态，这需要使用一个称为&lt;strong>重排序缓存(ROB)&lt;strong>的部件来配合，流水线中的所有指令都按照程序中规定的顺序存储在重排序缓存中，使用重排序缓存来实现程序对处理器状态的顺序更新，一条指令在这个阶段，会将它的结果从 PRF 搬移到 ARF 中，同时&lt;/strong>重排序缓存也会配合完成对异常(exception)的处理&lt;/strong>，如果不存在异常，那么这条指令就可以顺利地离开流水线， 并对处理器的状态进行更改，此时称这条&lt;strong>指令退休(retire)了&lt;/strong>，一条指令一旦退休，它就再也不可能回到之前的状态了。
+因为 store 指令需要写存储器，如果在流水线的写回阶段就将 store 指令的结果写到存储器中，那么一旦由于分支预测失败或者异常等原因，需要将这条 store 指令从流水线中抹掉时，就没有办法将存储器的状态进行恢复了，因为存储器中原来的值已经被覆盖， &lt;strong>Store Buffer(SB),来存储 store 指令没有退休之前的结果&lt;/strong>，s&lt;strong>tore 指令在流水线的写回阶段，会将它的结果写到 Store Buffer 中，只有一条 store 指令真的从流水线中退休的时候，才可以将它的值从 Store Buffer 写到存储器中&lt;/strong>。使用了这个部件之后，Load 指令此时除了从 D-Cache 中寻找数据，还需要从 Store Buffer 中进行查找，这样在一定程度上增加了设计的复杂度。&lt;/p>
+&lt;p>在重排序这里也会处理异常 ， 如果没有异常就会写入ARF, 并成功退休，但是无论有没有异常都会写入SB。退休了才可以去修改相应状态。&lt;/p>
+&lt;p>发射阶段选择相应的指令并且送到FU,被选择的指令才会去读取物理寄存器&lt;/p>
+&lt;p>写回阶段进行统一旁路，为什么我写的RISCV有这么多的旁路网络 ?&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 267;
+flex-basis: 643px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241015131538323.png" data-size="946x353">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241015131538323.png"
+width="946"
+height="353"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241015131538323_hu5637503064892761083.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241015131538323_hu14369550668972739287.png 1024w"
+loading="lazy"
+alt="image-20241015131538323">
+&lt;/a>
+&lt;figcaption>image-20241015131538323&lt;/figcaption>
+&lt;/figure>
+&lt;figure
+class="gallery-image"
+style="
+flex-grow: 289;
+flex-basis: 695px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795.png" data-size="1002x346">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795.png"
+width="1002"
+height="346"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795_hu1110554545418232987.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/image-20241014212008795_hu2239682821483300699.png 1024w"
+loading="lazy"
+alt="image-20241014212008795">
+&lt;/a>
+&lt;figcaption>image-20241014212008795&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>超标量处理器设计&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处&lt;/p></description></item><item><title>乱序执行CPU</title><link>https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/</link><pubDate>Sat, 12 Oct 2024 16:08:08 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/</guid><description>&lt;h2 id="tomasulos-algorithm">Tomasulo&amp;rsquo;s algorithm&lt;/h2>
+&lt;h3 id="tomasulos-algorithm创新">Tomasulo‘s algorithm创新&lt;/h3>
+&lt;p>Tomasulo算法的主要创新包括硬件实现的寄存器重命名、为所有执行单元设计的保留站（reservation stations），以及一个公共数据总线（CDB），通过该总线计算出的值可以广播到所有可能需要它们的保留站。这些创新使得指令能够实现更好的并行执行，避免在使用记分板或其他早期算法时可能导致的停滞.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 155;
+flex-basis: 373px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/1280px-Tomasulo_Architecture.png" data-size="1280x822">
+&lt;img src="https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/1280px-Tomasulo_Architecture.png"
+width="1280"
+height="822"
+srcset="https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/1280px-Tomasulo_Architecture_hu16291643218958583948.png 480w, https://VastCircle.github.io/2024/%E4%B9%B1%E5%BA%8F%E6%89%A7%E8%A1%8Ccpu/1280px-Tomasulo_Architecture_hu13189868510601512322.png 1024w"
+loading="lazy"
+alt="Tomasulo_Architechure">
+&lt;/a>
+&lt;figcaption>Tomasulo_Architechure&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="cdb总线">CDB总线&lt;/h3>
+&lt;p>公共数据总线（CDB）将保留站直接连接到功能单元。根据Tomasulo的设计，它“在保持优先顺序的同时促进并发执行” 。这带来了两个重要影响：&lt;/p>
+&lt;ol>
+&lt;li>功能单元可以直接访问任何操作的结果，而无需通过浮点寄存器。这使得多个等待同一结果的单元可以继续执行，而不必等待解决对寄存器文件读端口的争用问题。&lt;/li>
+&lt;li>危险检测和控制执行是分布式的。保留站负责控制指令何时可以执行，而不是依赖一个专门的危险单元来进行统一管理。&lt;/li>
+&lt;/ol>
+&lt;h3 id="指令顺序">指令顺序&lt;/h3>
+&lt;p>指令是按顺序发出的，因此即使它们是乱序执行的（即非顺序执行），指令序列的效果（如指令引发的异常）仍然会按照顺序执行处理器中的顺序发生。这确保了乱序执行不会影响程序的正确性和预期行为&lt;/p>
+&lt;h4 id="寄存器重命名">寄存器重命名&lt;/h4>
+&lt;p>Tomasulo算法通过寄存器重命名来实现正确的乱序执行。所有的通用寄存器和保留站寄存器要么保存真实值，要么保存占位符值。如果在发射阶段某个目标寄存器的真实值不可用，则最初会使用占位符值。占位符值是一个标签，指示哪个保留站将生成真实值。当功能单元完成计算并在公共数据总线（CDB）上广播结果时，占位符将被真实值替换。&lt;/p>
+&lt;p>每个功能单元都有一个保留站。保留站保存执行单条指令所需的信息，包括操作和操作数。当功能单元空闲且指令所需的所有源操作数均为真实值时，功能单元便开始处理指令。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://jia.je/hardware/2021/09/14/brief-into-ooo/#%E7%BB%8F%E5%85%B8-tomasulo" target="_blank" rel="noopener"
+>乱序执行CPU&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://en.wikipedia.org/wiki/Tomasulo%27s_algorithm" target="_blank" rel="noopener"
+>wikipedia Tomasulo&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Runahead_Execution_An_Alternative_to_Very_Large_Instruction_Windows_for_Out of Order_Processors</title><link>https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/</link><pubDate>Thu, 10 Oct 2024 14:23:54 +0800</pubDate><guid>https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>当今的高性能处理器通过乱序执行来容忍长延迟操作。然而，随着延迟的增加，如果我们要继续容忍这些延迟，指令窗口的大小必须增加得更快。本文提出先行(runahead)执行是提高乱序处理器内存延迟容忍度(memory latency tolerance)的有效方法，而不需要不合理的大指令窗口。超前执行可解除因长延迟操作而阻塞的指令窗口的阻塞，从而使处理器能够在程序路径中提前执行,这会导致数据在需要之前就被预取到缓存中。&lt;/p>
+&lt;h2 id="introduction">introduction&lt;/h2>
+&lt;p>乱序执行处理器上的超前执行不会将长延迟操作“移开”（这需要在指令窗口中缓冲它及其后面的指令），而是将其扔出指令窗口。&lt;/p>
+&lt;p>当指令窗口被一个长延迟操作阻塞时，架构寄存器文件(architectural register file)的状态会被checkpoint保存。然后处理器进入“&lt;strong>超前运行模式&lt;/strong>”。它为阻塞操作分配一个虚假结果并将其扔出指令窗口。阻塞操作后的指令被**获取、执行，并以伪退休（pseudo-retired）**的方式从指令窗口中移除。当阻塞操作完成时，处理器重新进入“&lt;strong>正常模式&lt;/strong>”。此时，它会恢复之前保存的检查点状态，并从阻塞操作开始重新获取和执行指令。
+伪退出(pseudo-retire):指令按照传统意义上的方式执行和完成，只是它们不更新架构状态。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 150;
+flex-basis: 361px"
+>
+&lt;a href="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241012153516456.png" data-size="1193x793">
+&lt;img src="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241012153516456.png"
+width="1193"
+height="793"
+srcset="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241012153516456_hu10562838702254261104.png 480w, https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241012153516456_hu2604305733844358238.png 1024w"
+loading="lazy"
+alt="image-20241012153516456">
+&lt;/a>
+&lt;figcaption>image-20241012153516456&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Runahead 的好处来自于将被长延迟操作阻塞的小指令窗口转换为非阻塞窗口，从而使其具有大得多的窗口的性能。&lt;/p>
+&lt;p>在这篇论文中，仅评估了runahead mode对于在二级缓存失效的内存操作的表现，尽管它也可以在任何阻塞指令窗口的长延迟操作上启动。基于英特尔奔腾4处理器的机器模型，该处理器拥有&lt;strong>128个条目的指令窗口&lt;/strong>。
+首先展示了当前的乱序执行引擎无法容忍长延迟的主存访问时间。接下来，展示了runahead mode如何更好地应对这些延迟，并且能够达到一个具有更大指令窗口的机器的性能。&lt;/p>
+&lt;h2 id="relate-work">Relate work&lt;/h2>
+&lt;p>暂无&lt;/p>
+&lt;h2 id="out-of-order-execution-and-memory-latency-tolerance乱序执行和内存容忍度">Out-of-order execution and memory latency tolerance(乱序执行和内存容忍度)&lt;/h2>
+&lt;h3 id="instruction-and-scheduling-windows">Instruction and scheduling windows&lt;/h3>
+&lt;p>乱序执行比顺序执行更能容忍缓存缺失，因为它能够调度与缓存缺失无关的操作。乱序执行的机器通过两个窗口实现这一点：&lt;strong>指令窗口和调度窗口。&lt;/strong>
+指令窗口保存所有已解码但尚未提交到架构状态的指令，其主要目的是保证指令按顺序退休，以支持精确异常。
+调度窗口包含指令窗口中的一部分指令，其主要目的是每个周期搜索那些准备好执行的指令，并对它们进行调度执行。&lt;/p>
+&lt;p>当一个长延迟操作发生时，它会阻塞指令窗口，直到操作完成。尽管后续的指令可能已经执行完成，但它们无法从指令窗口中退休。如果操作的延迟时间足够长，并且指令窗口不够大，指令会在窗口中堆积，最终导致指令窗口被填满。此时，机器会停顿并停止向前执行。&lt;/p>
+&lt;h3 id="memory-latency-tolerance">Memory latency tolerance&lt;/h3>
+&lt;p>取指理想 变 调度窗口 L2理想程度 指令窗口&lt;/p>
+&lt;p>图 1 显示了七台不同机器的指令窗口停滞的周期百分比。每个栏顶部的数字是机器的IPC。该数据是所有模拟基准的平均值。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 137;
+flex-basis: 330px"
+>
+&lt;a href="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010154101124.png" data-size="407x296">
+&lt;img src="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010154101124.png"
+width="407"
+height="296"
+srcset="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010154101124_hu10965257689849940883.png 480w, https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010154101124_hu1293429106633126320.png 1024w"
+loading="lazy"
+alt="具有完整指令窗口停顿的周期的百分比">
+&lt;/a>
+&lt;figcaption>具有完整指令窗口停顿的周期的百分比&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>Runahead 的性能优势来自于将指令提取到提取引擎的缓存中，并执行未命中一级或二级缓存的独立加载和存储。&lt;/p>
+&lt;h2 id="implementation-of-runahead-execution-in-an-out-of-order-processor">Implementation of runahead execution in an out-of-order processor&lt;/h2>
+&lt;p>在本节中，我们描述了在乱序处理器上实现超前执行的情况，其中&lt;strong>指令在被调度后并在执行之前访问寄存器文件&lt;/strong>。Intel Pentium 4 处理器 [13]、MIPS R10000 微处理器 [30] 和 Compaq Alpha 21264 处理器 [18] 是这种微架构的例子。在其他一些微架构中，例如 Intel Pentium Pro 处理器 [12]，&lt;strong>指令在放入调度器之前访问寄存器文件&lt;/strong>。&lt;/p>
+&lt;p>Frontend RAT(Register Alias Table)用于重命名传入指令，并包含架构寄存器到物理寄存器的推测映射。&lt;/p>
+&lt;p>Retirement RAT 包含指向包含已提交架构值的物理寄存器的指针。它用于在分支错误预测和异常之后恢复状态。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 140;
+flex-basis: 338px"
+>
+&lt;a href="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010195821755.png" data-size="984x698">
+&lt;img src="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010195821755.png"
+width="984"
+height="698"
+srcset="https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010195821755_hu4585166472539683948.png 480w, https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/image-20241010195821755_hu9334271057527929535.png 1024w"
+loading="lazy"
+alt="image-20241010195821755">
+&lt;/a>
+&lt;figcaption>image-20241010195821755&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="entering-runahead-mode">Entering runahead mode&lt;/h3>
+&lt;p>**当内存操作在二级缓存中未命中且该内存操作到达指令窗口的头部时，处理器进入超前执行模式。**导致进入超前执行模式的指令地址会被记录。为了在从超前运行模式退出时正确恢复架构状态，处理器对架构寄存器文件的状态进行检查点。出于性能原因，处理器还检查分支历史寄存器和返回地址堆栈的状态。&lt;/p>
+&lt;p>架构寄存器文件的检查点可以通过复制提交寄存器别名表（RAT）指向的物理寄存器内容来完成，但这可能需要时间。&lt;strong>为了避免因复制导致的性能损失，处理器可以在正常模式下不断更新检查点的架构寄存器文件&lt;/strong>。当非超前指令从指令窗口中提交时，它会将其结果更新到检查点寄存器文件中的架构目标寄存器。这样检查点操作不会浪费任何时钟周期。&lt;/p>
+&lt;p>尽管Retirement RAT 在正常模式下指向架构寄存器状态，但在超前运行模式下它指向伪架构寄存器状态并反映伪退休指令更新的状态&lt;/p>
+&lt;h3 id="execution-in-runahead-mode">Execution in runahead mode&lt;/h3>
+&lt;p>&lt;strong>无效位和指令&lt;/strong>:每个物理寄存器都有一个与其关联的无效（INV）位，&lt;strong>以指示它是否具有虚假值&lt;/strong>。任何源自设置了无效位的寄存器的指令都是无效指令。 INV 位用于防止使用虚假数据进行虚假预取和分支解析。
+如果存储指令是无效的，它会在前置执行期间将一个 INV 值引入内存映像。为了处理前置模式下数据值（和 INV 值）通过内存的通信，我们使用一个小的“前置缓存”，它与一级数据缓存并行访问。&lt;/p>
+&lt;p>&lt;strong>INV 值的传播&lt;/strong>:引入 INV 值的第一条指令是导致处理器进入runahead mode的指令,如果这条指令是加载指令，它会将其物理目的寄存器标记为 INV。如果它是存储指令，则会在前置缓存中分配一行，并将其目标字节标记为 INV。任何无效的指令在调度或执行后写入寄存器时，会将该寄存器标记为 INV。任何有效的操作在写入寄存器时，会重置其目的寄存器的 INV 位。&lt;/p>
+&lt;h4 id="runahead-store-operations-and-runahead-cache">Runahead store operations and runahead cache&lt;/h4>
+&lt;p>先行存储(store)指令不会将其结果写入任何地方。因此，依赖于有效先行存储的先行加载被视为无效指令并被丢弃。由于寄存器数量有限，因此将&lt;strong>先行存储(store)&lt;strong>的结果&lt;/strong>转发&lt;/strong>到&lt;strong>先行加载(load)&lt;strong>对于高性能至关重要。
+如果存储及其相关加载都在指令窗口中，则此转发是通过当前乱序处理器中已存在的&lt;/strong>store buffer&lt;/strong>来完成的。
+如果超前运行加载依赖于已经pseudo-retired的超前运行存储（这意味着该存储不再位于存储缓冲区中），则它应该从某个其他位置获取存储的结果。1是写入data cache ,2是弄一个大的fully-associative buffer。&lt;/p>
+&lt;p>使用 runahead cache 来保存伪退休先行存储的结果和 INV 状态 ，提供指令之间的数据和INV状态的通信。为了支持存储和加载之间 INV 位的正确通信，&lt;strong>存储缓冲区&lt;/strong>中的每个条目和runahead cache 中的每个字节都有一个相应的 INV 位。runahead cache 的每个字节还有另一个与其关联的位（STO 位），指示存储是否已写入该字节。仅当访问的字节由存储写入（设置了 STO 位）并且访问runahead cache 有效时，对超前运行高速缓存的访问才会导致命中。&lt;/p>
+&lt;p>更新 INV 和 STO的规则:&lt;/p>
+&lt;ol>
+&lt;li>当有效的先行存储完成执行时，它将其数据写入其存储缓冲区条目（就像在普通处理器中一样）并重置该条目的关联 INV 位。同时，它查询数据缓存，如果数据缓存未命中，则向内存层次结构发送预取请求。（为什么store 要查 data cache）&lt;/li>
+&lt;li>当一个无效的先行存储被scheduled时，它会set其相关store buff条目的 INV 位。&lt;/li>
+&lt;li>当一个有效的先行存储离开指令窗口时，它会将其结果写入预运行缓存，并重置已写入字节的 INV 位。同时，它还会设置已写入字节的 STO 位。&lt;/li>
+&lt;li>当一个无效的先行存储离开指令窗口时，如果其地址有效，它会设置写入字节的 INV 位和 STO 位&lt;/li>
+&lt;li>先行存储从不将结果写入数据缓存。&lt;/li>
+&lt;/ol>
+&lt;p>当存储操作的地址无效时，存储操作会被简单地视为一个空操作（NOP）。由于加载操作无法识别与这些无效存储操作的依赖关系，它们可能会错误地从内存中加载一个陈旧的值。这个问题可以通过使用&lt;strong>内存依赖预测器&lt;/strong>来缓解，**预测器可以识别无效地址存储操作与其依赖的加载操作之间的依赖关系。**一旦依赖关系被识别，如果存储操作的数据值是无效的，则加载操作会被标记为无效（INV）；如果存储操作的数据值是有效的，则可以将其forward给加载操作。&lt;/p>
+&lt;h4 id="runahead-load-operations">Runahead load operations&lt;/h4>
+&lt;p>runahead load invalid :&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>源自无效的物理寄存器&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>依赖于store buffer中标记为无效（INV）的存储操作&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>依赖于一个已经伪退休且是无效（INV）的存储操作(runahead cache)&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>有效load会并行访问3个结构 ： data cache , runahead cache , store buffer .&lt;/p>
+&lt;p>加载操作命中store buffer ，并且命中的条目被标记为有效，那么加载操作会从store buffer获取数据。
+加载操作命中store buffer ，并且命中的条目被标记为无效（INV），那么加载操作会将其物理目标寄存器标记为无效（INV）。&lt;/p>
+&lt;p>只有当加载指令访问的cache line有效且其访问的任何字节的 STO 位被set时，该加载才被视为在&lt;strong>runahead cache 中命中&lt;/strong>。
+&lt;strong>如果load在store buffer未命中但在runahead cache 命中&lt;/strong>，则它会检查在runahead cache 访问的字节的 INV 位。如果没有INV 位set ，将使用runahead cache 中的数据。如果任意一个源数据字节被标记为 INV，则将其目标标记为INV。
+&lt;strong>如果load在store buffer和runahead cache 都未命中，但在data cache中命中&lt;/strong>，则它将使用data cache中的值，并被视为Valid。然而，由于以下两个原因，它实际上可能是无效的：1）它可能依赖于具有 INV 地址的store，或者 2）它可能依赖于一个 INV store，该store在runahead cache中将其目标字节标记为 INV，但由于冲突，相应的runahead cache被释放。然而，这两种情况都是罕见的，不会显著影响性能。&lt;/p>
+&lt;p>&lt;strong>如果加载在所有三个结构中都未命中&lt;/strong>，它会向L2 cache 发送请求以获取其数据。如果该请求在L2 cache 中命中，则数据将从L2 cache 传输到L1 cache ，加载完成其执行。如果请求在L2 cache 中未命中，加载会将其&lt;strong>目标寄存器&lt;/strong>标记为 INV，并像导致进入runahead mode的加载那样(未命中L1 cache)从调度器中移除。该请求会发送到内存像一个未命中 L2 缓存的&lt;strong>正常加载请求&lt;/strong>一样。&lt;/p>
+&lt;p>store buffer &amp;gt; runahead cache &amp;gt; data cache &amp;gt; L2 cache&lt;/p>
+&lt;h4 id="execution-and-prediction-of-branches">Execution and prediction of branches&lt;/h4>
+&lt;p>在runahead mode中，分支的预测和解决方式与正常模式完全相同，唯一的区别是：具有 INV 源(寄存器标记为INV)的分支（与所有分支一样）被预测并以推测的方式更新全局分支历史寄存器，但与其他分支不同，它永远无法被解决。如果分支被正确预测，这不是问题。然而，如果分支预测错误，处理器在获取到该分支后将始终处于错误路径，直到遇到一个与控制流无关的点。我们将获取到错误预测的 INV 分支的程序中的点称为“分歧点”。分歧点的存在不一定对性能有害，但正如我们稍后将展示的，分歧点在runahead mode中出现得越晚，性能提升就越好。&lt;/p>
+&lt;p>与分支预测相关的一个有趣问题是前置模式下分支预测器表的训练策略。一种选择——也是我们实现中采用的选项——是始终训练分支预测器表。如果一个分支首先在前置模式下执行，然后在正常模式下执行，这种策略将导致同一个分支对分支预测器进行两次训练。因此，预测器表的性能得到了增强，计数器可能会失去滞后效应。第二种选择是绝不在前置模式下训练分支预测器。这会导致前置模式下的分支预测准确率降低，从而降低性能，并使分歧点更接近前置入口点。第三种选择是始终在前置模式下训练分支预测器，但同时使用一个队列将前置模式下分支的结果传递给正常模式。在正常模式下，如果存在预测，则使用该队列中的预测来进行分支预测。如果一个分支使用来自队列的预测进行预测，则不会再次训练预测器表。第四种选择是为前置模式和正常模式使用两个独立的预测器表，并在进入前置模式时将正常模式的表信息复制到前置模式。这一选项在硬件实现上成本较高，但我们进行了模拟以确定第一种选项的双重训练策略有多重要。我们的结果显示，与第四种选择相比，二次训练分支预测器表条目并没有显著降低性能。&lt;/p>
+&lt;h4 id="instruction-pseudo-retirement-during-runahead-mode">Instruction pseudo-retirement during runahead mode.&lt;/h4>
+&lt;p>在runahead mode下，指令按照程序顺序离开指令窗口。&lt;strong>如果某条指令到达指令窗口的队头，它将被考虑进行pseudo-retire。&lt;/strong>
+如果被考虑pseudo-retire的指令是无效的（INV），它会立即从窗口中移除。
+如果指令是有效的，它需要等待执行完毕（此时它可能变为无效的），并将结果写入物理寄存器文件。在pseudo-retire时，一条指令会释放为其执行分配的所有资源。&lt;/p>
+&lt;p>无论是有效还是无效的指令，在它们离开指令窗口时都会更新退休重命名表（Retirement RAT）。退休重命名表不需要存储与每个寄存器关联的无效（INV）位，因为物理寄存器已经各自关联了无效位。&lt;/p>
+&lt;h4 id="exiting-runahead-mode">Exiting runahead mode&lt;/h4>
+&lt;p>任何时候可以退出 runahead mode , 所有在处理器中执行的指令都会被清除，它们的缓冲区会被释放。检查点保存的架构寄存器文件会复制到物理寄存器文件的预定部分。前端和退休的重命名表（RAT）也会被修复，以便它们指向保存架构寄存器值的物理寄存器。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="知识点补充">知识点补充&lt;/h3>
+&lt;h4 id="store-buffer">store buffer&lt;/h4>
+&lt;h4 id="分支预测">分支预测&lt;/h4>
+&lt;h4 id="architectural-register">Architectural Register&lt;/h4>
+&lt;p>架构寄存器是指每个CPU独有的一组全局寄存器，这些寄存器不与其他CPU共享。它们可以存储任意类型的数据，并且能够在CPU内部的线程之间实现快速通信。&lt;/p>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://www.sciencedirect.com/topics/computer-science/architectural-register" target="_blank" rel="noopener"
+>architectural register&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://jia.je/hardware/2021/09/14/brief-into-ooo/#%E8%83%8C%E6%99%AF" target="_blank" rel="noopener"
+>浅谈乱序执行CPU&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Chipyard Learning</title><link>https://VastCircle.github.io/2024/chipyard-learning/</link><pubDate>Mon, 07 Oct 2024 16:15:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard-learning/</guid><description>&lt;h2 id="chipyard-从下载到构建">chipyard 从下载到构建&lt;/h2>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>git clone https://github.com/ucb-bar/chipyard.git
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> chipyard
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>git checkout 1.10.0
@@ -60,13 +376,55 @@
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在output/chipyard.harness.TestHarness.MyCoreConfig 可以看到hello.vcd&lt;/p>
 &lt;p>使用 gtkwave可以打开hello.vcd 查看&lt;/p>
 &lt;h3 id="rocket-chip">rocket chip&lt;/h3>
-&lt;img src="rocket-chip 图表.png" alt="rocket-chip 图表" style="zoom:50%;" />
+&lt;div align=center>&lt;img src="rocket-chip 图表.png" alt="123" style="zoom:50%;" />&lt;/div>
 &lt;h4 id="tiles">tiles&lt;/h4>
 &lt;p>每个&lt;code>Rocket&lt;/code>核心都与一个页表遍历器、L1 指令缓存和 L1 数据缓存组合成一个&lt;code>RocketTile&lt;/code>&lt;/p>
 &lt;p>每个 CPU 块都有一个 L1 指令缓存和 L1 数据缓存。这些缓存的大小和关联性可以配置。默认&lt;code>RocketConfig&lt;/code> 使用 16 KiB、4 路组关联指令和数据缓存&lt;/p>
 &lt;h4 id="memory-system">Memory System&lt;/h4>
 &lt;p>这些图块(Tiles)连接到&lt;code>SystemBus&lt;/code>，后者将其连接到 L2 缓存组。然后，L2 缓存组连接到&lt;code>MemoryBus&lt;/code>，后者通过 TileLink 到 AXI 转换器连接到 DRAM 控制器&lt;/p>
 &lt;div align=center>&lt;img src="image-20241009152035016.png" alt="Momory System" style="zoom:50%;" /> &lt;/div>
+&lt;h4 id="mmio">MMIO&lt;/h4>
+&lt;p>对于 MMIO 外围设备，&lt;code>SystemBus&lt;/code>连接到&lt;code>ControlBus&lt;/code>和&lt;code>PeripheryBus&lt;/code>&lt;/p>
+&lt;p>&lt;code>ControlBus&lt;/code>连接标准外围设备，如 BootROM、平台级中断控制器 (PLIC)、核心本地中断 (CLINT) 和调试单元&lt;/p>
+&lt;h5 id="bootrom">BootROM&lt;/h5>
+&lt;p>BootROM 包含第一阶段引导加载程序，即系统复位后运行的第一条指令。它还包含设备树，Linux 会使用它来确定连接了哪些其他外设，具体在 /generators/rocket-chip/bootrom&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">#define DRAM_BASE 0x80000000
+.section .text.start, &amp;#34;ax&amp;#34;, @progbits
+.globl _start
+_start:
+csrwi 0x7c1, 0 // disable chicken bits
+li s0, DRAM_BASE
+csrr a0, mhartid
+la a1, _dtb
+jr s0
+.section .text.hang, &amp;#34;ax&amp;#34;, @progbits
+.globl _hang
+_hang:
+csrwi 0x7c1, 0 // disable chicken bits
+csrr a0, mhartid
+la a1, _dtb
+csrwi mie, 0
+1:
+wfi
+j 1b
+.section .rodata.dtb, &amp;#34;a&amp;#34;, @progbits
+.globl _dtb
+.align 5, 0
+_dtb:
+.ascii &amp;#34;DTB goes here&amp;#34;
+&lt;/code>&lt;/pre>&lt;p>linker.ld&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>SECTIONS
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ROM_BASE&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> 0x10000; /* ... but actually position independent */
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> . &lt;span style="color:#56b6c2">=&lt;/span> ROM_BASE;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .text.start : &lt;span style="color:#56b6c2">{&lt;/span> *&lt;span style="color:#56b6c2">(&lt;/span>.text.start&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> . &lt;span style="color:#56b6c2">=&lt;/span> ROM_BASE + 0x40;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .text.hang : &lt;span style="color:#56b6c2">{&lt;/span> *&lt;span style="color:#56b6c2">(&lt;/span>.text.hang&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> . &lt;span style="color:#56b6c2">=&lt;/span> ROM_BASE + 0x80;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .rodata.dtb : &lt;span style="color:#56b6c2">{&lt;/span> *&lt;span style="color:#56b6c2">(&lt;/span>.rodata.dtb&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>第一条指令应该是从0x10000开始&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;p>&lt;a class="link" href="https://chipyard.readthedocs.io/en/1.10.0/" target="_blank" rel="noopener"
