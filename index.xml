@@ -1,4 +1,446 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Mon, 14 Oct 2024 16:43:30 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>超标量处理器概览</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link><pubDate>Mon, 14 Oct 2024 16:43:30 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="超标量处理器概览">超标量处理器概览&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 15 Oct 2024 14:08:47 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>分支预测</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/</link><pubDate>Tue, 15 Oct 2024 14:08:47 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;h3 id="分支预测需要的内容">分支预测需要的内容&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>方向，决定跳转与否&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>目标地址 决定跳转的目的地，riscv中有两种体现形式&lt;/p>
+&lt;p>PC + 立即数，跳转范围受限。&lt;/p>
+&lt;p>寄存器跳转，预测风险难度高，但是除了RETURN/CALL,一般建议不使用间接跳转。&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="分支预测的解码">分支预测的解码&lt;/h3>
+&lt;p>快速分辨出哪条指令是分支指令&lt;/p>
+&lt;p>I-cache得出结果可能需要多个周期，这些周期无法得到准确的预测结果&lt;/p>
+&lt;p>解码+分支预测放在一个周期 ， 严重影响周期时间&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 205;
+flex-basis: 494px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015143633234.png" data-size="768x373">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015143633234.png"
+width="768"
+height="373"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015143633234_hu5012368611020013998.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015143633234_hu8871877114348964777.png 1024w"
+loading="lazy"
+alt="快速解码">
+&lt;/a>
+&lt;figcaption>快速解码&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;del>可以在指令从L2 cache 写入到I-cache时进行快速解码,(pre-decode),然后将指令否是分支的信息也写入I-cache.&lt;/del>&lt;/p>
+&lt;p>分支预测的最好时机是在当前周期得到去指令地址的时候&lt;/p>
+&lt;p>可以直接通过PC值来进行分支预测，那就不需要进行解码了，但是只能够知道它是分支指令&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 220;
+flex-basis: 530px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015153115072.png" data-size="773x350">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015153115072.png"
+width="773"
+height="350"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015153115072_hu10962105718784769920.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015153115072_hu3395612283536332007.png 1024w"
+loading="lazy"
+alt="pc分支预测">
+&lt;/a>
+&lt;figcaption>pc分支预测&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="分支预测的方向预测">分支预测的方向预测&lt;/h2>
+&lt;p>跳转 （taken)和不发生跳转（not token）&lt;/p>
+&lt;h3 id="一bit的跳转预测">一bit的跳转预测&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 290;
+flex-basis: 697px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182744711.png" data-size="517x178">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182744711.png"
+width="517"
+height="178"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182744711_hu3772473742952120499.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182744711_hu6029973878094252562.png 1024w"
+loading="lazy"
+alt="image-20241015182744711">
+&lt;/a>
+&lt;figcaption>image-20241015182744711&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="基于两位饱和计数器2-bit-saturating-counter">基于两位饱和计数器（2-bit saturating counter)&lt;/h3>
+&lt;p>根据分支前两次的结果预测下一次的结果&lt;/p>
+&lt;h4 id="状态机">状态机&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 301;
+flex-basis: 723px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182911601.png" data-size="654x217">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182911601.png"
+width="654"
+height="217"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182911601_hu6329958502138823409.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015182911601_hu5922628540263514478.png 1024w"
+loading="lazy"
+alt="基于两位饱和计数器">
+&lt;/a>
+&lt;figcaption>基于两位饱和计数器&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>（1）计数器处于饱和状态，分支指令本次被预测发生跳转&lt;/p>
+&lt;p>（2） 计数器处于不饱和状态，分支指令预测发生跳转&lt;/p>
+&lt;p>（3） 计数器处于不饱和状态，分支指令预测不发生跳转&lt;/p>
+&lt;p>（4） 计数器处于饱和状态，分支指令被预测不发生跳转&lt;/p>
+&lt;p>初始状态位于 strongly not taken 或者 weakly not taken&lt;/p>
+&lt;p>状态机处于饱和状态，只有两次预测失败才会改变预测的结果&lt;/p>
+&lt;p>对于以下的情况，该种方法能够有50%的成功预测率&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 328;
+flex-basis: 787px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015184801299.png" data-size="279x85">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015184801299.png"
+width="279"
+height="85"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015184801299_hu12330989491748176683.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015184801299_hu10712615227853934463.png 1024w"
+loading="lazy"
+alt="image-20241015184801299">
+&lt;/a>
+&lt;figcaption>image-20241015184801299&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>TTNTNTNTNT 对于这种情况，预测还是有问题，就是始终进入不了饱和，那还是相当于1bit&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 159;
+flex-basis: 382px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015190708431.png" data-size="632x397">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015190708431.png"
+width="632"
+height="397"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015190708431_hu1672855586108714933.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015190708431_hu15441497882329938705.png 1024w"
+loading="lazy"
+alt="另外两种预测方法">
+&lt;/a>
+&lt;figcaption>另外两种预测方法&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>情况1是如果两次连续的跳转，就直接变成饱和的强跳转，那就需要两次不跳转才能预测为不跳转&lt;/p>
+&lt;p>情况2是如果两次连续的不跳转，就直接变成饱和的不跳转，那就需要两次跳转才能预测为跳转&lt;/p>
+&lt;p>利用格雷码降低功耗，减少出错的概率&lt;/p>
+&lt;p>对于一般的for循环，TTTTTTTTTTTTTTN ,只会出现2次预测失败 ，开始时 weakly not taken , 当再次执行for循环，第一次就会预测成功&lt;/p>
+&lt;h4 id="存储方式">存储方式&lt;/h4>
+&lt;p>每一个PC需要一个两位的饱和计数器， 32 位 PC需要 2^30 * 2b 存储器 ， 使用如下方法存储（PHT（Pattern History Table））: 使用 PC的一部分进行存储&lt;/p>
+&lt;h5 id="别名-aliasing">别名 （aliasing)&lt;/h5>
+&lt;p>不同PC有相同的饱和计数器，导致相互之间的干扰&lt;/p>
+&lt;p>中立别名 ： 分支指令的方向一致&lt;/p>
+&lt;p>破坏性别名 ： 分支指令的方向不一致&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 225;
+flex-basis: 540px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015192528722.png" data-size="655x291">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015192528722.png"
+width="655"
+height="291"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015192528722_hu9221241697137903403.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015192528722_hu5725581828526846841.png 1024w"
+loading="lazy"
+alt="使用PC值的一部分来寻址饱和计数器">
+&lt;/a>
+&lt;figcaption>使用PC值的一部分来寻址饱和计数器&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 189;
+flex-basis: 454px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194600012.png" data-size="563x297">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194600012.png"
+width="563"
+height="297"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194600012_hu2951182150190756820.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194600012_hu16224992082934435296.png 1024w"
+loading="lazy"
+alt="image-20241015194600012">
+&lt;/a>
+&lt;figcaption>image-20241015194600012&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h5 id="避免别名的方法--哈希表">避免别名的方法 —— 哈希表&lt;/h5>
+&lt;p>哈希表能够压缩32位PC到一个比较小的值&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 196;
+flex-basis: 472px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194955893.png" data-size="553x281">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194955893.png"
+width="553"
+height="281"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194955893_hu15927042566795541290.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241015194955893_hu8702642689007638371.png 1024w"
+loading="lazy"
+alt="image-20241015194955893">
+&lt;/a>
+&lt;figcaption>image-20241015194955893&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>更新时间点&lt;/p>
+&lt;p>（1）在流水线的取指令阶段，进行分支预测，根据预测的结果更新PHT 预测的结果更新PHT肯定不合理&lt;/p>
+&lt;p>（2） 在流水线的执行阶段，当分支指令的方向被计算出来时，更新PHT&lt;/p>
+&lt;p>（3） 在流水线的提交阶段，当分支指令要离开流水线是，更新PHT&lt;/p>
+&lt;p>对于2,3，分支指令可能在PHT更新之前就被取过很多次了，会影响结果，但是影响的不多&lt;/p>
+&lt;p>在乱序执行中，即使在执行阶段得到了一条分支指令的结果，也无法保证该结果是正确的，因为分支指令可能位于分支预测失败的路径上，所以（3）是最保险的&lt;/p>
+&lt;p>顺序执行不会吗 ？ 不会 ，主要是乱序执行有可能前面的指令后于后面指令的执行 ，这样后面的指令不一定会执行&lt;/p>
+&lt;h3 id="基于局部历史的分支预测">基于局部历史的分支预测&lt;/h3>
+&lt;p>BHR(Branch History Register):分支历史寄存器&lt;/p>
+&lt;p>通过一个寄存器记录一条分支指令在过去的历史状态&lt;/p>
+&lt;p>n位BHR记录n次结果&lt;/p>
+&lt;p>BHR和PHT一一对应，BHR有多少种取值，PHT有多少表项（entry)&lt;/p>
+&lt;p>结果从BHR右侧移入，对应的BHR值改变对应的PHT&lt;/p>
+&lt;p>那就相当于把一个PC对应的表项有进行了细分 -&amp;gt; 一个BHR和多个PHT&lt;/p>
+&lt;p>如果一个序列，连续相同的数有p位，则虚了的循环周期为p,只要BHR不小于p,就可以做完美预测&lt;/p>
+&lt;h4 id="寻址">寻址&lt;/h4>
+&lt;p>如果进行全寻址的话 ， 1个PC值 需要 N位BTR + 2^N * 2 位PHT , 2^n 就需要 2^n（ N + 2^N * 2）&lt;/p>
+&lt;p>所以需要PC部分值来寻址&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 238;
+flex-basis: 571px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016102002253.png" data-size="629x264">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016102002253.png"
+width="629"
+height="264"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016102002253_hu9089512783516302460.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016102002253_hu16056882700841532627.png 1024w"
+loading="lazy"
+alt="image-20241016102002253">
+&lt;/a>
+&lt;figcaption>image-20241016102002253&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;strong>1个PHT&lt;/strong>&lt;/p>
+&lt;p>PC部分值寻址PHT,PC通过hash处理寻址BHT&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 159;
+flex-basis: 382px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104245339.png" data-size="581x365">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104245339.png"
+width="581"
+height="365"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104245339_hu16419308451831036941.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104245339_hu17376103308489953844.png 1024w"
+loading="lazy"
+alt="image-20241016104245339">
+&lt;/a>
+&lt;figcaption>image-20241016104245339&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>异或（XOR)法&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 155;
+flex-basis: 373px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104602111.png" data-size="727x467">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104602111.png"
+width="727"
+height="467"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104602111_hu15096252433589209338.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016104602111_hu925909729055331567.png 1024w"
+loading="lazy"
+alt="位拼接法和异或法">
+&lt;/a>
+&lt;figcaption>位拼接法和异或法&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="基于全局历史的分支预测">基于全局历史的分支预测&lt;/h3>
+&lt;p>对一条分支指令进行分支预测，考虑前面分支指令的执行结果&lt;/p>
+&lt;p>需要一个全局历史寄存器（GHR(global history register)),记录最近执行的所有分支指令的结果、&lt;/p>
+&lt;p>最理想的情况是对每条分支指令都使用一个PHT&lt;/p>
+&lt;p>一个全局寄存器 + 每一条分支指令对应的PHT&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 203;
+flex-basis: 489px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144951117.png" data-size="650x319">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144951117.png"
+width="650"
+height="319"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144951117_hu9179660129570194615.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144951117_hu13364759526685380234.png 1024w"
+loading="lazy"
+alt="image-20241016144951117">
+&lt;/a>
+&lt;figcaption>image-20241016144951117&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>量变引起质变，当局部BHR少到只剩下一个的时候，就是全局GHR&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 176;
+flex-basis: 423px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144931624.png" data-size="726x411">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144931624.png"
+width="726"
+height="411"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144931624_hu7324003174822261831.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016144931624_hu16689410873822793480.png 1024w"
+loading="lazy"
+alt="image-20241016144931624">
+&lt;/a>
+&lt;figcaption>image-20241016144931624&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="总结">总结&lt;/h3>
+&lt;p>两种分支预测方法
+&lt;strong>局部历史分支预测&lt;/strong>：基于分支指令自身在过去的执行状况来进行分支预测，对每一条分支指令都使用分支历史寄存器（BHR),并使用了由两位饱和计数器组成的PHT(Pattern History Table)来捕捉每一个BHR的规律，使用BHR和PHT配合进行分支预测
+&lt;strong>全局历史分支预测&lt;/strong>：基于一条分支指令之前的一些分支指令的执行状况来进行分支预测，使用全局历史寄存器（GHR)记录所有分支指令的执行情况，由两位饱和计数器组成的PHT(Pattern History Table)来捕捉每一个GHR的规律,使用GHR和PHT配合进行分支预测&lt;/p>
+&lt;h3 id="竞争的分支预测">竞争的分支预测&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 134;
+flex-basis: 323px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016145849720.png" data-size="417x309">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016145849720.png"
+width="417"
+height="309"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016145849720_hu13974060394538718885.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016145849720_hu8834002104162655463.png 1024w"
+loading="lazy"
+alt="竞争的分支预测原理图">
+&lt;/a>
+&lt;figcaption>竞争的分支预测原理图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 135;
+flex-basis: 325px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150054271.png" data-size="506x373">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150054271.png"
+width="506"
+height="373"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150054271_hu7667022521208126150.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150054271_hu9814928122482868099.png 1024w"
+loading="lazy"
+alt="竞争的分支预测_更详细的原理图">
+&lt;/a>
+&lt;figcaption>竞争的分支预测_更详细的原理图&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>理想情况下每一条分支指令都有一个CPHT(choice PHT)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 143;
+flex-basis: 345px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150311840.png" data-size="391x272">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150311840.png"
+width="391"
+height="272"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150311840_hu3776547309985000606.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016150311840_hu13077989359135110784.png 1024w"
+loading="lazy"
+alt="CPHT中的两位饱和计数器">
+&lt;/a>
+&lt;figcaption>CPHT中的两位饱和计数器&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;ol>
+&lt;li>当P1预测正确,P2预测错误时,计数器减1&lt;/li>
+&lt;li>当P1预测错误,P2预测正确时,计数器加1&lt;/li>
+&lt;li>当P1和P2预测结果一致时,不管预测正确与否,计数器保持不变&lt;/li>
+&lt;/ol>
+&lt;p>对于每一条指令,在GHR内容不同时,会导致使用不同的分支预测方法,所以将PC值与GHR进行相应运算再去寻址CPHT的地址.&lt;/p>
+&lt;h3 id="分支预测的更新">分支预测的更新&lt;/h3>
+&lt;h4 id="历史寄存器">历史寄存器&lt;/h4>
+&lt;p>（1）在流水线的取指令阶段，进行分支预测，根据预测的结果更新&lt;/p>
+&lt;p>（2） 在流水线的执行阶段，当分支指令的方向被计算出来时，更新,分支指令可能在错误预测的路径上,造成错误&lt;/p>
+&lt;p>（3） 在流水线的提交阶段，当分支指令要离开流水线是，更新 ,最保险的方法,但是浪费了性能&lt;/p>
+&lt;p>一条分支指令b在时间t被分支预测,在时间 $t + \Delta t$ 从流水线退休, 任何在 $ \Delta t $内的时间被预测的分支指令都不会从分支指令的结果受益&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 199;
+flex-basis: 479px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016153738302.png" data-size="763x382">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016153738302.png"
+width="763"
+height="382"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016153738302_hu9275436089700128595.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016153738302_hu11989386203258249376.png 1024w"
+loading="lazy"
+alt="image-20241016153738302">
+&lt;/a>
+&lt;figcaption>image-20241016153738302&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>采取方法1更新 ,但是会出现分支预测失败的情况 ,即使后续的分支指令使用的错误的 GHR ,由于他们在预测失败的路径上,都会从流水线中被抹去&lt;/p>
+&lt;h5 id="修复ghr错误值的方法">修复GHR错误值的方法&lt;/h5>
+&lt;h6 id="提交commit阶段修复法">提交(commit)阶段修复法&lt;/h6>
+&lt;p>前端阶段Speculative GHR, 提交阶段放置一个 Ritired GHR, 在前端推测失败之后,需要等待分支指令退休的时候,将后端的GHR写到前端的GHR中,然后根据这条分支指令所指定的目标地址,重新取指令执行.&lt;/p>
+&lt;p>该方法的缺点是会造成分支预测失败时惩罚的增大,(why?)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 231;
+flex-basis: 556px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016154227680.png" data-size="610x263">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016154227680.png"
+width="610"
+height="263"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016154227680_hu14721982168866039868.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016154227680_hu14789759748200599315.png 1024w"
+loading="lazy"
+alt="利用提交阶段的GHR修复分支预测器的GHR">
+&lt;/a>
+&lt;figcaption>利用提交阶段的GHR修复分支预测器的GHR&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h6 id="checkpoint修复法">checkpoint修复法&lt;/h6>
+&lt;p>在取指令阶段更新GHR时,可以把旧的GHR值保存起来,保存的内容称为checkpoint GHR .一旦分支指令的结果在流水线中被计算出来,就可以对分支指令的分支预测是否正确进行检查.如果分支预测正确,说明GHR中的值是正确的,如果预测失败,将这条分支指令对于的checkpoint GHR恢复到前端的GHR中,并从这条分支指令正确的目标地址开始取指令执行&lt;/p>
+&lt;p>我的理解是把原来的GHR和分支预测结果的反向结合然后放进fifo中,在预测失败时把这个值取出来&lt;/p>
+&lt;p>如果是顺序执行,读取存储器的方式也可以用FIFO,&lt;/p>
+&lt;p>方式二是对方式一的一种补充,使得能够在执行阶段也去实现恢复&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 125;
+flex-basis: 300px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016162236973.png" data-size="509x407">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016162236973.png"
+width="509"
+height="407"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016162236973_hu2640580469089932493.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016162236973_hu1193722294166550780.png 1024w"
+loading="lazy"
+alt="利用checkpoint的方法会GHR进行修复">
+&lt;/a>
+&lt;figcaption>利用checkpoint的方法会GHR进行修复&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h5 id="修复bhr错误值的方法">修复BHR错误值的方法&lt;/h5>
+&lt;p>方式和修复GHR基本是类似的,并且BHR很少出现一条分支指令在流水线的提交阶段更新BHR,流水线中又出现了这条分支指令使用BHR进行分支预测的情况,除非循环体很短&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 302;
+flex-basis: 725px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016181356130.png" data-size="716x237">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016181356130.png"
+width="716"
+height="237"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016181356130_hu15264134084536464035.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016181356130_hu13417008434328038782.png 1024w"
+loading="lazy"
+alt="image-20241016181356130">
+&lt;/a>
+&lt;figcaption>image-20241016181356130&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h4 id="两位饱和寄存器">两位饱和寄存器&lt;/h4>
+&lt;p>由于饱和寄存器一般是处在饱和状态的,所以选择在分支指令退休的时候更新PHT的饱和计数器,也不会产生很大的负面影响&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>超标量处理器概览</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link><pubDate>Mon, 14 Oct 2024 16:43:30 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="超标量处理器概览">超标量处理器概览&lt;/h2>
 &lt;h3 id="超标量处理器的流水线">超标量处理器的流水线&lt;/h3>
 &lt;h4 id="顺序执行">顺序执行&lt;/h4>
 &lt;p>&lt;figure
