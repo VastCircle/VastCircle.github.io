@@ -1,5 +1,202 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 16 Oct 2024 18:26:42 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>分支预测(目标地址)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/</link><pubDate>Wed, 16 Oct 2024 18:26:42 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/</guid><description>&lt;h2 id="分支预测失败的恢复">分支预测失败的恢复&lt;/h2>
-&lt;p>处在错误路径上的指令有可能已经将处理器中某个部位的内容进行了更改,&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 16 Oct 2024 18:26:42 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>分支预测(目标地址)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/</link><pubDate>Wed, 16 Oct 2024 18:26:42 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/</guid><description>&lt;h2 id="分支预测的目标地址预测">分支预测的目标地址预测&lt;/h2>
+&lt;p>对于直接跳转的分支指令,由于它的偏移值(offset)是以立即数的形式固定在指令中,目标地址是固定的,只需要记录分支指令的目标地址即可.&lt;/p>
+&lt;p>对于间接分支跳转,大部分是CALL和Return ,所以可以进行一定程度的预测&lt;/p>
+&lt;h3 id="直接跳转类型的分支预测">直接跳转类型的分支预测&lt;/h3>
+&lt;p>(1)当分支指令不发生跳转时,&lt;/p>
+&lt;p>目标地址 = 当前分支指令的PC值 + Sizeof(fetch group)&lt;/p>
+&lt;p>(2)当发生跳转时&lt;/p>
+&lt;p>目标指令 = 当前分支指令的PC值 + Sign_Eextend(offset)&lt;/p>
+&lt;h4 id="btb">BTB&lt;/h4>
+&lt;p>通过BTB(Branch Target Buffer)(相当于一个cache)使得多个PC值共用一个空间来存储目标地址,&lt;/p>
+&lt;p>index + tag ,&lt;/p>
+&lt;p>BTA (Branch Target Address)分支目标地址&lt;/p>
+&lt;p>可以使用组相联的BTA来提高分支预测的准确率&lt;/p>
+&lt;p>==如果已经被替换了,那该跳哪去 : 先跳再冲刷吗?==&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 160;
+flex-basis: 386px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185417711-1729092127159-1.png" data-size="856x532">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185417711-1729092127159-1.png"
+width="856"
+height="532"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185417711-1729092127159-1_hu7374757969364877266.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185417711-1729092127159-1_hu6804283647297828377.png 1024w"
+loading="lazy"
+alt="image-20241016185417711">
+&lt;/a>
+&lt;figcaption>image-20241016185417711&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h5 id="partial-tag-btb">partial-tag BTB&lt;/h5>
+&lt;p>如果映射到BTB中的指令中只有一条,那可以简化tag的部分,只使用很小的一部分,&lt;/p>
+&lt;p>这种方法实际上也是在赌,减少了tag的大小,万一出现了重合,那就会出现目标地址预测失败的情况,但实际上,如果出现了重合,即使不减少tag,仍然会导致预测失败.&lt;/p>
+&lt;p>&lt;figure
+>
+&lt;a href="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016185852818.png" >
+&lt;img src="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016185852818.png"
+loading="lazy"
+alt="image-20241016185852818">
+&lt;/a>
+&lt;figcaption>image-20241016185852818&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>和之前类似,仍然可以采取一定运算,来降低tag的位数,比方说异或&lt;/p>
+&lt;p>&lt;del>我比较好奇,如果tag没有对上,对于直接相连来说,本身也无法得到正确地址,那为什么不直接把tag删除了&lt;/del>&lt;/p>
+&lt;p>应该是组相联有用吧&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 235;
+flex-basis: 565px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016190929007-1729092127159-3.png" data-size="551x234">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016190929007-1729092127159-3.png"
+width="551"
+height="234"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016190929007-1729092127159-3_hu17591383904736463039.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016190929007-1729092127159-3_hu1099906551913900448.png 1024w"
+loading="lazy"
+alt="image-20241016190929007">
+&lt;/a>
+&lt;figcaption>image-20241016190929007&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h4 id="btb缺失的处理">BTB缺失的处理&lt;/h4>
+&lt;h5 id="停止执行">停止执行&lt;/h5>
+&lt;p>暂停取指,直到目标地址被计算出来&lt;/p>
+&lt;p>对于直接跳转指令,在解码阶段就可以分离出偏移值&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 181;
+flex-basis: 436px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192302026-1729092127159-4.png" data-size="491x270">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192302026-1729092127159-4.png"
+width="491"
+height="270"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192302026-1729092127159-4_hu6458134045906799705.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192302026-1729092127159-4_hu15515489183902377947.png 1024w"
+loading="lazy"
+alt="解码阶段分离指令">
+&lt;/a>
+&lt;figcaption>解码阶段分离指令&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>停止取指会造成气泡,其实就是导致流水线停滞&lt;/p>
+&lt;p>&lt;figure
+>
+&lt;a href="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016192510520.png" >
+&lt;img src="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016192510520.png"
+loading="lazy"
+alt="image-20241016192510520">
+&lt;/a>
+&lt;figcaption>image-20241016192510520&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h5 id="继续执行">继续执行&lt;/h5>
+&lt;p>使用顺序的PC值去指令&lt;/p>
+&lt;p>计算出的地址和原来PC不一致,就冲刷流水线,重新开始取指&lt;/p>
+&lt;p>这么做会浪费功耗&lt;/p>
+&lt;h3 id="间接跳转类型的分支预测">间接跳转类型的分支预测&lt;/h3>
+&lt;h4 id="callreturn-指令的分支预测">CALL/Return 指令的分支预测&lt;/h4>
+&lt;p>CALL的地址一般也是固定的,所以也可以通过BTB进行预测&lt;/p>
+&lt;p>Return的目标地址是不固定的,但是Return的目标地址总是等于最近一次执行的&lt;/p>
+&lt;p>但是Return指令的目标地址,是按照CALL指令执行的相反顺序排列的&lt;/p>
+&lt;p>所以可以做一个存储器,保存最近执行的CALL指令的下一条指令的地址,这个存储器是后进先出的(Last In First Out,LIFO),原理与堆栈类似,称为返回地址堆栈(Return Address Stack,RAS)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 249;
+flex-basis: 599px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202107006-1729092127159-6.png" data-size="809x324">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202107006-1729092127159-6.png"
+width="809"
+height="324"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202107006-1729092127159-6_hu5781072421816679016.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202107006-1729092127159-6_hu16507365381751537198.png 1024w"
+loading="lazy"
+alt="CALL/Return 指令分支预测">
+&lt;/a>
+&lt;figcaption>CALL/Return 指令分支预测&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h5 id="ras工作条件">RAS工作条件&lt;/h5>
+&lt;p>(1)需要及时保存PC + 4的值, 指令类型只有在解码阶段才能获知,因此可以在BTB中多加一项来保存分支指令的类型,这样在后续取到这一条指令就可以获知分支指令类型&lt;/p>
+&lt;p>(2)在对Return指令进行目标地址预测是,能够选择RAS的数据,而非BTB的数据,按照上面的方法就可以做到&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 258;
+flex-basis: 621px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202620233-1729092127159-7.png" data-size="492x190">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202620233-1729092127159-7.png"
+width="492"
+height="190"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202620233-1729092127159-7_hu508193164438520474.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016202620233-1729092127159-7_hu1108834045841803893.png 1024w"
+loading="lazy"
+alt="将指令类型存储到BTB中">
+&lt;/a>
+&lt;figcaption>将指令类型存储到BTB中&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h5 id="ras满了">RAS满了&lt;/h5>
+&lt;p>如果函数层次过深,就会出现RAS无法继续存放的问题&lt;/p>
+&lt;p>(1)不保存CALL了,这样下一次Return 就会出现分支预测失败,并且还要求RAS指针不发生改变&lt;/p>
+&lt;p>(2)继续按照顺序向RAS写入,此时最旧的会被覆盖掉.最后一次return 可能会出现分支预测失败,但是也是可能性事件,比方说递归函数&lt;/p>
+&lt;p>可以通过带计数器的RAS来扩展RAS的容量, 即对于相邻的CALL,如果是同一条指令,就存放在RAS的同一个地址,再用计数器进行标识&lt;/p>
+&lt;h4 id="其他指令的预测">其他指令的预测&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 131;
+flex-basis: 316px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016203614224-1729092127159-8.png" data-size="227x172">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016203614224-1729092127159-8.png"
+width="227"
+height="172"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016203614224-1729092127159-8_hu6984012436561300078.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016203614224-1729092127159-8_hu9987043498051736602.png 1024w"
+loading="lazy"
+alt="case指令">
+&lt;/a>
+&lt;figcaption>case指令&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 291;
+flex-basis: 699px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210205293-1729092127159-9.png" data-size="711x244">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210205293-1729092127159-9.png"
+width="711"
+height="244"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210205293-1729092127159-9_hu5286439124904148354.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210205293-1729092127159-9_hu16493922937992861016.png 1024w"
+loading="lazy"
+alt="image-20241016210205293">
+&lt;/a>
+&lt;figcaption>image-20241016210205293&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>使用基于局部历史的分支预测方法,把PHT换成了Target Cache,&lt;/p>
+&lt;p>每当分支指令执行一次,就将目标地址写到Target Cache 中&lt;/p>
+&lt;h2 id="小结">小结&lt;/h2>
+&lt;p>分支预测使用 BHR , GHR和饱和计数器配合进行分支指令方向的预测&lt;/p>
+&lt;p>使用 BTB, RAS和 Target Cache对分支指令的目标地址进行预测&lt;/p>
+&lt;p>完整的分支预测方法 , decoupled BTB : 将分支指令的方向预测独立于BTB ,本身不会被记录到BTB的分支指令也会被记录(&lt;del>不跳转的分支也会记录到BTB&lt;/del>)&lt;/p>
+&lt;p>预测为发生跳转,但是发生了BTB缺失,比发生分支预测失败的情况好,可以节省功耗&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 101;
+flex-basis: 243px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210627326-1729092127160-10.png" data-size="525x517">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210627326-1729092127160-10.png"
+width="525"
+height="517"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210627326-1729092127160-10_hu15660941589493918871.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016210627326-1729092127160-10_hu4393141796266973765.png 1024w"
+loading="lazy"
+alt="完整的分支预测方法">
+&lt;/a>
+&lt;figcaption>完整的分支预测方法&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="分支预测失败的恢复">分支预测失败的恢复&lt;/h2>
+&lt;p>处在错误路径上的指令有可能已经将处理器中某个部位的内容进行了更改,例如寄存器重命名阶段的重命名映射表(mapping table),需要对操作进行撤销,即分支预测失败时的恢复&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
@@ -444,217 +641,6 @@ alt="image-20241016181356130">
 &lt;/figure>&lt;/p>
 &lt;h4 id="两位饱和寄存器">两位饱和寄存器&lt;/h4>
 &lt;p>由于饱和寄存器一般是处在饱和状态的,所以选择在分支指令退休的时候更新PHT的饱和计数器,也不会产生很大的负面影响&lt;/p>
-&lt;h2 id="分支预测的目标地址预测">分支预测的目标地址预测&lt;/h2>
-&lt;p>对于直接跳转的分支指令,由于它的偏移值(offset)是以立即数的形式固定在指令中,目标地址是固定的,只需要记录分支指令的目标地址即可.&lt;/p>
-&lt;p>对于间接分支跳转,大部分是CALL和Return ,所以可以进行一定程度的预测&lt;/p>
-&lt;h3 id="直接跳转类型的分支预测">直接跳转类型的分支预测&lt;/h3>
-&lt;p>(1)当分支指令不发生跳转时,&lt;/p>
-&lt;p>目标地址 = 当前分支指令的PC值 + Sizeof(fetch group)&lt;/p>
-&lt;p>(2)当发生跳转时&lt;/p>
-&lt;p>目标指令 = 当前分支指令的PC值 + Sign_Eextend(offset)&lt;/p>
-&lt;h4 id="btb">BTB&lt;/h4>
-&lt;p>通过BTB(Branch Target Buffer)(相当于一个cache)使得多个PC值共用一个空间来存储目标地址,&lt;/p>
-&lt;p>index + tag ,&lt;/p>
-&lt;p>BTA (Branch Target Address)分支目标地址&lt;/p>
-&lt;p>可以使用组相联的BTA来提高分支预测的准确率&lt;/p>
-&lt;p>==如果已经被替换了,那该跳哪去 : 先跳再冲刷吗?==&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 160;
-flex-basis: 386px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185417711.png" data-size="856x532">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185417711.png"
-width="856"
-height="532"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185417711_hu7374757969364877266.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185417711_hu6804283647297828377.png 1024w"
-loading="lazy"
-alt="image-20241016185417711">
-&lt;/a>
-&lt;figcaption>image-20241016185417711&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;h5 id="partial-tag-btb">partial-tag BTB&lt;/h5>
-&lt;p>如果映射到BTB中的指令中只有一条,那可以简化tag的部分,只使用很小的一部分,&lt;/p>
-&lt;p>这种方法实际上也是在赌,减少了tag的大小,万一出现了重合,那就会出现目标地址预测失败的情况,但实际上,如果出现了重合,即使不减少tag,仍然会导致预测失败.&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 302;
-flex-basis: 726px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185852818.png" data-size="778x257">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185852818.png"
-width="778"
-height="257"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185852818_hu17713719676223318284.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016185852818_hu2386597830981386302.png 1024w"
-loading="lazy"
-alt="image-20241016185852818">
-&lt;/a>
-&lt;figcaption>image-20241016185852818&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;p>和之前类似,仍然可以采取一定运算,来降低tag的位数,比方说异或&lt;/p>
-&lt;p>&lt;del>我比较好奇,如果tag没有对上,对于直接相连来说,本身也无法得到正确地址,那为什么不直接把tag删除了&lt;/del>&lt;/p>
-&lt;p>应该是组相联有用吧&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 235;
-flex-basis: 565px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016190929007.png" data-size="551x234">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016190929007.png"
-width="551"
-height="234"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016190929007_hu17591383904736463039.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016190929007_hu1099906551913900448.png 1024w"
-loading="lazy"
-alt="image-20241016190929007">
-&lt;/a>
-&lt;figcaption>image-20241016190929007&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;h4 id="btb缺失的处理">BTB缺失的处理&lt;/h4>
-&lt;h5 id="停止执行">停止执行&lt;/h5>
-&lt;p>暂停取指,直到目标地址被计算出来&lt;/p>
-&lt;p>对于直接跳转指令,在解码阶段就可以分离出偏移值&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 181;
-flex-basis: 436px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192302026.png" data-size="491x270">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192302026.png"
-width="491"
-height="270"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192302026_hu6458134045906799705.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192302026_hu15515489183902377947.png 1024w"
-loading="lazy"
-alt="解码阶段分离指令">
-&lt;/a>
-&lt;figcaption>解码阶段分离指令&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;p>停止取指会造成气泡,其实就是导致流水线停滞&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 282;
-flex-basis: 677px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192510520.png" data-size="725x257">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192510520.png"
-width="725"
-height="257"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192510520_hu17955641935330878257.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016192510520_hu10501807876583559370.png 1024w"
-loading="lazy"
-alt="image-20241016192510520">
-&lt;/a>
-&lt;figcaption>image-20241016192510520&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;h5 id="继续执行">继续执行&lt;/h5>
-&lt;p>使用顺序的PC值去指令&lt;/p>
-&lt;p>计算出的地址和原来PC不一致,就冲刷流水线,重新开始取指&lt;/p>
-&lt;p>这么做会浪费功耗&lt;/p>
-&lt;h3 id="间接跳转类型的分支预测">间接跳转类型的分支预测&lt;/h3>
-&lt;h4 id="callreturn-指令的分支预测">CALL/Return 指令的分支预测&lt;/h4>
-&lt;p>CALL的地址一般也是固定的,所以也可以通过BTB进行预测&lt;/p>
-&lt;p>Return的目标地址是不固定的,但是Return的目标地址总是等于最近一次执行的&lt;/p>
-&lt;p>但是Return指令的目标地址,是按照CALL指令执行的相反顺序排列的&lt;/p>
-&lt;p>所以可以做一个存储器,保存最近执行的CALL指令的下一条指令的地址,这个存储器是后进先出的(Last In First Out,LIFO),原理与堆栈类似,称为返回地址堆栈(Return Address Stack,RAS)&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 249;
-flex-basis: 599px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202107006.png" data-size="809x324">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202107006.png"
-width="809"
-height="324"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202107006_hu5781072421816679016.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202107006_hu16507365381751537198.png 1024w"
-loading="lazy"
-alt="CALL/Return 指令分支预测">
-&lt;/a>
-&lt;figcaption>CALL/Return 指令分支预测&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;h5 id="ras工作条件">RAS工作条件&lt;/h5>
-&lt;p>(1)需要及时保存PC + 4的值, 指令类型只有在解码阶段才能获知,因此可以在BTB中多加一项来保存分支指令的类型,这样在后续取到这一条指令就可以获知分支指令类型&lt;/p>
-&lt;p>(2)在对Return指令进行目标地址预测是,能够选择RAS的数据,而非BTB的数据,按照上面的方法就可以做到&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 258;
-flex-basis: 621px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202620233.png" data-size="492x190">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202620233.png"
-width="492"
-height="190"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202620233_hu508193164438520474.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016202620233_hu1108834045841803893.png 1024w"
-loading="lazy"
-alt="将指令类型存储到BTB中">
-&lt;/a>
-&lt;figcaption>将指令类型存储到BTB中&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;h5 id="ras满了">RAS满了&lt;/h5>
-&lt;p>如果函数层次过深,就会出现RAS无法继续存放的问题&lt;/p>
-&lt;p>(1)不保存CALL了,这样下一次Return 就会出现分支预测失败,并且还要求RAS指针不发生改变&lt;/p>
-&lt;p>(2)继续按照顺序向RAS写入,此时最旧的会被覆盖掉.最后一次return 可能会出现分支预测失败,但是也是可能性事件,比方说递归函数&lt;/p>
-&lt;p>可以通过带计数器的RAS来扩展RAS的容量, 即对于相邻的CALL,如果是同一条指令,就存放在RAS的同一个地址,再用计数器进行标识&lt;/p>
-&lt;h4 id="其他指令的预测">其他指令的预测&lt;/h4>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 131;
-flex-basis: 316px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016203614224.png" data-size="227x172">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016203614224.png"
-width="227"
-height="172"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016203614224_hu6984012436561300078.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016203614224_hu9987043498051736602.png 1024w"
-loading="lazy"
-alt="case指令">
-&lt;/a>
-&lt;figcaption>case指令&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 291;
-flex-basis: 699px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210205293.png" data-size="711x244">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210205293.png"
-width="711"
-height="244"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210205293_hu5286439124904148354.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210205293_hu16493922937992861016.png 1024w"
-loading="lazy"
-alt="image-20241016210205293">
-&lt;/a>
-&lt;figcaption>image-20241016210205293&lt;/figcaption>
-&lt;/figure>&lt;/p>
-&lt;p>使用基于局部历史的分支预测方法,把PHT换成了Target Cache,&lt;/p>
-&lt;p>每当分支指令执行一次,就将目标地址写到Target Cache 中&lt;/p>
-&lt;h2 id="小结">小结&lt;/h2>
-&lt;p>分支预测使用 BHR , GHR和饱和计数器配合进行分支指令方向的预测&lt;/p>
-&lt;p>使用 BTB, RAS和 Target Cache对分支指令的目标地址进行预测&lt;/p>
-&lt;p>完整的分支预测方法 , decoupled BTB : 将分支指令的方向预测独立于BTB ,本身不会被记录到BTB的分支指令也会被记录(&lt;del>不跳转的分支也会记录到BTB&lt;/del>)&lt;/p>
-&lt;p>预测为发生跳转,但是发生了BTB缺失,比发生分支预测失败的情况好,可以节省功耗&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 101;
-flex-basis: 243px"
->
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210627326.png" data-size="525x517">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210627326.png"
-width="525"
-height="517"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210627326_hu15660941589493918871.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B02/image-20241016210627326_hu4393141796266973765.png 1024w"
-loading="lazy"
-alt="完整的分支预测方法">
-&lt;/a>
-&lt;figcaption>完整的分支预测方法&lt;/figcaption>
-&lt;/figure>&lt;/p>
 &lt;h2 id="版权信息">版权信息&lt;/h2>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>超标量处理器概览</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</link><pubDate>Mon, 14 Oct 2024 16:43:30 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="超标量处理器概览">超标量处理器概览&lt;/h2>
