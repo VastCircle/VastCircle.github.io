@@ -295,9 +295,9 @@ alt="image-20241016144931624">
 &lt;figcaption>image-20241016144931624&lt;/figcaption>
 &lt;/figure>&lt;/p>
 &lt;h3 id="总结">总结&lt;/h3>
-&lt;p>两种分支预测方法
-&lt;strong>局部历史分支预测&lt;/strong>：基于分支指令自身在过去的执行状况来进行分支预测，对每一条分支指令都使用分支历史寄存器（BHR),并使用了由两位饱和计数器组成的PHT(Pattern History Table)来捕捉每一个BHR的规律，使用BHR和PHT配合进行分支预测
-&lt;strong>全局历史分支预测&lt;/strong>：基于一条分支指令之前的一些分支指令的执行状况来进行分支预测，使用全局历史寄存器（GHR)记录所有分支指令的执行情况，由两位饱和计数器组成的PHT(Pattern History Table)来捕捉每一个GHR的规律,使用GHR和PHT配合进行分支预测&lt;/p>
+&lt;p>两种分支预测方法&lt;/p>
+&lt;p>&lt;strong>局部历史分支预测&lt;/strong>：基于分支指令自身在过去的执行状况来进行分支预测，对每一条分支指令都使用分支历史寄存器（BHR),并使用了由两位饱和计数器组成的PHT(Pattern History Table)来捕捉每一个BHR的规律，使用BHR和PHT配合进行分支预测&lt;/p>
+&lt;p>&lt;strong>全局历史分支预测&lt;/strong>：基于一条分支指令之前的一些分支指令的执行状况来进行分支预测，使用全局历史寄存器（GHR)记录所有分支指令的执行情况，由两位饱和计数器组成的PHT(Pattern History Table)来捕捉每一个GHR的规律,使用GHR和PHT配合进行分支预测&lt;/p>
 &lt;h3 id="竞争的分支预测">竞争的分支预测&lt;/h3>
 &lt;p>&lt;figure
 class="gallery-image"
