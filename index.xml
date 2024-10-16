@@ -32,9 +32,16 @@ alt="image-20241016185417711">
 &lt;p>如果映射到BTB中的指令中只有一条,那可以简化tag的部分,只使用很小的一部分,&lt;/p>
 &lt;p>这种方法实际上也是在赌,减少了tag的大小,万一出现了重合,那就会出现目标地址预测失败的情况,但实际上,如果出现了重合,即使不减少tag,仍然会导致预测失败.&lt;/p>
 &lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 302;
+flex-basis: 726px"
 >
-&lt;a href="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016185852818.png" >
-&lt;img src="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016185852818.png"
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185852818.png" data-size="778x257">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185852818.png"
+width="778"
+height="257"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185852818_hu17713719676223318284.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016185852818_hu2386597830981386302.png 1024w"
 loading="lazy"
 alt="image-20241016185852818">
 &lt;/a>
@@ -81,9 +88,16 @@ alt="解码阶段分离指令">
 &lt;/figure>&lt;/p>
 &lt;p>停止取指会造成气泡,其实就是导致流水线停滞&lt;/p>
 &lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 282;
+flex-basis: 677px"
 >
-&lt;a href="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016192510520.png" >
-&lt;img src="https://VastCircle.github.io/1015-%e8%b6%85%e6%a0%87%e9%87%8f%e5%a4%84%e7%90%86%e5%99%a8%e7%ac%94%e8%ae%b02/image-20241016192510520.png"
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192510520.png" data-size="725x257">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192510520.png"
+width="725"
+height="257"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192510520_hu17955641935330878257.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B03/image-20241016192510520_hu10501807876583559370.png 1024w"
 loading="lazy"
 alt="image-20241016192510520">
 &lt;/a>
