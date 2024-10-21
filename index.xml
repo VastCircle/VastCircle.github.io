@@ -1,4 +1,558 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 19 Oct 2024 11:46:41 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>寄存器重命名(超标量+过程恢复)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B06/</link><pubDate>Sat, 19 Oct 2024 11:46:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B06/</guid><description>&lt;h2 id="超标量处理器的寄存器重命名">超标量处理器的寄存器重命名&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 19 Oct 2024 20:25:19 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>发射(概述+流水线+分配)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</link><pubDate>Sat, 19 Oct 2024 20:25:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>只要发射队列中的一条指令的草做书都准备好了,且满足了发射的条件,就可以送到相应的FU中执行.发射队列的作用就是使用硬件保存一定数量的指令,然后从指令中找出可以执行的指令&lt;/p>
+&lt;p>发射时序一般处在处理器的关键路径上,直接影响处理器的周期时间&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 164;
+flex-basis: 394px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019211023251.png" data-size="596x363">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019211023251.png"
+width="596"
+height="363"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019211023251_hu10933506266918888330.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019211023251_hu6047188780366288377.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>(1)发射队列(Issue Queue),用来存储已经被寄存器重命名,但是没有被送到FU执行的指令,也称为保留站(Reservation station)&lt;/p>
+&lt;p>(2)分配(allocation)电路,用来从发射队列中找到空闲的空间,将寄存器重命名之后的指令存储在其中&lt;/p>
+&lt;p>(3)选择电路(仲裁电路),发射队列中多条指令的操作数都准备好了,电路会按照一定规律,从其中找到最合适的指令,送到Fu中去&lt;/p>
+&lt;p>(4)唤醒电路,当一条指令经过FU执行而得到结果数据时,会将其通知给发射队列中所有等待数据的指令,指令对应的源寄存器就会被设置为有效的状态,即为唤醒.&lt;/p>
+&lt;h3 id="集中式-or-分布式发射队列">集中式 or 分布式发射队列&lt;/h3>
+&lt;p>如果所有FU共用一个发射队列,即为集中式发射队列(centralized issue queue,CIQ)&lt;/p>
+&lt;p>如果每一个FU都有单独的发射队列,称为分布式发射队列(Distributed issue queue,DIQ)&lt;/p>
+&lt;p>CIQ容量大,选择电路和唤醒电路复杂,电路利用率高&lt;/p>
+&lt;p>DIQ会出现一个发射队列满了,其他发射队列没有满,但是最终数据被阻塞的情况,就会出现效率低下的问题&lt;/p>
+&lt;h3 id="数据捕捉-or-非数据捕捉">数据捕捉 or 非数据捕捉&lt;/h3>
+&lt;p>寄存器的数据读取时间&lt;/p>
+&lt;h4 id="数据捕捉">数据捕捉&lt;/h4>
+&lt;p>流水线的发射阶段之前读取寄存器,被寄存器重命名的指令会先读取物理寄存器堆,然后将读取到的值一起写入到发射队列,没有被计算出来的数据会以编号的形式写入,供唤醒时使用,会被标记为无法获得状态(non-available),这些值会通过旁路网络获取.在发射队列中,存储指令操作数的地方称为payload RAM&lt;/p>
+&lt;p>一条指令被仲裁电路选中发射到FU中去,它会将目标寄存器进行广播,其他在发射队列的指令就会去对比,有相等的情况时就会在payload RAM进行标记,在FU计算完成之后会写入到payload RAM 对应的位置 .&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 249;
+flex-basis: 598px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019212613505.png" data-size="776x311">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019212613505.png"
+width="776"
+height="311"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019212613505_hu17079656071217617578.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019212613505_hu4889682781684174770.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>machine width : 每周期实际解码和重命名的指令个数&lt;/p>
+&lt;p>issue width : 每周期最多可以在FU中并行执行的指令个数&lt;/p>
+&lt;p>在RISC 里 machine width &amp;lt;= issue width&lt;/p>
+&lt;p>物理寄存器的端口数 = machine width * 2&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 109;
+flex-basis: 262px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214007857.png" data-size="482x441">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214007857.png"
+width="482"
+height="441"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214007857_hu9745096111898785255.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214007857_hu6496583278703640029.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>大多数源操作数会经历两读1写,从寄存器读取出来,送到发射队列,从发射队列中读取送到FU ,功耗高 ,面积大&lt;/p>
+&lt;p>寄存器重命名方便 ,指令在顺利离开流水线的时候,需要将结果从重排序缓存中搬移到ARF中,采用数据捕捉的方式可以不用惯性指令结果的变化??????&lt;/p>
+&lt;h4 id="非数据捕捉">非数据捕捉&lt;/h4>
+&lt;p>在发射阶段之后读取物理寄存器堆,被重命名之后的指令不去读取物理寄存器堆,而是直接将源寄存器堆的编号放到发射队列中去.当指令被选中时,通过编号读取物理寄存器堆,将读取值送到FU中&lt;/p>
+&lt;p>寄存器堆的读端口 = issue width ,比较大&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 116;
+flex-basis: 278px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214531455.png" data-size="543x468">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214531455.png"
+width="543"
+height="468"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214531455_hu17049688566279640447.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019214531455_hu12853474364071027865.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="压缩-or-非压缩">压缩 or 非压缩&lt;/h3>
+&lt;h4 id="压缩">压缩&lt;/h4>
+&lt;p>当一条指令被选中离开发射队列之后,指令上面所有的指令都会下移一格&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 425px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215435572.png" data-size="620x350">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215435572.png"
+width="620"
+height="350"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215435572_hu11413087233639779848.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215435572_hu6794216728322161169.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>通过多路选择器进行压缩&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 230;
+flex-basis: 554px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215543440.png" data-size="702x304">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215543440.png"
+width="702"
+height="304"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215543440_hu14122326088059142316.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215543440_hu10310402141209563975.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>这种方式选择电路比较简单,通过优先编码选择最旧的就行了,oldest-first方法 ,但是选择电路的延时很长&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 162;
+flex-basis: 390px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215909085.png" data-size="512x315">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215909085.png"
+width="512"
+height="315"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215909085_hu10969826154039478454.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241019215909085_hu1981833134611443612.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>优点如下:&lt;/p>
+&lt;p>1.分配电路简单,发射队列中的空闲空间总是处于上层,只需要使用发射队列的写指针,指向第一个空闲空间&lt;/p>
+&lt;p>2.选择电路简单.最旧的指令存在的RAW相关性也越多,先执行可以最大程度释放和它存在RAW相关性的指令&lt;/p>
+&lt;p>但是&lt;/p>
+&lt;p>1.实现起来浪费面积&lt;/p>
+&lt;p>2.功耗大&lt;/p>
+&lt;h4 id="非压缩">非压缩&lt;/h4>
+&lt;p>没有移动&lt;/p>
+&lt;h2 id="发射过程中的流水线">发射过程中的流水线&lt;/h2>
+&lt;h3 id="非数据捕捉结构的流水线">非数据捕捉结构的流水线&lt;/h3>
+&lt;p>要被FU执行&lt;/p>
+&lt;p>(1)指令所有的源操作数准备好了&lt;/p>
+&lt;p>(2)指令被发射队列选中&lt;/p>
+&lt;p>(3)能够从寄存器,payload RAM或者旁路网络获得源操作数&lt;/p>
+&lt;p>下图发射过程被分为了唤醒(wake-up)和仲裁(Select)两个流水线阶段&lt;/p>
+&lt;p>唤醒阶段,发射队列中的所有相关寄存器会被置为准备好的状态&lt;/p>
+&lt;p>仲裁阶段,会使用仲裁电路选择一条最合适的指令送到FU中&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 357;
+flex-basis: 857px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020130427036.png" data-size="836x234">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020130427036.png"
+width="836"
+height="234"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020130427036_hu13578928480996287574.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020130427036_hu15483047359496982778.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>tomasulo算法:在指令执行完才对相关指令进行唤醒&lt;/p>
+&lt;p>可以通过将唤醒过程提前来获得更高性能&lt;/p>
+&lt;p>即在指令A被仲裁电路选中后就对其他寄存器进行唤醒,这样指令B在下一个周期就能够被仲裁&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 267;
+flex-basis: 643px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131005465.png" data-size="611x228">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131005465.png"
+width="611"
+height="228"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131005465_hu12261158574036134191.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131005465_hu15538349812895092404.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>意思是 Select 和 wake-up应该是在同一个周期的串行,A被唤醒才能够去selectB&lt;/p>
+&lt;p>这种操作称为&amp;quot;原子的&amp;quot;&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 210;
+flex-basis: 504px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131410841.png" data-size="818x389">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131410841.png"
+width="818"
+height="389"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131410841_hu14381474285825173627.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020131410841_hu7271168370352068712.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>拆分流水线可以使得主频升高,但是&lt;/p>
+&lt;p>(1)分支预测失败,惩罚增加&lt;/p>
+&lt;p>(2)cache访问的周期数增加&lt;/p>
+&lt;p>(3)功耗增大&lt;/p>
+&lt;p>以上是假设执行是一个周期,实际上并不止&lt;/p>
+&lt;h3 id="数据捕捉结构的流水线">数据捕捉结构的流水线&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 237;
+flex-basis: 568px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020132530404.png" data-size="858x362">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020132530404.png"
+width="858"
+height="362"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020132530404_hu7642558332426759119.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020132530404_hu738880975121771762.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>可以把select和payload放在同一个流水段 ,在指令被仲裁电路选中之后,在同一个周期对发射队列其他的指令进行唤醒,同时去读取payload RAM,这两个操作是并行进行的,在这个流水段还会负责payload RAM的读取和写入,会导致处理器的周期时间变得过大.&lt;/p>
+&lt;p>旁路网络这样是啥意思????&lt;/p>
+&lt;p>另一种设计方式是把payload单独放成一个流水段,旁路和执行分成两个流水段,在旁路阶段,FU的结果会被送到payload RAM和FU的输入端&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 241;
+flex-basis: 579px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020134351478.png" data-size="799x331">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020134351478.png"
+width="799"
+height="331"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020134351478_hu15363317278529565932.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020134351478_hu3440636031536888040.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="分配">分配&lt;/h2>
+&lt;p>对于非压缩的方式设计的发射队列,需要分配电路扫描整个发射队列,找到四个空闲的表项并将四条指令写入&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 111;
+flex-basis: 268px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140342425.png" data-size="478x427">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140342425.png"
+width="478"
+height="427"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140342425_hu915797298984400432.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140342425_hu13892753167635664755.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>
+可以使用一个表格来记录所有空闲表项的编号,按照FIFO的方式管理,也可以简单把发射队列分为多个部分,每个段选一个空闲编号,但是会出现问题就是如果有一个表项非空的话,会阻碍其他指令的放入,甚至由于在寄存器重命名阶段是in-order状态A的无法放入会导致后续指令都无法放入&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 117;
+flex-basis: 282px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140649280.png" data-size="529x450">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140649280.png"
+width="529"
+height="450"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140649280_hu16173649002378560098.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020140649280_hu10959566968097053341.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="仲裁">仲裁&lt;/h2>
+&lt;p>最好实现oldest-first功能的仲裁&lt;/p>
+&lt;h3 id="1-of-m仲裁">1-of-M仲裁&lt;/h3>
+&lt;p>可以通过指令在ROB中的位置作为指令的年龄信息,但是由于ROB是一个循环队列,所有单纯的地址是无法表征年龄的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 387;
+flex-basis: 930px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143224470.png" data-size="834x215">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143224470.png"
+width="834"
+height="215"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143224470_hu11734813543713119581.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143224470_hu2948785691697860533.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>其实我觉得,直接比较读写地址可以的吧,读指针 &amp;gt; 写指针 , 下新上旧 , 读指针 &amp;lt; 写指针 , 上新下旧 ,其实读指针 &amp;gt; 写的时候,也代表两者不是一面的&lt;/p>
+&lt;p>可以在ROB中地址前面再加入一位,称为位置值.想当于对于读写地址又加了一位&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 83;
+flex-basis: 199px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143555564.png" data-size="333x400">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143555564.png"
+width="333"
+height="400"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143555564_hu8819546655997073234.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020143555564_hu10037926471509499272.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 121;
+flex-basis: 292px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020201905180.png" data-size="550x451">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020201905180.png"
+width="550"
+height="451"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020201905180_hu12240918921388596847.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020201905180_hu6071650023988884185.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>(1)位置值相同时,ROB地址越小,对应的指令越旧&lt;/p>
+&lt;p>(2)位置值不同时,ROB地址越大,对应的指令越旧,比方说情况2的 0 10 与 1 01 比较,明显是0 10 旧&lt;/p>
+&lt;p>先根据是否rdy选出指令,再根据年龄进行筛选&lt;/p>
+&lt;p>二分&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 160;
+flex-basis: 385px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020202810467.png" data-size="472x294">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020202810467.png"
+width="472"
+height="294"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020202810467_hu15299360207959238160.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020202810467_hu12909387690140829006.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 128;
+flex-basis: 307px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203048042.png" data-size="806x629">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203048042.png"
+width="806"
+height="629"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203048042_hu1482760444792659261.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203048042_hu4089846200509570806.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>该电路能够得到最小的年龄值,但是还需要得到最小年龄值对应的指令,最方便的是将指令信息也一同附上去&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 145;
+flex-basis: 350px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203340063.png" data-size="496x340">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203340063.png"
+width="496"
+height="340"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203340063_hu10454207305702131865.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020203340063_hu4651879014994689033.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="n-of-m-仲裁电路">N of M 仲裁电路&lt;/h3>
+&lt;p>几个FU共用一个发射队列,发射队列需要在一个周期内为没一个FU选择出一条指令,就要求有一个N of M的仲裁电路&lt;/p>
+&lt;p>可以通过两级仲裁电路实现,第一级选择一条指令后对第二级进行标记,但是这样延时极大&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 172;
+flex-basis: 414px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204057330.png" data-size="601x348">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204057330.png"
+width="601"
+height="348"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204057330_hu14705004795844087432.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204057330_hu18352542851947980875.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>对每一个FU使用一个1 of M的仲裁器, 根据指令类型进行分类,这样就会存在相同类型的指令会阻塞或者一部分FU处在空闲状态的问题&lt;/p>
+&lt;p>可以通过增加FU的数量解决上述问题,但是比方数两个ALU,指令该分配给哪个ALU又是一个问题,可以通过轮换分配法实现,但是这样是无法保证严格的oldest-first原则的,而且有可能会浪费FU资源&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 268;
+flex-basis: 645px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204725711.png" data-size="828x308">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204725711.png"
+width="828"
+height="308"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204725711_hu5869953476708852689.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020204725711_hu13988473186677534807.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>一般来说,加减法,逻辑运算,移位运算合成一个FU,&lt;/p>
+&lt;p>惩罚和除法合成一个,&lt;/p>
+&lt;p>访问存储器和访问协处理器合并在一起,&lt;/p>
+&lt;p>浮点运算合并在一起&lt;/p>
+&lt;h2 id="唤醒">唤醒&lt;/h2>
+&lt;h3 id="单周期的唤醒">单周期的唤醒&lt;/h3>
+&lt;p>唤醒是指被仲裁器选中的指令将目的寄存器的编号(dst_tag)和发射队列中所有源寄存器的编号进行比较,并将那些比较结果相等的源寄存器进行标记的过程&lt;/p>
+&lt;p>下面的电路是所有仲裁电路共享一个发射队列的情况, 所以发射队列只会接受到一个响应,因为同一时刻肯定只有一条指令被仲裁,每个FU都会使用一个仲裁电路&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 209;
+flex-basis: 503px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020213306752.png" data-size="881x420">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020213306752.png"
+width="881"
+height="420"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020213306752_hu12195273095659706992.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020213306752_hu9126926194952235300.png 1024w"
+loading="lazy"
+alt="image-20241020213306752">
+&lt;/a>
+&lt;figcaption>image-20241020213306752&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>(1)ValL:指令中是否存在第一个源寄存器&lt;/p>
+&lt;p>(2)SrcL:指令中第一个源寄存器的编号&lt;/p>
+&lt;p>(3)RdyL:指令中第一个源寄存器是否已经被唤醒而处于准备好的状态&lt;/p>
+&lt;p>(4)ValR:第二个&lt;/p>
+&lt;p>(5)Dest:目的寄存器的编号&lt;/p>
+&lt;p>(6)Issued:一条指令被仲裁电路选中之后,可能不会马上离开发射队列,需要进行标记,这样的指令不会向仲裁电路发出请求信号&lt;/p>
+&lt;p>为什么有四个仲裁电路?????是不是指多个FU,但是多个FU不是应该可以接受多个请求&lt;/p>
+&lt;p>发射队列的每一个表项都会根据四个响应信号的值,将自身的目的寄存器编号送到对应的总线上去,每个仲裁电路对应一个总线&lt;/p>
+&lt;ol>
+&lt;li>被仲裁电路选择的指令会将它的目的寄存器编号送到对应的总线上&lt;/li>
+&lt;li>每一条总线的值会和发射队列中所有指令的源寄存器的编号进行比较,如果发现相等,标记为准备好的状态&lt;/li>
+&lt;li>当发射队列某条指令的操作数都准备好了,并且没有被仲裁电路选中过,就可以想仲裁电路发送请求信号&lt;/li>
+&lt;li>如果仲裁电路发现有更高优先级的指令发出请求,当前指令不会得到有效响应信号,需要再之后的周期继续发送请求信号.在一些设计中,可以轮流向多个仲裁电路发送请求.如果从仲裁电路中得到有效信号,就会吧issued置位.一条被选中的指令不会立刻离开发射队列,因为一个指令如果使用了load指令的结果,即使被仲裁电路选中,也不能离开&lt;/li>
+&lt;li>发射队列的指令更具响应信号,,把目的寄存器编号送到对应总线上去,用来唤醒发射队列中所有相关的源寄存器&lt;/li>
+&lt;/ol>
+&lt;h3 id="多周期的唤醒">多周期的唤醒&lt;/h3>
+&lt;p>单周期的唤醒能够在一个周期被FU执行完毕,但是当一条指令无法在一个周期执行完毕时,需要根据她在FU中的周期数,将唤醒过程延迟&lt;/p>
+&lt;p>根据唤醒的过程&lt;/p>
+&lt;h4 id="延迟广播">延迟广播.&lt;/h4>
+&lt;p>发现被仲裁电路选中的指令执行周期大于1,则在选中的当前周期,不讲指令的目的寄存器编号送到总线上,而是根据选中指令需要执行的周期数(N),延迟N-1周期,才送到总线上去&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 490;
+flex-basis: 1176px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020215810850.png" data-size="838x171">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020215810850.png"
+width="838"
+height="171"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020215810850_hu3236811294374040669.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020215810850_hu5826633055030736483.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>延迟广播之后可能出现tag bus产生冲突,比方说下面的MUL和ADD在同一时刻需要将目的寄存器的值送到tag broadcast bus上&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 290;
+flex-basis: 696px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020220227829.png" data-size="836x288">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020220227829.png"
+width="836"
+height="288"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020220227829_hu16861531667843717354.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241020220227829_hu3627428205873869122.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>可以通过增加总线的数量,也可以利用表格,记录下FU执行指令所需要的周期数,被仲裁电路选中的指令,如果发现冲突,被选中的指令不会送到FU中执行,而是在下一个周期继续参与仲裁&lt;/p>
+&lt;p>但是还是存在一个问题,就是指令B被否决(cycle 1),本身指令C是可以被仲裁的,但是C比B要新,所以这个周期被浪费掉了,所以可以先检查是否冲突,如果冲突的话就不向仲裁电路发起请求了(不发请求很奇怪啊,发请求在仲裁的时候否决行不行),但是这样访问网络和仲裁电路是串行的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 168;
+flex-basis: 403px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021131316298.png" data-size="580x345">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021131316298.png"
+width="580"
+height="345"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021131316298_hu3250847906907956578.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021131316298_hu13178792662719264520.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="延迟唤醒">延迟唤醒&lt;/h4>
+&lt;p>在比较结果相等时,不马上置为准备好的状态,而是根据指令所需要的执行周期数,进行相应周期的延时,然后再改变发射队列中源寄存器的状态&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 237;
+flex-basis: 570px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133753495.png" data-size="632x266">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133753495.png"
+width="632"
+height="266"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133753495_hu13815543178213961515.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133753495_hu9998523058420159875.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 408;
+flex-basis: 979px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133917852.png" data-size="816x200">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133917852.png"
+width="816"
+height="200"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133917852_hu12597106233390159010.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021133917852_hu3885520225871445685.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 162;
+flex-basis: 389px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615.png" data-size="874x539">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615.png"
+width="874"
+height="539"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615_hu11985143713305038664.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615_hu8735654588987287885.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>寄存器重命名(超标量+过程恢复)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B06/</link><pubDate>Sat, 19 Oct 2024 11:46:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B06/</guid><description>&lt;h2 id="超标量处理器的寄存器重命名">超标量处理器的寄存器重命名&lt;/h2>
 &lt;p>对于 Dest = Src1 op ASrc2&lt;/p>
 &lt;p>(1)从RAT中找到Src1和Src2对应的物理寄存器Psrc1和Psrc2&lt;/p>
 &lt;p>(2)从空闲列表(Free list)中找到一个空闲的物理寄存器Pdest,将其作为指令的目的寄存器Dest对应的物理寄存器&lt;/p>
