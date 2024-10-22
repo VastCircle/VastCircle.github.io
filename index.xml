@@ -1,4 +1,8 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 19 Oct 2024 20:25:19 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>发射(概述+流水线+分配)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</link><pubDate>Sat, 19 Oct 2024 20:25:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 22 Oct 2024 13:17:32 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>超标量处理器笔记8</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B08/</link><pubDate>Tue, 22 Oct 2024 13:17:32 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B08/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>发射(概述+流水线+分配)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</link><pubDate>Sat, 19 Oct 2024 20:25:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
 &lt;p>只要发射队列中的一条指令的草做书都准备好了,且满足了发射的条件,就可以送到相应的FU中执行.发射队列的作用就是使用硬件保存一定数量的指令,然后从指令中找出可以执行的指令&lt;/p>
 &lt;p>发射时序一般处在处理器的关键路径上,直接影响处理器的周期时间&lt;/p>
 &lt;p>&lt;figure
@@ -502,6 +506,7 @@ loading="lazy"
 &lt;/a>
 &lt;/figure>&lt;/p>
 &lt;h4 id="延迟唤醒">延迟唤醒&lt;/h4>
+&lt;p>最优解就就是要去实现背对背执行,一条指令的执行和后一条指令的执行是先后的&lt;/p>
 &lt;p>在比较结果相等时,不马上置为准备好的状态,而是根据指令所需要的执行周期数,进行相应周期的延时,然后再改变发射队列中源寄存器的状态&lt;/p>
 &lt;p>&lt;figure
 class="gallery-image"
@@ -533,21 +538,118 @@ loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
+&lt;p>通过移位寄存器实现延迟唤醒的效果.在解码阶段对每条指令执行周期数进行编码,称为DELAY,在将目的寄存器送到总线外,还需要将DELAY值也送到总线上去.称为DELAY bus .&lt;/p>
+&lt;p>Freed :表项是否空闲&lt;/p>
+&lt;p>Issued:指令是否被仲裁电路选择&lt;/p>
+&lt;p>SrcL:第一个源寄存器编号&lt;/p>
+&lt;p>SrcL_M:当寄存器编号比较结果相等时,置1;当接收到仲裁电路的响应信号后,清0,它是移位寄存器进行算数右移的使能标志&lt;/p>
+&lt;p>SrcL_SHIFT:移位寄存器,当编号比较结果相等时,将DELAY写入移位寄存器,每周期进行算数右移&lt;/p>
+&lt;p>Rdy:表示第一个源寄存器是否准备好了&lt;/p>
+&lt;p>SrcR_imm_valid :表示第二个操作数是否是立即数&lt;/p>
+&lt;p>ROB ID:指令在ROB的位置,使得其能够实现oldest-first选择&lt;/p>
+&lt;p>编码形式是类似于11111000(8位),在经过3个算数右移之后最低位就是1,就是Rdy=1&lt;/p>
+&lt;p>直到被仲裁电路响应或者说选择之后,SrcL_M,srcL_SHIFT都会清零,其他时候Rdy都会保持着1的状态发送请求,直到被仲裁&lt;/p>
 &lt;p>&lt;figure
 class="gallery-image"
 style="
-flex-grow: 162;
-flex-basis: 389px"
+flex-grow: 153;
+flex-basis: 368px"
 >
-&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615.png" data-size="874x539">
-&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615.png"
-width="874"
-height="539"
-srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615_hu11985143713305038664.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021134018615_hu8735654588987287885.png 1024w"
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021142521046.png" data-size="847x552">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021142521046.png"
+width="847"
+height="552"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021142521046_hu3664706843096973520.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021142521046_hu17387076878035751376.png 1024w"
 loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
+&lt;h3 id="推测唤醒">推测唤醒&lt;/h3>
+&lt;p>对于某些指令,指令在FU中执行的周期数是可以被预测的,这样才可能分配一个确定的DELAY值&lt;/p>
+&lt;p>但是对于&lt;/p>
+&lt;p>(1)Load指令&lt;/p>
+&lt;p>(2)某些处理器的特殊情况,例如RowerPC 603处理器存在early out,即当被除数值比较小时能够被提前预测指令&lt;/p>
+&lt;p>比较简单的方法就是等指令执行完了之后再去唤醒其他指令&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 345;
+flex-basis: 828px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192837731.png" data-size="787x228">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192837731.png"
+width="787"
+height="228"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192837731_hu13555257517852508750.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192837731_hu3376860337472421188.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>可以优化一下就是一般load指令在第一个周期计算地址,第二个周期访问Tag SRAM,第三个周期将读取到的数据写入目的寄存器,所以在第二个周期就可以判断,命中后去唤醒&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 304;
+flex-basis: 730px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192904962.png" data-size="654x215">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192904962.png"
+width="654"
+height="215"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192904962_hu15428221746190009120.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192904962_hu17889552520785745816.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>假设d-cache是一直命中的,就能够得到一个比较理想的情况&lt;figure
+class="gallery-image"
+style="
+flex-grow: 287;
+flex-basis: 690px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192917840.png" data-size="633x220">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192917840.png"
+width="633"
+height="220"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192917840_hu15789197913931500280.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021192917840_hu5995376768543292965.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>但是一旦指令A发生了D-cache缺失,此时B就不能停住而等待操作数,这样会使得FU无法接受其他新指令,严重影响处理器的性能.最好的办法是将指令B重新放回发射队列(Issue Queue),因为load指令在D-cache缺失之后,会到L2 cache寻找数据,此时可以假设L2 cache是命中的,并按照命中时间重新对相关寄存器进行唤醒,还是使用延迟唤醒&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 244;
+flex-basis: 587px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021210622840.png" data-size="798x326">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021210622840.png"
+width="798"
+height="326"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021210622840_hu12103557051335753409.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241021210622840_hu10406948929904864418.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>对于不确定周期的指令,可以去预测指令执行的周期数,在指令得到结果之前,对相关的指令进行唤醒操作&lt;/p>
+&lt;p>预测成功就执行,预测失败就去进行状态会被,被唤醒的所有寄存器需要重新设置为(not ready)状态,如果一些指令离开了发射队列,还需要从流水线中抹去,放回发射队列&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 283;
+flex-basis: 681px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241022113730769.png" data-size="724x255">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241022113730769.png"
+width="724"
+height="255"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241022113730769_hu17984726890091083280.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/image-20241022113730769_hu12546290877630753377.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>未完待续&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
