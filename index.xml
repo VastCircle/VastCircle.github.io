@@ -693,7 +693,7 @@ loading="lazy"
 &lt;p>超标量处理器&lt;/p>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
->vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>发射(概述+流水线+分配)</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</link><pubDate>Sat, 19 Oct 2024 20:25:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>发射</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</link><pubDate>Sat, 19 Oct 2024 20:25:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B07/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
 &lt;p>只要发射队列中的一条指令的草做书都准备好了,且满足了发射的条件,就可以送到相应的FU中执行.发射队列的作用就是使用硬件保存一定数量的指令,然后从指令中找出可以执行的指令&lt;/p>
 &lt;p>发射时序一般处在处理器的关键路径上,直接影响处理器的周期时间&lt;/p>
 &lt;p>&lt;figure
