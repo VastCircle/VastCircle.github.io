@@ -352,7 +352,31 @@ loading="lazy"
 &lt;/figure>&lt;/p>
 &lt;p>这样write back buffer也会成为Architecture state的一部分,load指令需要在store buffer和write back buffer中查找.一旦write back buffer没有空间了,就不能再将store指令退休&lt;/p>
 &lt;p>store 指令也是顺序进入write back buffer的,但是在进入的同时需要查找有没有写入相同地址的store指令,有的话需要把前面的store指令置为无效 ,保证load能够查找罪行的数据&lt;/p>
-&lt;p>对于软件处理TLB缺失的处理器,在store指令需要退休时,如果ROB中记录了TLB缺失的异常,那么store指令不能够进入write back buffer,而是需要异常的处理&lt;/p>
+&lt;p>对于软件处理TLB缺失的处理器,在store指令需要退休时,如果ROB中记录了TLB缺失的异常,那么store指令不能够进入write back buffer,而是需要异常的处理,需要将流水线清空,进行处理器的状态恢复.然后跳转到对应的异常处理程序中去,处理完之后重新执行store,这样可以保证所有进入write back buffer中的store指令不会产生TLB缺失&lt;/p>
+&lt;h3 id="指令离开流水线的限制">指令离开流水线的限制&lt;/h3>
+&lt;p>在4-way的超标量处理器中,如果ROB中最旧的四条指令都处于complete状态,理论上四条指令都能够退休&lt;/p>
+&lt;p>但是
+(1)每周期有四条store指令退休,意味着D-Cache或者Write Back Buffer需要支持四个写端口&lt;/p>
+&lt;p>(2)每周期有四条分支指令退休,意味着没周期需要将四条分支指令的信息写回分支预测器,这需要分支预测器中是偶有部件需要支持四个写端口,同时需要能够将Checkpoint资源在每周期释放四个&lt;/p>
+&lt;p>(3)如果在处理器中对 store/load 指令之间的相关性实现了预测，即预测一条 load 指令是否会和它之前的 store 指令存在相关性，在这种情况下，如果每周期有四条 load 指令退休，意味着每周期需要将四条 load 指令的信息写回到相关的预测器中，这也导致了四个写端口的需求。&lt;/p>
+&lt;p>但是上述情况出现的概率很小,所以增加硬件结构不如对指令进行限制,比方说限制每次退休的分支指令只能有1条之类的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 251;
+flex-basis: 604px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027205917686.png" data-size="735x292">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027205917686.png"
+width="735"
+height="292"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027205917686_hu8938038301564095761.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027205917686_hu5547790577299267913.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>br_mask = 1110 (如果假设分支指令是1,那对分支指令进行异或应该能够得到1110这一串数字), st_mask = 1111 , ld_mask = 1111 ,那么代表第四条指令是第二条分支指令,再把3个结果相与,得到1110,代表只有前三条指令有资格退休&lt;/p>
+&lt;p>同理,对于异常指令,也只能退休一条,所以在检测到异常指令之后,需要对后续的指令进行屏蔽&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
