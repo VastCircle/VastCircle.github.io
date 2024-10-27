@@ -1,4 +1,359 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 26 Oct 2024 15:23:09 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>超标量处理器笔记9</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</link><pubDate>Sat, 26 Oct 2024 15:23:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 26 Oct 2024 15:23:09 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>提交</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</link><pubDate>Sat, 26 Oct 2024 15:23:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>提交</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/</link><pubDate>Sat, 26 Oct 2024 15:06:32 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>无&lt;/p>
+&lt;h2 id="重排序缓存">重排序缓存&lt;/h2>
+&lt;h3 id="一般结构">一般结构&lt;/h3>
+&lt;p>ROB是一个FIFO&lt;/p>
+&lt;p>(1)Complete:表示一条指令是否执行完毕&lt;/p>
+&lt;p>(2)Areg:指令在原始程序中指定的目的寄存器,逻辑寄存器&lt;/p>
+&lt;p>(3)Preg:指令的Areg经过寄存器重命名之后,对应的物理寄存器编号&lt;/p>
+&lt;p>(4)OPreg:指令的Areg被重命名为新的Preg之前,对应的旧的Preg,当指令发生异常(exception)进行恢复,会用到&lt;/p>
+&lt;p>(5)PC:指令对应的PC值,当发生中断或异常之后,需要保存指令的PC值&lt;/p>
+&lt;p>(6)Exception:指令发生异常的异常类型&lt;/p>
+&lt;p>(7)Type:指令的类型会被记录到这里,当指令retire时,不同类型的指令会有不同的动作,例如store指令写D-cache(那执行在干嘛)&lt;/p>
+&lt;p>在流水线的分发阶段,指令会按照进入流水线的顺序写入ROB,ROB中对应的complete会被置0,执行完成之后会被置1.指令的计算结果可以放在ROB中,也可以放在物理寄存器堆(PRF)中.&lt;/p>
+&lt;p>异常的处理统一放在提交阶段&lt;/p>
+&lt;p>指令表项的编号会一直随着指令在流水线中流动&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 229;
+flex-basis: 551px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241018201606114.png" data-size="699x304">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241018201606114.png"
+width="699"
+height="304"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241018201606114_hu3029882811398972242.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241018201606114_hu11810229668060151238.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>i1是除法指令,i2使用i1的结果,所以i1,i2执行时间很长&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 143;
+flex-basis: 345px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160416090.png" data-size="535x372">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160416090.png"
+width="535"
+height="372"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160416090_hu526346446613648332.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160416090_hu11969902543979219059.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 150;
+flex-basis: 361px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160430956.png" data-size="843x559">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160430956.png"
+width="843"
+height="559"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160430956_hu15166723323535760280.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160430956_hu17217095718010947724.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="端口需求">端口需求&lt;/h3>
+&lt;p>对于一个4-way的超标量处理器来说,在ROB中每周期可以退休的指令不少于4条,ROB选择那些Complete的指令进行退休,但是由于是顺序的,如果连续4条中出现一条not ready ,后续的就无法retire&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 146;
+flex-basis: 352px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160826543.png" data-size="413x281">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160826543.png"
+width="413"
+height="281"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160826543_hu2060967638341698444.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026160826543_hu6471094479480740589.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>(1)4个读端口:retire时检测指令是否complete&lt;/p>
+&lt;p>(2)8个读端口 : 在流水线的寄存器重命名阶段,需要从ROB读取4条指令的源操作数 ????&lt;/p>
+&lt;p>(3)4个写端口:分发阶段需要向ROB写入4条指令 ????&lt;/p>
+&lt;p>(4)最少4个写端口:在write back 阶段,需要写入最小4条指令的结果 (最少是由于很多处理器的issue width &amp;gt; machine width)&lt;/p>
+&lt;h2 id="管理处理器的状态">管理处理器的状态&lt;/h2>
+&lt;ol>
+&lt;li>Architecture State , 通用寄存器的值,PC的值,存储器的值&lt;/li>
+&lt;li>Speculative State,超标量处理器内部的状态,例如重命名使用的物理寄存器,重排序缓存(ROB),发射队列(Issue Queue)和store buffer 等,这些状态超前于指令集定义的状态&lt;/li>
+&lt;/ol>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 196;
+flex-basis: 472px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026162140931.png" data-size="663x337">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026162140931.png"
+width="663"
+height="337"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026162140931_hu18410339645903847302.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026162140931_hu15498842930549422733.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>对于采用将通用寄存器扩展进行寄存器重命名的架构,需要将目的寄存器的值从物理寄存器搬移到通用寄存器中&lt;/p>
+&lt;p>对于采用通用的物理寄存器进行重命名的架构,需要将目的寄存器在物理寄存器堆中标记为外界可见的状态???&lt;/p>
+&lt;p>如果退休的指令是store, 需要把store buffer对应的值写到D-cache去(难道不是写完了再退休的吗)&lt;/p>
+&lt;p>如果退休的指令是分支指令,需要进行状态恢复,并且冲刷错误指令,从正确地址取地址 ,&lt;/p>
+&lt;p>在提交阶段还需要对异常进行统一处理&lt;/p>
+&lt;p>两种方法&lt;/p>
+&lt;p>(1)使用ROB管理指令集定义的状态&lt;/p>
+&lt;p>(2)使用物理寄存器管理指令集定义的状态&lt;/p>
+&lt;h3 id="使用rob管理指令集定义的状态-retire-register-file">使用ROB管理指令集定义的状态 (Retire Register File)&lt;/h3>
+&lt;p>当指令退休的时候,指令的结果可以对指令集定义的状态进行更新,此时会将指令的结果从ROB中搬移到指令集中定义的逻辑寄存器中.逻辑寄存器存储了所有退休指令对应的目的寄存器的值&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 191;
+flex-basis: 459px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026192854827.png" data-size="584x305">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026192854827.png"
+width="584"
+height="305"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026192854827_hu6872805367257657893.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026192854827_hu6988686517471031140.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>一般情况下,使用ROB管理指令集定义的状态,都对应着使用数据捕捉的结构来进行发射(issue),因为指令的内容会存在在ROB和通用寄存器当中,通过数据捕捉可以在执行阶段把数据送到payload RAM ,可以直接从payload RAM去获取所有数据&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 207;
+flex-basis: 497px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026193358686.png" data-size="729x352">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026193358686.png"
+width="729"
+height="352"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026193358686_hu14794657159944181992.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026193358686_hu17778871549113846091.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>对于非捕获队列,没有payload RAM,相应的数据是直接从ROB或者通用寄存器获取,所有需要发射队列支持额外的写端口(通知操作数的位置变动),和额外的旁路网络来&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 224;
+flex-basis: 539px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026195235072.png" data-size="690x307">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026195235072.png"
+width="690"
+height="307"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026195235072_hu12509796414499110516.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026195235072_hu13364150662557934682.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="使用物理寄存器管理指令集定义的状态">使用物理寄存器管理指令集定义的状态&lt;/h3>
+&lt;p>当物理寄存器的结果被计算出来之后,指令的状态变成了complete,当它退休的时候,直接把相应的状态标记为 Architecture state ,直到另一条指令写入同样的目标寄存器并且退休了,就相当于直接把指令集定义的逻辑寄存器融入到物理寄存器中&lt;/p>
+&lt;p>(1)当指令从ROB中退休之后,不需要把指令的结果进行搬移,便于实现低功耗&lt;/p>
+&lt;p>(2)在基于ROB进行状态管理时,需要ROB开辟空间存放指令的结果,但例如store,比较指令,分支指令是没有目的寄存器的,ROB会有一部分空间浪费掉了,但是这种方法只会对于存在目的寄存器的指令分配空间&lt;/p>
+&lt;p>(3)ROB是集中管理方式,指令需要从其中读取操作数,同时指令也需要把结果写入其中,需要大量的读写端口,但是使用物理寄存器可以采用cluster结构等方式来避免多端口的负面影响&lt;/p>
+&lt;p>但是这样会造成寄存器重命名比较复杂 ,使用ROB管理时,只需要写入ROB就完成了重命名,但是使用物理寄存器管理,需要额外的表格存放哪些物理寄存器是空闲的,并且重映射关系的建立和释放都比较困难,并且需要一个额外的表格来存放那些物理寄存器是Architecture state (这不是加一个标志位就可以了)&lt;/p>
+&lt;h2 id="特殊情况的处理">特殊情况的处理&lt;/h2>
+&lt;p>分支预测错误,或者异常&lt;/p>
+&lt;p>store指令只有在retire阶段才能够真正改变处理器的状态(写D-cache),如果发射了D-cache缺失,会阻碍流水线中所以后面指令继续退休&lt;/p>
+&lt;h3 id="分支预测失败">分支预测失败&lt;/h3>
+&lt;p>以流水线的寄存器重命名为分界&lt;/p>
+&lt;p>前端的状态回复(front-end recovery):将流水线中重命名阶段之前的所有指令都抹掉,将分支预测器中的历史状态标进行恢复,并使用正确的地址取指令&lt;/p>
+&lt;p>后端的状态恢复(back-end recovery time):把处理器中所有内部组件(Issue Queue,Store Buffer 和 ROB)错误的指令都抹掉,恢复重命名映射表(RAT),以便那些错误指令对RAT的修改进行改正,同时被错误的指令占据的物理寄存器和ROB的空间需要被释放&lt;/p>
+&lt;p>满足后端恢复的时间小于前端恢复的时间+取指和寄存器重命名的时间,不需要暂停流水线&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 917;
+flex-basis: 2202px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201405204.png" data-size="514x56">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201405204.png"
+width="514"
+height="56"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201405204_hu16380282229336755602.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201405204_hu13274219510865086437.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 265;
+flex-basis: 636px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201634076.png" data-size="873x329">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201634076.png"
+width="873"
+height="329"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201634076_hu12408654504628570787.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026201634076_hu13341318665468000535.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="基于rob重命名的架构基于扩展的arf进行寄存器重命名同理">基于ROB重命名的架构(基于扩展的ARF进行寄存器重命名同理)&lt;/h4>
+&lt;p>当寄存器位于ROB时,在RAT中存储在ROB的位置,位于ARF,直接进行寻址 , RAT的地址是逻辑寄存器的值,数据是存储类型及对应具体位置&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 135;
+flex-basis: 324px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026202221475.png" data-size="550x407">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026202221475.png"
+width="550"
+height="407"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026202221475_hu14505643750566939328.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026202221475_hu15297449480776893135.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>一条退休的指令将目的寄存器从ROB搬移到ARF中后,并不一定表示以后指令需要从ARF读取寄存器的值&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">A :ADD R1,R2,R3
+B :ADD R1,R1,R4
+C :ADD R1,R1,R5
+&lt;/code>&lt;/pre>&lt;p>只有指令C的映射关系会写入到RAT中, 即使指令A从流水线中退休了,后续的指令也只使用指令C的结果(why???).为了实现能够在指令实现搬移之后从ARF读取寄存器的值,在ROB中的每条指令都会检查自身是否是最新的映射关系,只有当一条指令从ROB中退休的时候,发现自身也是最新的映射关系,才能够将RAT中对应的内容改为ARF状态&lt;/p>
+&lt;p>从ROB中退休的指令检查自身是不是最新的映射关系:在指令退休的时候,使用目的寄存器读取RAT,读出逻辑寄存器此时对应的ROB pointer,如果发现它和当前退休指令在ROB中占据的地址是一样的,表面这条退休的指令是最新的映射关系&lt;/p>
+&lt;p>在流水线中发现分支预测失败时(一般是在执行阶段),此时流水线中有一部分指令是在分支指令之前进人到流水线的，它们可以被继续执行，因此当发现分支指令预测失败时，并不马上进行状态修复，而是停止取新的指令，让流水线继续执行，这个过程称为将&lt;strong>流水线抽干(drain out)&lt;/strong>,直到分支指令之前的所有指令(包括分支指令本身)都退休。此时 ARF 中所有寄存器的内容都是正确的，同时在流水线中的所有指令都是处于错误的路径上，可以将流水线中的指令全部抹掉，然后将 RAT 中所有的内容都标记为 ARF 状态，这样处理器就从分支预测失败的状态恢复过来了，此时可以从正确的地址开始取指.&lt;/p>
+&lt;p>优点:重命名易于实现,状态恢复容易&lt;/p>
+&lt;h4 id="基于统一的prf进行重命名的架构">基于统一的PRF进行重命名的架构&lt;/h4>
+&lt;p>两个RAT (前端RAT(Speculative RAT)和后端RAT(Architecture RAT)),可以使用后端RAT对处理器进行状态恢复&lt;/p>
+&lt;p>和前面类似,当发现分支指令预测失败时，并不马上进行状态修复，而是停止取新的指令，让流水线继续执行，这个过程称为将&lt;strong>流水线抽干(drain out)&lt;/strong>,直到分支指令之前的所有指令(包括分支指令本身)都退休,之后可以将流水线中的指令全部抹掉，然后将后端RAT 中所有的内容都复制到前端RAT，这样处理器就从分支预测失败的状态恢复过来了，此时可以从正确的地址开始取指.这种方法就是&lt;strong>Recovery at Retire&lt;/strong>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 153;
+flex-basis: 368px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026214726040.png" data-size="609x397">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026214726040.png"
+width="609"
+height="397"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026214726040_hu6396325282664157643.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026214726040_hu7500078327809743159.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>还是会遇到问题,就是分支指令之前存在D-cache缺失的指令,会等待时间过程导致分支预测失败时的惩罚(mis-prediction penalty)过大&lt;/p>
+&lt;p>为了解决上述问题,可以使用checkpoint,即在每条分支指令改变处理器状态之前,把处理器的状态保存起来,然后通过分支指令编号选择性去抹除流水线错误路径的指令,然后使用checkpoint去恢复RAT,基于SRAM的RAT需要保存整个表格,基于CAM的RAT只需要保存映射表中的状态位&lt;/p>
+&lt;p>还可以去选择性的分配checkpoint的资源,对于分支预测错误率比较高的才分配checkpoint,但是如果分支预测失败,还是需要采用Recovery at Retire恢复,也可以使用ROB进行恢复,因为ROB中还是保存着旧的映射关系,即记录着每条指令对于重命名映射表的修改&lt;/p>
+&lt;h3 id="异常的处理">异常的处理&lt;/h3>
+&lt;p>使用ROB去顺序的执行所有的异常&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 393;
+flex-basis: 945px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220112144.png" data-size="831x211">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220112144.png"
+width="831"
+height="211"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220112144_hu16578964903247613817.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220112144_hu7093890399153564677.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>在指令即将要退休的时候,如果发生了异常就不能退休,而是要去转而处理异常&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 330;
+flex-basis: 794px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220145671.png" data-size="791x239">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220145671.png"
+width="791"
+height="239"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220145671_hu12721806047334324940.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241026220145671_hu12980922077329163659.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>精确异常:处理器能够知道哪条指令发生了异常,并且这条发生异常的指令之后所有的指令都不允许改变处理器的状态,这样在处理完异常之后,可以精确的进行返回,返回地方有两种,(1)返回到发生异常指令本身,重新执行指令(TLB缺失),(2)不重新执行指令,而是返回到它的下一条指令(系统调用) ,精确异常需要抹去产生异常的指令后面的所有指令,并回复处理器修改的状态&lt;/p>
+&lt;p>可以采用前面所说的Recovery ai Retire来恢复异常&lt;/p>
+&lt;p>还有一种方法就是WALK,通过ROB保存的旧数据来恢复&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 234;
+flex-basis: 562px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027150107021.png" data-size="727x310">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027150107021.png"
+width="727"
+height="310"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027150107021_hu11962430676454193348.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027150107021_hu7737992814455827596.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>在使用统一的PRF进行寄存器重命名的方式中,和RAT相关的还有两个表格,一个存储那些物理寄存器是空闲的,Free Register ,一个存储物理寄存器的值是否被计算出来,Busy Table&lt;/p>
+&lt;p>对于Free Register Pool ,因为刚刚读取的内容不会消失,不会被退休的指令覆盖,所以只需要恢复读指针,可以利用ROB的旧映射关系来进行恢复(如果是顺序读取Free Register Pool的话其实感觉只需要回退读指针就可以了)&lt;/p>
+&lt;p>对于Busy Table,由于指令运算完成之后,就可以在写回阶段写入对应的物理寄存器,所以在发生异常时,Busy Table已经进行了多次修改.还是可以通过ROB,在从ROB读取指令时,每读取一条指令,就将指令的目的寄存器在Busy Table对应的内容置为无效 ,这样后续的指令也不会使用到错误的值了&lt;/p>
+&lt;p>对于统一的PRF进行重命名的架构,使用WALK的方法是合适的,因为涉及到对Free Register Pool和Busy Table的恢复&lt;/p>
+&lt;h3 id="中断的处理">中断的处理&lt;/h3>
+&lt;p>中断是处理器外部发生的 ,是异步的&lt;/p>
+&lt;p>(1)马上处理,当中断发生时,就将流水线中的指令全部抹掉,按照异常处理的方式进行恢复,并将流水线中最旧的指令PC值(还有其他状态寄存器)保存起来,然后跳转到对应的中断处理程序,返回时,使用保存的PC值重新取指令 .这种方式实时性最强,但是相当于之前的那些指令需要重新执行&lt;/p>
+&lt;p>(2)延迟处理 .当中断发生时，流水线停止取指令，但是要等到流水线中所有的指令都退休(retire)之后才对这个中断进行处理，这样能够保证流水线中这些已有的指令不被“浪费”,而且当流水线中所有的指令都退休之后，此时流水线的状态肯定是正确的，也就不需要进行状态恢复了。&lt;/p>
+&lt;p>(1)如果在流水线中的这些指令发生了 D-Cache 缺失，那么需要很长的时间才能够解决，这样导致了过长的中断响应时间。
+(2)如果在流水线中发现了一条预测失败的分支指令，那么首先需要对这个情况进行处理，将处理器的状态进行恢复，这需要消耗一定的时间，也造成了中断响应时间的增大。&lt;/p>
+&lt;p>(3)如果流水线中的这些指令中发生了异常(exception),那么是先对异常进行处理，还是先对中断进行处理？这需要仔细地进行权衡，但是一般来说，应该是先对中断进行处理， 因为很多类型的异常处理需要耗费很长的时间，如 D-Cache 缺失、TLB 缺失或者 Page Fault等，这样会导致中断的响应时间讨长而无法忍受。&lt;/p>
+&lt;h3 id="store指令的处理">store指令的处理&lt;/h3>
+&lt;p>store指令通常在retire之前都是不写入D-cache的,它会写入store buffer,这样load指令就会从store buffer 或者D-cache去获取数据.这种方法最安全,但是一旦store指令D-cache缺失,需要等待很长的时间,会造成ROB的堵塞&lt;/p>
+&lt;p>可以在store buffer中增加一个状态位,标记store指令是否具备退休的条件,这样store在缓存中有3个状态&lt;/p>
+&lt;p>un-complete(未执行完毕),当store指令在分发阶段占据一个store buffer的时候标记为un-complete&lt;/p>
+&lt;p>complete(已经执行完毕),当store指令已经得到地址和数据,但是没有变成最旧的指令,标记为complete&lt;/p>
+&lt;p>(retire)离开流水线,当store指令成为最旧的指令并退休是,在store buffer标记该状态,这样store指令可以离开ROB,就不会阻碍后面的指令离开流水线,而硬件会自动将store buffer中处于retire状态的store指令写到D-cache中,并且此时store buffer中的retire的内容也会成为Architecture state的一部分&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 222;
+flex-basis: 532px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154045976.png" data-size="715x322">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154045976.png"
+width="715"
+height="322"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154045976_hu1744290998666272899.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154045976_hu16397971302973277069.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>store buffer中的指令只有在完成写D-cache的任务之后才会释放空间,这样会造成分发之前的流水线发生阻塞,可以把已经退休的store指令存储在一个叫做write back buffer的地方,硬件会自动将write back buffer的store指令写到D-cache中&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 277;
+flex-basis: 665px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154430488.png" data-size="721x260">
+&lt;img src="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154430488.png"
+width="721"
+height="260"
+srcset="https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154430488_hu13023071255000305450.png 480w, https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B05/image-20241027154430488_hu3884197430323085139.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>这样write back buffer也会成为Architecture state的一部分,load指令需要在store buffer和write back buffer中查找.一旦write back buffer没有空间了,就不能再将store指令退休&lt;/p>
+&lt;p>store 指令也是顺序进入write back buffer的,但是在进入的同时需要查找有没有写入相同地址的store指令,有的话需要把前面的store指令置为无效 ,保证load能够查找罪行的数据&lt;/p>
+&lt;p>对于软件处理TLB缺失的处理器,在store指令需要退休时,如果ROB中记录了TLB缺失的异常,那么store指令不能够进入write back buffer,而是需要异常的处理&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
