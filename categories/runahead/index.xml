@@ -1,5 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Runahead on VastCircle's blog</title><link>https://VastCircle.github.io/categories/runahead/</link><description>Recent content in Runahead on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 27 Oct 2024 21:23:02 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/runahead/index.xml" rel="self" type="application/rss+xml"/><item><title>微架构代码解读</title><link>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</link><pubDate>Sun, 27 Oct 2024 21:23:02 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Runahead on VastCircle's blog</title><link>https://VastCircle.github.io/categories/runahead/</link><description>Recent content in Runahead on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 27 Oct 2024 21:23:02 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/runahead/index.xml" rel="self" type="application/rss+xml"/><item><title>rocket-src微架构代码解读</title><link>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</link><pubDate>Sun, 27 Oct 2024 21:23:02 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</guid><description>&lt;h2 id="差异文件">差异文件&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">### 新加入的&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RCU.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_cache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RH_Cache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_data.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_tag.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/Runahead_cache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">### 修改过的 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/BootROM.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/BTB.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/Frontend.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/HellaCacheArbiter.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/HellaCache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/NBDcache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RocketCore.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>subsystem/Configs.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>subsystem/SystemBus.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tile/Core.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/Bundles.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/Edges.scala 
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>Runahead_Execution_An_Alternative_to_Very_Large_Instruction_Windows_for_Out of Order_Processors</title><link>https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/</link><pubDate>Thu, 10 Oct 2024 14:23:54 +0800</pubDate><guid>https://VastCircle.github.io/2024/runahead_execution_an_alternative_to_very_large_instruction_windows_for_out-of-order_processors/</guid><description>&lt;h2 id="abstract">Abstract&lt;/h2>
+&lt;p>当今的高性能处理器通过乱序执行来容忍长延迟操作。然而，随着延迟的增加，如果我们要继续容忍这些延迟，指令窗口的大小必须增加得更快。本文提出先行(runahead)执行是提高乱序处理器内存延迟容忍度(memory latency tolerance)的有效方法，而不需要不合理的大指令窗口。超前执行可解除因长延迟操作而阻塞的指令窗口的阻塞，从而使处理器能够在程序路径中提前执行,这会导致数据在需要之前就被预取到缓存中。&lt;/p></description></item></channel></rss>

@@ -1,8 +1,46 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 30 Oct 2024 15:06:32 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>微架构代码解读</title><link>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</link><pubDate>Sun, 27 Oct 2024 21:23:02 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>提交</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</link><pubDate>Sat, 26 Oct 2024 15:23:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 30 Oct 2024 15:06:32 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard的三个highest_level</title><link>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</link><pubDate>Tue, 29 Oct 2024 21:56:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</guid><description>&lt;p>Chipyard SoC 中三个最高层次是&lt;code>ChipTop&lt;/code>(DUT)、&lt;code>TestHarness&lt;/code>和&lt;code>TestDriver&lt;/code>。&lt;code>ChipTop&lt;/code>和&lt;code>TestHarness&lt;/code>均由 Chisel 生成器发出。&lt;code>TestDriver&lt;/code>用作我们的测试平台，是 Rocket Chip 中的 Verilog 文件。&lt;/p></description></item><item><title>Rocket Chip学习</title><link>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</link><pubDate>Tue, 29 Oct 2024 17:12:22 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</guid><description>&lt;h2 id="rocket-chip-框图">rocket-chip 框图&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 93; 
+			flex-basis: 224px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013.png" data-size="685x733">
+		&lt;img src="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013.png"
+			width="685"
+			height="733"
+			srcset="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013_hu14119112562339422234.png 480w, https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013_hu6804879921133493359.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>rocket-src微架构代码解读</title><link>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</link><pubDate>Sun, 27 Oct 2024 21:23:02 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</guid><description>&lt;h2 id="差异文件">差异文件&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">### 新加入的&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RCU.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_cache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RH_Cache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_data.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_tag.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/Runahead_cache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">### 修改过的 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/BootROM.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/BTB.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/Frontend.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/HellaCacheArbiter.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/HellaCache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/NBDcache.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RocketCore.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>subsystem/Configs.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>subsystem/SystemBus.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tile/Core.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/Bundles.scala 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/Edges.scala 
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>提交</title><link>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</link><pubDate>Sat, 26 Oct 2024 15:23:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%B6%85%E6%A0%87%E9%87%8F%E5%A4%84%E7%90%86%E5%99%A8%E7%AC%94%E8%AE%B09/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"

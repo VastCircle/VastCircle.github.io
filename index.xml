@@ -1,4 +1,218 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 27 Oct 2024 21:23:02 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>微架构代码解读</title><link>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</link><pubDate>Sun, 27 Oct 2024 21:23:02 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 29 Oct 2024 21:56:38 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard的三个highest_level</title><link>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</link><pubDate>Tue, 29 Oct 2024 21:56:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</guid><description>&lt;p>Chipyard SoC 中三个最高层次是&lt;code>ChipTop&lt;/code>(DUT)、&lt;code>TestHarness&lt;/code>和&lt;code>TestDriver&lt;/code>。&lt;code>ChipTop&lt;/code>和&lt;code>TestHarness&lt;/code>均由 Chisel 生成器发出。&lt;code>TestDriver&lt;/code>用作我们的测试平台，是 Rocket Chip 中的 Verilog 文件。&lt;/p>
+&lt;h2 id="chiptopdut">ChipTop(DUT)&lt;/h2>
+&lt;p>ChipTop 是顶层模块，负责实例化 System 子模块，通常是 DigitalTop 的具体实例。设计的大部分内容位于 System 中。ChipTop 层中存在的其他组件通常是 IO 单元、时钟接收器和多路复用器、重置同步器以及其他需要存在于 System 之外的模拟 IP。IOBinders 负责实例化与 System 的 IO 相对应的 ChipTop IO 的 IO 单元。HarnessBinders 负责实例化测试夹具，以连接到 ChipTop 端口。大多数类型的设备和测试夹具都可以使用自定义的 IOBinders 和 HarnessBinders 进行实例化。&lt;/p>
+&lt;h3 id="自定义-chiptop">自定义 ChipTop&lt;/h3>
+&lt;p>默认的标准 ChipTop 提供了一个最小的、基本的模板，以便 IOBinders 在 DigitalTop 特性周围生成 IO 单元。对于 tapeout、集成模拟 IP 或其他非标准用例，Chipyard 支持使用 BuildTop 键指定自定义 ChipTop。一个使用非标准 IO 单元的自定义 ChipTop 示例位于 &lt;code>generators/chipyard/src/main/scala/example/CustomChipTop.scala&lt;/code>。&lt;/p>
+&lt;p>您还可以指定一个完全自定义的 ChipTop，该 ChipTop 不使用任何 RocketChip 或 Chipyard SoC 组件。示例位于 &lt;code>generators/chipyard/src/main/scala/example/EmptyChipTop.scala&lt;/code>。可以使用以下命令构建 EmptyChipTop 示例：&lt;code>make CONFIG=EmptyChipTopConfig TOP=EmptyChipTop&lt;/code>。&lt;/p>
+&lt;h3 id="systemdigitaltop">System/DigitalTop&lt;/h3>
+&lt;p>Rocket Chip SoC 的系统模块是通过 cake-pattern 组合而成的。具体而言，DigitalTop 扩展了 System，System 扩展了 Subsystem，Subsystem 又扩展了 BaseSubsystem。&lt;/p>
+&lt;h4 id="basesubsystem">BaseSubsystem&lt;/h4>
+&lt;p>BaseSubsystem 在 &lt;code>generators/rocketchip/src/main/scala/subsystem/BaseSubsystem.scala&lt;/code> 中定义。查看 BaseSubsystem 抽象类，我们看到该类实例化了顶层总线（frontbus、systembus、peripherybus 等），但没有指定拓扑结构。该类还定义了多个 ElaborationArtefacts，这些文件是在 Chisel 细化后生成的（例如，设备树字符串和外交图可视化 GraphML 文件）。&lt;/p>
+&lt;h4 id="subsystem">Subsystem&lt;/h4>
+&lt;p>在 &lt;code>generators/chipyard/src/main/scala/Subsystem.scala&lt;/code> 中，我们可以看到 Chipyard 的 Subsystem 是如何扩展 BaseSubsystem 抽象类的。Subsystem 混入了 HasBoomAndRocketTiles 特性，该特性根据指定的参数定义并实例化 BOOM 或 Rocket 瓦片。我们在这里为每个瓦片连接一些基本的 IO，特别是 hartids 和复位向量。&lt;/p>
+&lt;h4 id="system">System&lt;/h4>
+&lt;p>&lt;code>generators/chipyard/src/main/scala/System.scala&lt;/code> 完成了 System 的定义。&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>HasHierarchicalBusTopology&lt;/strong> 在 Rocket Chip 中定义，指定顶层总线之间的连接。&lt;/li>
+&lt;li>&lt;strong>HasAsyncExtInterrupts&lt;/strong> 和 &lt;strong>HasExtInterruptsModuleImp&lt;/strong> 添加外部中断的 IO，并将其适当地连接到瓦片。&lt;/li>
+&lt;li>&lt;strong>CanHave&amp;hellip;AXI4Port&lt;/strong> 添加各种主从 AXI4 端口，添加 TL-to-AXI4 转换器，并将其连接到适当的总线。&lt;/li>
+&lt;li>&lt;strong>HasPeripheryBootROM&lt;/strong> 添加 BootROM 设备。&lt;/li>
+&lt;/ul>
+&lt;h3 id="tops">Tops&lt;/h3>
+&lt;p>SoC Top 继承 System 类，并包含自定义组件的特性。在 Chipyard 中，这包括添加 NIC、UART 和 GPIO，以及为引导方法设置硬件。有关这些引导方法的更多信息，请参阅 :ref:&lt;code>Advanced-Concepts/Chip-Communication:Communicating with the DUT&lt;/code>。&lt;/p>
+&lt;h3 id="testharness">TestHarness&lt;/h3>
+&lt;p>TestHarness 与 Top 之间的连接是在添加到 Top 的特性中定义的方法中执行的。当这些方法从 TestHarness 中调用时，它们可以在夹具的作用域内实例化模块，然后将其连接到 DUT。例如，从 CanHaveMasterAXI4MemPortModuleImp 特性定义的 &lt;code>connectSimAXIMem&lt;/code> 方法，在 TestHarness 中调用时，会实例化 SimAXIMems，并将其连接到顶层的正确 IO。&lt;/p>
+&lt;p>尽管这种间接方式连接顶层 IO 可能看起来不必要地复杂，但它允许设计师组合自定义特性，而无需担心任何特定特性的实现细节。&lt;/p>
+&lt;h3 id="testdriver">TestDriver&lt;/h3>
+&lt;p>TestDriver 在 &lt;code>generators/rocketchip/src/main/resources/vsrc/TestDriver.v&lt;/code> 中定义。该 Verilog 文件通过实例化 TestHarness、驱动时钟和复位信号以及解释成功输出来执行仿真。该文件与为 TestHarness 和 Top 生成的 Verilog 一起编译，以生成仿真器。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://github.com/ucb-bar/chipyard/blob/main/docs/Advanced-Concepts/Top-Testharness.rst" target="_blank" rel="noopener"
+>Tops,Test-Harnesses,and the Test-Driver&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Rocket Chip学习</title><link>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</link><pubDate>Tue, 29 Oct 2024 17:12:22 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</guid><description>&lt;h2 id="rocket-chip-框图">rocket-chip 框图&lt;/h2>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 93;
+flex-basis: 224px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013.png" data-size="685x733">
+&lt;img src="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013.png"
+width="685"
+height="733"
+srcset="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013_hu14119112562339422234.png 480w, https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/image-20241029185840013_hu6804879921133493359.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 160;
+flex-basis: 384px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/1b76004cd81da403ee6061bc5f28c8a4.png" data-size="920x574">
+&lt;img src="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/1b76004cd81da403ee6061bc5f28c8a4.png"
+width="920"
+height="574"
+srcset="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/1b76004cd81da403ee6061bc5f28c8a4_hu10081888447368840699.png 480w, https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/1b76004cd81da403ee6061bc5f28c8a4_hu7103377815266656506.png 1024w"
+loading="lazy"
+alt="rocket-chip流水线">
+&lt;/a>
+&lt;figcaption>rocket-chip流水线&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 151;
+flex-basis: 362px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/606757a6f155fc39d830d2669766510d.png" data-size="812x537">
+&lt;img src="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/606757a6f155fc39d830d2669766510d.png"
+width="812"
+height="537"
+srcset="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/606757a6f155fc39d830d2669766510d_hu2470859002471598808.png 480w, https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/606757a6f155fc39d830d2669766510d_hu17716410241867253808.png 1024w"
+loading="lazy"
+alt="rocket-chip Icache">
+&lt;/a>
+&lt;figcaption>rocket-chip Icache&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 140;
+flex-basis: 337px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/d5b43f3a013f1952dcc43774d22b5d37.png" data-size="1042x742">
+&lt;img src="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/d5b43f3a013f1952dcc43774d22b5d37.png"
+width="1042"
+height="742"
+srcset="https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/d5b43f3a013f1952dcc43774d22b5d37_hu12111035731917621890.png 480w, https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/d5b43f3a013f1952dcc43774d22b5d37_hu6353591107662034634.png 1024w"
+loading="lazy"
+alt="rocket-chip Dcache">
+&lt;/a>
+&lt;figcaption>rocket-chip Dcache&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="rocket-chip-代码结构">rocket-chip 代码结构&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## rocket-chip generator的一级目录结构&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　bootrom : 在BootROM的bootloader第一阶段所使用的代码
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> csrc Verilator: 仿真用的C代码
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　emulator Verilator :用来编译和跑仿真的工作目录
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　project Scala: 构建工具sbt用来构建Scala的工作目录
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　regression: 定义的持续的整合和一套nightly regression
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　scripts: 用来分析仿真的输出或者处理代码文件的内容
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　vsim VCS: 用来编译和跑仿真的工作目录
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　vsrc Verilog: 代码，包含接口、测试框架和Verilog过程接口VPI
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　chisel3 :包含Chisel自定义的各种类和规则，用来生成RTL
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　firrtl: 存放Chisel编译器处理代码而生成的一种中间表示，由中间表示能生成Verilog代码或C++代码
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　hardfloat: 用chisel写成的浮点单元
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　riscv-tools: 支持RISC-V的一套软件，与生成RTL有关
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　torture: 用来生成压力测试所需的一些随机指令
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## src/main/scala: 构筑rocket-chip的代码&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> amba: 协议的实现代码，包括AXI4，AHB-lite，APB
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> config: 提供能配置Generator的Scala的接口
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　coreplex: 包含Rocket核、系统总线、coherence agents、debug设备、中断处理、面向外部的外设、时钟同步处理和TileLink到外设总线转换
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　devices: 一些外设，包括debug模块和各种挂在TileLink的从设备
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　diplomacy: 用来扩展Chisel，通过允许对硬件进行两个阶段的阐述，可以让参数在模块之间协调传递
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　groundtest: 生成可综合的硬件测试平台，通过发出随机的访问存储器指令流，进行对核外的存储器系统进行压力测试
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　jtag: 用来生成JTAG总线接口
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　regmapper: 用来生成带有能访问内存映射寄存器的标准接口的从设备
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　rocket: 用来生成顺序核Rocket、L1指令cache和L1数据cache
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　tile: 包含可以与Rocket核组成tile的组件，如FPU和RoCC协处理器
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　tilelink: 用来生成TileLink总线（协议），包含一些适配器和转其他总线（协议）的转换器
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　system:Rocket Chip的顶层代码包，同时也是用作测试的硬件平台的顶层代码包
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　unittest: 用作生成硬件测试平台来测试单独的一个个模块
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>　util: 提供一些能被其他代码包调用的通用的Scala和Chisel结构
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="srcmainscalasystem">/src/main/scala/system&lt;/h3>
+&lt;h4 id="testharnessscala">TestHarness.scala&lt;/h4>
+&lt;p>TestHarness 模块通过模拟配置、接口连接和调试信号设置，构建了一个测试环境，用于验证 ExampleRocketSystem的功能&lt;/p>
+&lt;h4 id="testgenerationscala">TestGeneration.scala&lt;/h4>
+&lt;p>这段代码定义了RISC-V处理器的测试框架，它主要由一些抽象和具体的测试套件类组成，用于生成用于RISC-V测试的Makefile脚本片段。以下是代码的主要结构与功能：&lt;/p>
+&lt;p>RocketTestSuite 抽象类：
+这个抽象类定义了一个通用的测试套件结构，包含测试目录、目标名称、测试用例集合等关键参数。postScript属性生成用于链接目标文件的Makefile命令模板。&lt;/p>
+&lt;p>AssemblyTestSuite 类：&lt;/p>
+&lt;p>这是RocketTestSuite的子类，用于定义汇编语言的测试套件。每个实例表示特定环境（如rv32ui）下的测试集合，并生成包含测试文件的Makefile片段。
+BenchmarkTestSuite 类：&lt;/p>
+&lt;p>用于定义基准测试套件，支持特定目录中的多个基准测试，例如性能评估用的程序。
+RegressionTestSuite 类：&lt;/p>
+&lt;p>包含一组用于回归测试的测试文件，通过简单定义makeTargetName来统一生成Makefile片段。
+TestGeneration 对象：&lt;/p>
+&lt;p>该对象定义了添加测试套件并生成Makefile片段的逻辑。通过gen方法根据测试类型和环境生成目标名称和Perl脚本，用于捕获和处理测试结果。
+DefaultTestSuites 对象：&lt;/p>
+&lt;p>包含多个默认测试套件的实例，这些测试套件涵盖了不同类型的RISC-V指令集扩展，例如rv32ui、rv64ui、rv32ua、rv64ua等。还包括了一些性能基准和单一回归测试的示例。&lt;/p>
+&lt;h4 id="configsscala">Configs.scala&lt;/h4>
+&lt;p>TestHarness.scala 就是testbench，而 ExampleRocketSystem.scala 就是SOC的层次，包括Core以外的其他外设&amp;amp;总线，Configs.scala 就是核心Core的配置。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">BaseConfig&lt;/span> &lt;span style="color:#c678dd">extends&lt;/span> &lt;span style="color:#e5c07b">Config&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">WithDefaultMemPort&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">WithDefaultMMIOPort&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">WithDefaultSlavePort&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">WithTimebase&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">BigInt&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">1000000&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#7f848e">// 1 MHz
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">WithDTS&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;freechips,rocketchip-unknown&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Nil&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">WithNExtTopInterrupts&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">2&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">BaseSubsystemConfig&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="examplerocketsystemscala">ExampleRocketSystem.scala&lt;/h4>
+&lt;p>对于SOC层面的设计&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">/** Example Top with periphery devices and ports, and a Rocket subsystem */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">ExampleRocketSystem&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">implicit&lt;/span> &lt;span style="color:#e06c75">p&lt;/span>&lt;span style="color:#c678dd">:&lt;/span> &lt;span style="color:#e5c07b">Parameters&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">extends&lt;/span> &lt;span style="color:#e5c07b">RocketSubsystem&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">with&lt;/span> &lt;span style="color:#e5c07b">HasAsyncExtInterrupts&lt;/span> &lt;span style="color:#7f848e">// 提供异步外部中断接口，允许系统处理来自外部设备的异步中断信号
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">with&lt;/span> &lt;span style="color:#e5c07b">CanHaveMasterAXI4MemPort&lt;/span> &lt;span style="color:#7f848e">// 添加 AXI4 主接口，用于连接存储器
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">with&lt;/span> &lt;span style="color:#e5c07b">CanHaveMasterAXI4MMIOPort&lt;/span> &lt;span style="color:#7f848e">// 添加 AXI4 主接口，用于连接内存映射的 I/O 端口
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">with&lt;/span> &lt;span style="color:#e5c07b">CanHaveSlaveAXI4Port&lt;/span> &lt;span style="color:#7f848e">// 添加 AXI4 从接口，支持与其他主设备的交互
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// optionally add ROM devices
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// 可选地添加 ROM 设备
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// Note that setting BootROMLocated will override the reset_vector for all tiles
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// 设置 BootROMLocated 将覆盖所有核心的重置向量
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">bootROM&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">p&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">BootROMLocated&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">location&lt;/span>&lt;span style="color:#56b6c2">)).&lt;/span>&lt;span style="color:#e06c75">map&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#e5c07b">BootROM&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">attach&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">_&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#c678dd">this&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">CBUS&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span> &lt;span style="color:#7f848e">// 连接 BootROM 到 CBUS，以配置系统启动入口
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">maskROMs&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">p&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">MaskROMLocated&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">location&lt;/span>&lt;span style="color:#56b6c2">)).&lt;/span>&lt;span style="color:#e06c75">map&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#e5c07b">MaskROM&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">attach&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">_&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#c678dd">this&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">CBUS&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span> &lt;span style="color:#7f848e">// 将 MaskROMs 连接到 CBUS，作为只读存储器使用
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">override&lt;/span> &lt;span style="color:#c678dd">lazy&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">module&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">ExampleRocketSystemModuleImp&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">this&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#7f848e">// 延迟加载模块实现
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="simaximemscala">simAXIMem.scala&lt;/h4>
+&lt;p>Memory with AXI port for use in elaboratable test harnesses(一个mem的仿真模型)&lt;/p>
+&lt;h3 id="srcmainscalarocket">/src/main/scala/rocket&lt;/h3>
+&lt;p>此 RTL 包生成 Rocket 顺序流水线核心以及 L1 指令和数据缓存。此库旨在供芯片生成器使用，该生成器在内存系统中实例化核心并将其连接到外部世界。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/a_weiming/article/details/84594781" target="_blank" rel="noopener"
+>rocket-chip目录&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/meton-robean/ResearchNote/issues/23" target="_blank" rel="noopener"
+>rocketchip学习笔记&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.cnblogs.com/gujiangtaoFuture/articles/11766114.html" target="_blank" rel="noopener"
+>https://www.cnblogs.com/gujiangtaoFuture/articles/11766114.html&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>rocket-src微架构代码解读</title><link>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</link><pubDate>Sun, 27 Oct 2024 21:23:02 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%BE%AE%E6%9E%B6%E6%9E%84%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/</guid><description>&lt;h2 id="差异文件">差异文件&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">### 新加入的&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RCU.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_cache.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RH_Cache.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_data.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/rh_tag.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/Runahead_cache.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">### 修改过的 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/BootROM.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/BTB.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/Frontend.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/HellaCacheArbiter.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/HellaCache.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/NBDcache.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>rocket/RocketCore.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>subsystem/Configs.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>subsystem/SystemBus.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tile/Core.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/Bundles.scala
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tilelink/Edges.scala
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
@@ -3463,12 +3677,45 @@ _dtb:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .rodata.dtb : &lt;span style="color:#56b6c2">{&lt;/span> *&lt;span style="color:#56b6c2">(&lt;/span>.rodata.dtb&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>第一条指令应该是从0x10000开始&lt;/p>
+&lt;h2 id="源码解读">源码解读&lt;/h2>
+&lt;h3 id="variablesmk">variables.mk&lt;/h3>
+&lt;h4 id="sub_project">SUB_PROJECT&lt;/h4>
+&lt;p>这对应于chipyard/generators 目录中的项目之一。更正式地说，它是由相应生成器目录中的 build.sbt 文件中的条目之一以及 Chipyard 根目录中的主 build.sbt 文件定义的&lt;/p>
+&lt;p>constellation icenet rocketchip testchipip hwacha &amp;hellip;&lt;/p>
+&lt;h4 id="sbt_project">SBT_PROJECT&lt;/h4>
+&lt;p>这对应于要构建的芯片的顶级存储库。这是定义许多更高级别的构造的地方，例如测试工具和测试平台。&lt;/p>
+&lt;h4 id="model">MODEL&lt;/h4>
+&lt;p>该模型是 Chisel 应该使用的项目的顶级模块。通常，这应该定义为与测试工具相同，但不一定必须如此。&lt;/p>
+&lt;h4 id="vlog_model">VLOG_MODEL&lt;/h4>
+&lt;p>这是 FIRRTL/Verilog 应该使用的项目的顶层模块。与 MODEL 一样，这通常与测试工具相同，但不一定需要如此。&lt;/p>
+&lt;h4 id="model_package">MODEL_PACKAGE&lt;/h4>
+&lt;p>这是用于查找 CPU 整体模型的 Scala 包。这应该对应于 Scala CPU 配置文件中的包 &lt;packageName>。&lt;/p>
+&lt;h4 id="config">CONFIG&lt;/h4>
+&lt;p>这定义了项目应使用的参数。通常，这用于选择 SBT_PROJECT 中定义的 CPU 配置之一。&lt;/p>
+&lt;h4 id="config_package">CONFIG_PACKAGE&lt;/h4>
+&lt;p>这是定义 Config 类的 Scala 包。该文件必须包含 Config 的类定义，这意味着对象 Config 必须存在。&lt;/p>
+&lt;h4 id="generator_package">GENERATOR_PACKAGE&lt;/h4>
+&lt;p>这是定义 Generator 类的 Scala 包。该文件必须包含 Generator 的类定义，这意味着 Generator 对象必须存在。&lt;/p>
+&lt;h4 id="tb">TB&lt;/h4>
+&lt;p>这定义了测试台包装器，该包装器延伸到测试工具上，以允许在 Verilog 模拟器中进行模拟。默认是TestDriver&lt;/p>
+&lt;p>路径位于generators/rocket-chip/src/main/resources/vsrc/TestDriver.v&lt;/p>
+&lt;p>里面包含着这个&lt;/p>
+&lt;pre tabindex="0">&lt;code> `MODEL testHarness(
+.clock(clock),
+.reset(reset),
+.io_success(success)
+&lt;/code>&lt;/pre>&lt;h4 id="top">TOP&lt;/h4>
+&lt;p>这是该项目的顶层模块。通常，这是由测试工具实例化的模块。&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://alukens.com/project/spring-2021-independent-research-results/research_final_paper.pdf" target="_blank" rel="noopener"
+>An Introduction to Declarative CPU Design and FPGA Development using the Chipyard SoC Design Framework&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://chipyard.readthedocs.io/en/1.10.0/" target="_blank" rel="noopener"
 >chipyard手册&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://www.cnblogs.com/hwzhao/p/17363380.html" target="_blank" rel="noopener"
 >https://www.cnblogs.com/hwzhao/p/17363380.html&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/ucb-bar/chipyard/blob/main/docs/Advanced-Concepts/Top-Testharness.rst" target="_blank" rel="noopener"
+>Tops,Test-Harnesses,and the Test-Driver&lt;/a>&lt;/p>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
