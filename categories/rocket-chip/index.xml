@@ -1,4 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Rocket-Chip on VastCircle's blog</title><link>https://VastCircle.github.io/categories/rocket-chip/</link><description>Recent content in Rocket-Chip on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 29 Oct 2024 17:12:22 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/rocket-chip/index.xml" rel="self" type="application/rss+xml"/><item><title>Rocket Chip学习</title><link>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</link><pubDate>Tue, 29 Oct 2024 17:12:22 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</guid><description>&lt;h2 id="rocket-chip-框图">rocket-chip 框图&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Rocket-Chip on VastCircle's blog</title><link>https://VastCircle.github.io/categories/rocket-chip/</link><description>Recent content in Rocket-Chip on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 30 Oct 2024 16:25:09 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/rocket-chip/index.xml" rel="self" type="application/rss+xml"/><item><title>Big_soc_路径查找</title><link>https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</link><pubDate>Wed, 30 Oct 2024 16:25:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</guid><description>&lt;h2 id="路径查找">路径查找&lt;/h2>
+&lt;h3 id="bootrom-clocksinkdomain_1sv">Bootrom ClockSinkDomain_1.sv&lt;/h3>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 158; 
+			flex-basis: 381px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345.png" data-size="567x357">
+		&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345.png"
+			width="567"
+			height="357"
+			srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345_hu13999121753685267221.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345_hu10622608143385405980.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>Rocket Chip学习</title><link>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</link><pubDate>Tue, 29 Oct 2024 17:12:22 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocket-chip%E5%AD%A6%E4%B9%A0/</guid><description>&lt;h2 id="rocket-chip-框图">rocket-chip 框图&lt;/h2>
 &lt;p>&lt;figure 
 	
 		class="gallery-image" 

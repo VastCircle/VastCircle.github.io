@@ -1,16 +1,583 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Tue, 29 Oct 2024 21:56:38 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard的三个highest_level</title><link>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</link><pubDate>Tue, 29 Oct 2024 21:56:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</guid><description>&lt;p>Chipyard SoC 中三个最高层次是&lt;code>ChipTop&lt;/code>(DUT)、&lt;code>TestHarness&lt;/code>和&lt;code>TestDriver&lt;/code>。&lt;code>ChipTop&lt;/code>和&lt;code>TestHarness&lt;/code>均由 Chisel 生成器发出。&lt;code>TestDriver&lt;/code>用作我们的测试平台，是 Rocket Chip 中的 Verilog 文件。&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 31 Oct 2024 13:11:58 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>处理器成功运行的标志</title><link>https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/</link><pubDate>Thu, 31 Oct 2024 13:11:58 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/</guid><description>&lt;h2 id="处理器运行">处理器运行&lt;/h2>
+&lt;p>&lt;figure
+>
+&lt;a href="https://VastCircle.github.io/1030-big_soc_%e8%b7%af%e5%be%84%e6%9f%a5%e6%89%be/image-20241031125127267.png" >
+&lt;img src="https://VastCircle.github.io/1030-big_soc_%e8%b7%af%e5%be%84%e6%9f%a5%e6%89%be/image-20241031125127267.png"
+loading="lazy"
+alt="image-20241031125127267">
+&lt;/a>
+&lt;figcaption>image-20241031125127267&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>在_success_exit_sim_exit == 1时io_success为1&lt;/p>
+&lt;p>&lt;figure
+>
+&lt;a href="https://VastCircle.github.io/1030-big_soc_%e8%b7%af%e5%be%84%e6%9f%a5%e6%89%be/image-20241031125156158.png" >
+&lt;img src="https://VastCircle.github.io/1030-big_soc_%e8%b7%af%e5%be%84%e6%9f%a5%e6%89%be/image-20241031125156158.png"
+loading="lazy"
+alt="image-20241031125156158">
+&lt;/a>
+&lt;figcaption>image-20241031125156158&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+>
+&lt;a href="https://VastCircle.github.io/1030-big_soc_%e8%b7%af%e5%be%84%e6%9f%a5%e6%89%be/image-20241031125250090.png" >
+&lt;img src="https://VastCircle.github.io/1030-big_soc_%e8%b7%af%e5%be%84%e6%9f%a5%e6%89%be/image-20241031125250090.png"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-verilog" data-lang="verilog">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">input&lt;/span> &lt;span style="color:#e06c75">clock&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">input&lt;/span> &lt;span style="color:#e06c75">reset&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">input&lt;/span> &lt;span style="color:#e06c75">tsi_out_valid&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">output&lt;/span> &lt;span style="color:#e06c75">tsi_out_ready&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">input&lt;/span> [&lt;span style="color:#d19a66">31&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>] &lt;span style="color:#e06c75">tsi_out_bits&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">output&lt;/span> &lt;span style="color:#e06c75">tsi_in_valid&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">input&lt;/span> &lt;span style="color:#e06c75">tsi_in_ready&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">output&lt;/span> [&lt;span style="color:#d19a66">31&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>] &lt;span style="color:#e06c75">tsi_in_bits&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">output&lt;/span> [&lt;span style="color:#d19a66">31&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>] &lt;span style="color:#e06c75">exit&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 115;
+flex-basis: 276px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031132938852.png" data-size="801x696">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031132938852.png"
+width="801"
+height="696"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031132938852_hu1086351026104805095.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031132938852_hu16573299286926149045.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 238;
+flex-basis: 573px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135417464.png" data-size="803x336">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135417464.png"
+width="803"
+height="336"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135417464_hu13613305115897699263.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135417464_hu11887304916702126665.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="serialram-ram-testharnesssv">SerialRAM ram TestHarness.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 188;
+flex-basis: 452px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140339626.png" data-size="813x431">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140339626.png"
+width="813"
+height="431"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140339626_hu4176905410126000133.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140339626_hu2529958250269980170.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tsitotilelink-tsi2tl-serialramsvimage-20241031135520906png">TSIToTileLink tsi2tl SerialRAM.sv&lt;figure
+class="gallery-image"
+style="
+flex-grow: 152;
+flex-basis: 367px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135520906.png" data-size="829x542">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135520906.png"
+width="829"
+height="542"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135520906_hu14310546762855310609.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031135520906_hu12161034021007393813.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/h4>
+&lt;h3 id="chiptop-chiptop0-testharnesssv-image-20241031140507499image-20241031140507499png">ChipTop chiptop0 TestHarness.sv &lt;figure
+class="gallery-image"
+style="
+flex-grow: 218;
+flex-basis: 524px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140507499.png" data-size="922x422">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140507499.png"
+width="922"
+height="422"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140507499_hu8295389208615334147.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140507499_hu10722610121197411403.png 1024w"
+loading="lazy"
+alt="image-20241031140507499">
+&lt;/a>
+&lt;figcaption>image-20241031140507499&lt;/figcaption>
+&lt;/figure>&lt;/h3>
+&lt;h3 id="digitaltop-system-chiptopsv">DigitalTop system ChipTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 335;
+flex-basis: 805px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140808505.png" data-size="1434x427">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140808505.png"
+width="1434"
+height="427"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140808505_hu1061019807963324589.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140808505_hu2950244644950165344.png 1024w"
+loading="lazy"
+alt="image-20241031140808505">
+&lt;/a>
+&lt;figcaption>image-20241031140808505&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="asyncqueue-subsystem_fbus_out_async">AsyncQueue subsystem_fbus_out_async&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 410;
+flex-basis: 985px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140930605.png" data-size="1363x332">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140930605.png"
+width="1363"
+height="332"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140930605_hu9871378090970186772.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031140930605_hu13595630188455238265.png 1024w"
+loading="lazy"
+alt="image-20241031140930605">
+&lt;/a>
+&lt;figcaption>image-20241031140930605&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 3588;
+flex-basis: 8611px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141017157.png" data-size="1220x34">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141017157.png"
+width="1220"
+height="34"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141017157_hu16951995028749720341.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141017157_hu10423103866915634304.png 1024w"
+loading="lazy"
+alt="image-20241031141017157">
+&lt;/a>
+&lt;figcaption>image-20241031141017157&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 416;
+flex-basis: 1000px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141152232.png" data-size="1434x344">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141152232.png"
+width="1434"
+height="344"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141152232_hu11387270610975677908.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141152232_hu5720023195938835171.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="tlserdesser-subsystem_fbus_serdesser-digitaltopsv">TLSerdesser subsystem_fbus_serdesser DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 240;
+flex-basis: 577px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141312322.png" data-size="1054x438">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141312322.png"
+width="1054"
+height="438"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141312322_hu17977651119035661201.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031141312322_hu4356173967899277811.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>After the transaction is converted to TileLink, the &lt;code>TLSerdesser&lt;/code> (located in &lt;code>generators/testchipip&lt;/code>) serializes the transaction and sends it to the chip (this &lt;code>TLSerdesser&lt;/code> is sometimes also referred to as a digital serial-link or SerDes).&lt;/p>
+&lt;h3 id="heading">&lt;/h3>
+&lt;p>_sbusystem_fbus_serdess_auto_client_out_&lt;/p>
+&lt;p>_subsystem_sbus_auto_coupler_from_bus_named_subsystem_fbus_bus_xing_in_d_bits_opcode&lt;/p>
+&lt;p>&amp;hellip;&lt;/p>
+&lt;p>后面应该就到core了吧&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 108;
+flex-basis: 260px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031142422181.png" data-size="810x747">
+&lt;img src="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031142422181.png"
+width="810"
+height="747"
+srcset="https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031142422181_hu9005692429509185126.png 480w, https://VastCircle.github.io/2024/%E5%A4%84%E7%90%86%E5%99%A8%E6%88%90%E5%8A%9F%E8%BF%90%E8%A1%8C%E7%9A%84%E6%A0%87%E5%BF%97/image-20241031142422181_hu2502667652843423368.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p></description></item><item><title>Big_soc_路径查找</title><link>https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</link><pubDate>Wed, 30 Oct 2024 16:25:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</guid><description>&lt;h2 id="路径查找">路径查找&lt;/h2>
+&lt;h3 id="bootrom-clocksinkdomain_1sv">Bootrom ClockSinkDomain_1.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 158;
+flex-basis: 381px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345.png" data-size="567x357">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345.png"
+width="567"
+height="357"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345_hu13999121753685267221.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164859345_hu10622608143385405980.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="clocksinkdomain_1-bootromdomainwrapper-digitaltopsv">ClockSinkDomain_1 bootROMDomainWrapper DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 265;
+flex-basis: 638px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164741290.png" data-size="907x341">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164741290.png"
+width="907"
+height="341"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164741290_hu102353570205705049.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030164741290_hu2590073761771574827.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="peripherybus_1-subsystem_cbus--digitaltopsv">PeripheryBus_1 subsystem_cbus DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 306;
+flex-basis: 735px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030165640444.png" data-size="923x301">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030165640444.png"
+width="923"
+height="301"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030165640444_hu10383002120596061510.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030165640444_hu18402210719830523042.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlinterconnectcoupler_33-coupler_to_bootrom-tlinterconnectcoupler_33sv">TLInterconnectCoupler_33 coupler_to_bootrom TLInterconnectCoupler_33.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 133;
+flex-basis: 321px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031010752745.png" data-size="870x650">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031010752745.png"
+width="870"
+height="650"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031010752745_hu3992272573636306381.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031010752745_hu9979219063896286076.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlxbar_5-out_xbar--peripherybus_1sv">TLXbar_5 out_xbar PeripheryBus_1.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 166;
+flex-basis: 398px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030185219084.png" data-size="793x477">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030185219084.png"
+width="793"
+height="477"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030185219084_hu10448680742370513107.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030185219084_hu17420875698955200549.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 112;
+flex-basis: 269px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788.png" data-size="815x726">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788.png"
+width="815"
+height="726"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788_hu16787036665204178119.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788_hu2087664825858543687.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlinterconnectcoupler-coupler_to_l2_ctrl-peripherybus_1sv">TLInterconnectCoupler coupler_to_l2_ctrl peripherybus_1.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 116;
+flex-basis: 279px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200.png" data-size="934x803">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200.png"
+width="934"
+height="803"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200_hu5295001788486488850.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200_hu9976619187178774634.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h5 id="tlfragmenter_2-fragmenter-tlinterconnectcouplersv">TLFragmenter_2 fragmenter TLInterconnectCoupler.sv&lt;/h5>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 94;
+flex-basis: 227px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027.png" data-size="846x892">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027.png"
+width="846"
+height="892"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027_hu6699421544000463558.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027_hu12051470061498582303.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h5 id="tlbuffer_6-buffer--tlinterconnectcouplersv">TLBuffer_6 buffer TLInterconnectCoupler.sv&lt;/h5>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 96;
+flex-basis: 232px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483.png" data-size="771x797">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483.png"
+width="771"
+height="797"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483_hu13378708531855159852.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483_hu5077580212353300762.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlinterconnectcoupler-coupler_to_l2_ctrl-peripherybus_1sv-1">TLInterconnectCoupler coupler_to_l2_ctrl peripherybus_1.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 113;
+flex-basis: 272px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980.png" data-size="920x809">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980.png"
+width="920"
+height="809"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980_hu9649216811834887221.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980_hu11168965269890549918.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="peripherybus_1-subsystem_cbus--digitaltopsv-1">PeripheryBus_1 subsystem_cbus DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 298;
+flex-basis: 716px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982.png" data-size="1340x449">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982.png"
+width="1340"
+height="449"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982_hu949437431551879801.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982_hu2194081511421310779.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="coherencemanagerwrapper-subsystem_l2_wrapper-digitaltopsv">CoherenceManagerWrapper subsystem_l2_wrapper DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 174;
+flex-basis: 419px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031013341985.png" data-size="1192x682">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031013341985.png"
+width="1192"
+height="682"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031013341985_hu4239901299354339721.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031013341985_hu17551902722383602852.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="inclusivecache-l2--coherencemanagerwrappersv">InclusiveCache l2 CoherenceManagerWrapper.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 117;
+flex-basis: 283px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112634641.png" data-size="717x608">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112634641.png"
+width="717"
+height="608"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112634641_hu2709144765505328249.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112634641_hu17114887769523885667.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 95;
+flex-basis: 229px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113153384.png" data-size="746x780">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113153384.png"
+width="746"
+height="780"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113153384_hu10994807932654197116.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113153384_hu9974981150287781469.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlcachecork-cork--coherencemanagerwrappersv">TLCacheCork cork &lt;strong>CoherenceManagerWrapper.sv&lt;/strong>&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 101;
+flex-basis: 244px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113807118.png" data-size="816x802">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113807118.png"
+width="816"
+height="802"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113807118_hu9076489822654885813.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113807118_hu17825230885535812463.png 1024w"
+loading="lazy"
+alt="image-20241031113807118">
+&lt;/a>
+&lt;figcaption>image-20241031113807118&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 131;
+flex-basis: 315px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113912098.png" data-size="795x604">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113912098.png"
+width="795"
+height="604"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113912098_hu13582625459371530707.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113912098_hu14921006148919335977.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="bankbinder-binder-coherencemanagerwrappersv">BankBinder binder CoherenceManagerWrapper.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 106;
+flex-basis: 254px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113951757.png" data-size="835x787">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113951757.png"
+width="835"
+height="787"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113951757_hu4867654425878897104.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031113951757_hu416188532021133310.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="coherencemanagerwrapper-subsystem_l2_wrapper--digitaltopsv">CoherenceManagerWrapper subsystem_l2_wrapper DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 192;
+flex-basis: 463px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095210458.png" data-size="1258x652">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095210458.png"
+width="1258"
+height="652"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095210458_hu1991859796095460662.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095210458_hu12504717475907084572.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="memorybus-subsystem_mbus-digitaltopsv">memorybus subsystem_mbus DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 223;
+flex-basis: 536px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095313158.png" data-size="1290x577">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095313158.png"
+width="1290"
+height="577"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095313158_hu10547067537806860942.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031095313158_hu8519425387056163879.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 129;
+flex-basis: 310px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204624185.png" data-size="721x558">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204624185.png"
+width="721"
+height="558"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204624185_hu4951593277296956299.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204624185_hu17132605656731841606.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="digitaltop-system-chiptopsv">DigitalTop system chiptop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 353;
+flex-basis: 849px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204011379.png" data-size="1012x286">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204011379.png"
+width="1012"
+height="286"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204011379_hu8900226278681400073.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030204011379_hu973512857469762760.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="dram">Dram&lt;/h3>
+&lt;p>略&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 128;
+flex-basis: 308px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472.png" data-size="1079x839">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472.png"
+width="1079"
+height="839"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472_hu5176489324737728561.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472_hu2127473252320913306.png 1024w"
+loading="lazy"
+alt="image-20241031120949472">
+&lt;/a>
+&lt;figcaption>image-20241031120949472&lt;/figcaption>
+&lt;/figure>&lt;/p></description></item><item><title>Chipyard的三个highest_level</title><link>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</link><pubDate>Tue, 29 Oct 2024 21:56:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</guid><description>&lt;p>Chipyard SoC 中三个最高层次是&lt;code>ChipTop&lt;/code>(DUT)、&lt;code>TestHarness&lt;/code>和&lt;code>TestDriver&lt;/code>。&lt;code>ChipTop&lt;/code>和&lt;code>TestHarness&lt;/code>均由 Chisel 生成器发出。&lt;code>TestDriver&lt;/code>用作我们的测试平台，是 Rocket Chip 中的 Verilog 文件。&lt;/p>
 &lt;h2 id="chiptopdut">ChipTop(DUT)&lt;/h2>
 &lt;p>ChipTop 是顶层模块，负责实例化 System 子模块，通常是 DigitalTop 的具体实例。设计的大部分内容位于 System 中。ChipTop 层中存在的其他组件通常是 IO 单元、时钟接收器和多路复用器、重置同步器以及其他需要存在于 System 之外的模拟 IP。IOBinders 负责实例化与 System 的 IO 相对应的 ChipTop IO 的 IO 单元。HarnessBinders 负责实例化测试夹具，以连接到 ChipTop 端口。大多数类型的设备和测试夹具都可以使用自定义的 IOBinders 和 HarnessBinders 进行实例化。&lt;/p>
-&lt;h3 id="自定义-chiptop">自定义 ChipTop&lt;/h3>
+&lt;h2 id="自定义-chiptop">自定义 ChipTop&lt;/h2>
 &lt;p>默认的标准 ChipTop 提供了一个最小的、基本的模板，以便 IOBinders 在 DigitalTop 特性周围生成 IO 单元。对于 tapeout、集成模拟 IP 或其他非标准用例，Chipyard 支持使用 BuildTop 键指定自定义 ChipTop。一个使用非标准 IO 单元的自定义 ChipTop 示例位于 &lt;code>generators/chipyard/src/main/scala/example/CustomChipTop.scala&lt;/code>。&lt;/p>
 &lt;p>您还可以指定一个完全自定义的 ChipTop，该 ChipTop 不使用任何 RocketChip 或 Chipyard SoC 组件。示例位于 &lt;code>generators/chipyard/src/main/scala/example/EmptyChipTop.scala&lt;/code>。可以使用以下命令构建 EmptyChipTop 示例：&lt;code>make CONFIG=EmptyChipTopConfig TOP=EmptyChipTop&lt;/code>。&lt;/p>
-&lt;h3 id="systemdigitaltop">System/DigitalTop&lt;/h3>
+&lt;h2 id="systemdigitaltop">System/DigitalTop&lt;/h2>
 &lt;p>Rocket Chip SoC 的系统模块是通过 cake-pattern 组合而成的。具体而言，DigitalTop 扩展了 System，System 扩展了 Subsystem，Subsystem 又扩展了 BaseSubsystem。&lt;/p>
-&lt;h4 id="basesubsystem">BaseSubsystem&lt;/h4>
+&lt;h3 id="basesubsystem">BaseSubsystem&lt;/h3>
 &lt;p>BaseSubsystem 在 &lt;code>generators/rocketchip/src/main/scala/subsystem/BaseSubsystem.scala&lt;/code> 中定义。查看 BaseSubsystem 抽象类，我们看到该类实例化了顶层总线（frontbus、systembus、peripherybus 等），但没有指定拓扑结构。该类还定义了多个 ElaborationArtefacts，这些文件是在 Chisel 细化后生成的（例如，设备树字符串和外交图可视化 GraphML 文件）。&lt;/p>
-&lt;h4 id="subsystem">Subsystem&lt;/h4>
+&lt;h3 id="subsystem">Subsystem&lt;/h3>
 &lt;p>在 &lt;code>generators/chipyard/src/main/scala/Subsystem.scala&lt;/code> 中，我们可以看到 Chipyard 的 Subsystem 是如何扩展 BaseSubsystem 抽象类的。Subsystem 混入了 HasBoomAndRocketTiles 特性，该特性根据指定的参数定义并实例化 BOOM 或 Rocket 瓦片。我们在这里为每个瓦片连接一些基本的 IO，特别是 hartids 和复位向量。&lt;/p>
-&lt;h4 id="system">System&lt;/h4>
+&lt;h3 id="system">System&lt;/h3>
 &lt;p>&lt;code>generators/chipyard/src/main/scala/System.scala&lt;/code> 完成了 System 的定义。&lt;/p>
 &lt;ul>
 &lt;li>&lt;strong>HasHierarchicalBusTopology&lt;/strong> 在 Rocket Chip 中定义，指定顶层总线之间的连接。&lt;/li>
@@ -18,14 +585,18 @@
 &lt;li>&lt;strong>CanHave&amp;hellip;AXI4Port&lt;/strong> 添加各种主从 AXI4 端口，添加 TL-to-AXI4 转换器，并将其连接到适当的总线。&lt;/li>
 &lt;li>&lt;strong>HasPeripheryBootROM&lt;/strong> 添加 BootROM 设备。&lt;/li>
 &lt;/ul>
-&lt;h3 id="tops">Tops&lt;/h3>
-&lt;p>SoC Top 继承 System 类，并包含自定义组件的特性。在 Chipyard 中，这包括添加 NIC、UART 和 GPIO，以及为引导方法设置硬件。有关这些引导方法的更多信息，请参阅 :ref:&lt;code>Advanced-Concepts/Chip-Communication:Communicating with the DUT&lt;/code>。&lt;/p>
-&lt;h3 id="testharness">TestHarness&lt;/h3>
-&lt;p>TestHarness 与 Top 之间的连接是在添加到 Top 的特性中定义的方法中执行的。当这些方法从 TestHarness 中调用时，它们可以在夹具的作用域内实例化模块，然后将其连接到 DUT。例如，从 CanHaveMasterAXI4MemPortModuleImp 特性定义的 &lt;code>connectSimAXIMem&lt;/code> 方法，在 TestHarness 中调用时，会实例化 SimAXIMems，并将其连接到顶层的正确 IO。&lt;/p>
+&lt;h2 id="tops">Tops&lt;/h2>
+&lt;p>SoC Top 继承 System 类，并包含自定义组件的特性。在 Chipyard 中，这包括添加 NIC、UART 和 GPIO，以及为引导方法设置硬件。&lt;/p>
+&lt;h2 id="testharness">TestHarness&lt;/h2>
+&lt;p>TestHarness 与 Top 之间的连接是在添加到 Top 的特性中定义的方法中执行的。当这些方法从 TestHarness 中调用时，它们可以在scope of the harness内实例化模块，然后将其连接到 DUT。例如，从 CanHaveMasterAXI4MemPortModuleImp 特性定义的 &lt;code>connectSimAXIMem&lt;/code> 方法，在 TestHarness 中调用时，会实例化 SimAXIMems，并将其连接到顶层的正确 IO。&lt;/p>
 &lt;p>尽管这种间接方式连接顶层 IO 可能看起来不必要地复杂，但它允许设计师组合自定义特性，而无需担心任何特定特性的实现细节。&lt;/p>
-&lt;h3 id="testdriver">TestDriver&lt;/h3>
+&lt;h2 id="testdriver">TestDriver&lt;/h2>
 &lt;p>TestDriver 在 &lt;code>generators/rocketchip/src/main/resources/vsrc/TestDriver.v&lt;/code> 中定义。该 Verilog 文件通过实例化 TestHarness、驱动时钟和复位信号以及解释成功输出来执行仿真。该文件与为 TestHarness 和 Top 生成的 Verilog 一起编译，以生成仿真器。&lt;/p>
-&lt;h2 id="附录">附录&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-verilog" data-lang="verilog">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">`MODEL&lt;/span> &lt;span style="color:#e06c75">testHarness&lt;/span>(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#e06c75">clock&lt;/span>(&lt;span style="color:#e06c75">clock&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#e06c75">reset&lt;/span>(&lt;span style="color:#e06c75">reset&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> .&lt;span style="color:#e06c75">io_success&lt;/span>(&lt;span style="color:#e06c75">success&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;p>&lt;a class="link" href="https://github.com/ucb-bar/chipyard/blob/main/docs/Advanced-Concepts/Top-Testharness.rst" target="_blank" rel="noopener"
 >Tops,Test-Harnesses,and the Test-Driver&lt;/a>&lt;/p>
@@ -3006,6 +3577,7 @@ alt="image-20241015194955893">
 &lt;p>那就相当于把一个PC对应的表项有进行了细分 -&amp;gt; 一个BHR和多个PHT&lt;/p>
 &lt;p>如果一个序列，连续相同的数有p位，则虚了的循环周期为p,只要BHR不小于p,就可以做完美预测&lt;/p>
 &lt;h4 id="寻址">寻址&lt;/h4>
+&lt;p>将所有分支指令的BHR组合在一起称为分支历史寄存器表(Branch History Register Table,BHT)&lt;/p>
 &lt;p>如果进行全寻址的话 ， 1个PC值 需要 N位BTR + 2^N * 2 位PHT , 2^n 就需要 2^n（ N + 2^N * 2）&lt;/p>
 &lt;p>所以需要PC部分值来寻址&lt;/p>
 &lt;p>&lt;figure
@@ -3560,6 +4132,8 @@ alt="image-20241010195821755">
 &lt;h4 id="architectural-register">Architectural Register&lt;/h4>
 &lt;p>架构寄存器是指每个CPU独有的一组全局寄存器，这些寄存器不与其他CPU共享。它们可以存储任意类型的数据，并且能够在CPU内部的线程之间实现快速通信。&lt;/p>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://github.com/lshpku/hwd-prefetch-study/blob/master/Paper_Reading.md" target="_blank" rel="noopener"
+>paper-reading&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://www.sciencedirect.com/topics/computer-science/architectural-register" target="_blank" rel="noopener"
 >architectural register&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://jia.je/hardware/2021/09/14/brief-into-ooo/#%E8%83%8C%E6%99%AF" target="_blank" rel="noopener"
@@ -3679,7 +4253,18 @@ _dtb:
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>第一条指令应该是从0x10000开始&lt;/p>
 &lt;h2 id="源码解读">源码解读&lt;/h2>
 &lt;h3 id="variablesmk">variables.mk&lt;/h3>
-&lt;h4 id="sub_project">SUB_PROJECT&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-makefile" data-lang="makefile">&lt;span style="display:flex;">&lt;span>ifeq (&lt;span style="color:#c678dd">$(&lt;/span>&lt;span style="color:#e06c75">SUB_PROJECT&lt;/span>&lt;span style="color:#c678dd">)&lt;/span>,chipyard)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SBT_PROJECT&lt;/span> &lt;span style="color:#56b6c2">?=&lt;/span> chipyard
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MODEL ?&lt;span style="color:#56b6c2">=&lt;/span> TestHarness
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> VLOG_MODEL ?&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">$(&lt;/span>MODEL&lt;span style="color:#c678dd">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MODEL_PACKAGE ?&lt;span style="color:#56b6c2">=&lt;/span> chipyard.harness
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> CONFIG ?&lt;span style="color:#56b6c2">=&lt;/span> RocketConfig
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> CONFIG_PACKAGE ?&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">$(&lt;/span>SBT_PROJECT&lt;span style="color:#c678dd">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> GENERATOR_PACKAGE ?&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">$(&lt;/span>SBT_PROJECT&lt;span style="color:#c678dd">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> TB ?&lt;span style="color:#56b6c2">=&lt;/span> TestDriver
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> TOP ?&lt;span style="color:#56b6c2">=&lt;/span> ChipTop
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>endif
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="sub_project">SUB_PROJECT&lt;/h4>
 &lt;p>这对应于chipyard/generators 目录中的项目之一。更正式地说，它是由相应生成器目录中的 build.sbt 文件中的条目之一以及 Chipyard 根目录中的主 build.sbt 文件定义的&lt;/p>
 &lt;p>constellation icenet rocketchip testchipip hwacha &amp;hellip;&lt;/p>
 &lt;h4 id="sbt_project">SBT_PROJECT&lt;/h4>
