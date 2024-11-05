@@ -351,98 +351,384 @@ loading="lazy"
 &lt;p>&lt;figure
 class="gallery-image"
 style="
-flex-grow: 112;
-flex-basis: 269px"
+flex-grow: 181;
+flex-basis: 435px"
 >
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788.png" data-size="815x726">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788.png"
-width="815"
-height="726"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788_hu16787036665204178119.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241030195740788_hu2087664825858543687.png 1024w"
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202332950.png" data-size="713x393">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202332950.png"
+width="713"
+height="393"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202332950_hu9250519818328254813.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202332950_hu8645570273136880355.png 1024w"
 loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
-&lt;h4 id="tlinterconnectcoupler-coupler_to_l2_ctrl-peripherybus_1sv">TLInterconnectCoupler coupler_to_l2_ctrl peripherybus_1.sv&lt;/h4>
+&lt;h4 id="tlfifofixer_2-fixer-peripherybus_1sv">TLFIFOFixer_2 fixer PeripheryBus_1.sv&lt;/h4>
 &lt;p>&lt;figure
 class="gallery-image"
 style="
-flex-grow: 116;
-flex-basis: 279px"
+flex-grow: 152;
+flex-basis: 365px"
 >
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200.png" data-size="934x803">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200.png"
-width="934"
-height="803"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200_hu5295001788486488850.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111411200_hu9976619187178774634.png 1024w"
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202242426.png" data-size="776x510">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202242426.png"
+width="776"
+height="510"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202242426_hu1671350503351295985.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202242426_hu2891245334902017403.png 1024w"
 loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
-&lt;h5 id="tlfragmenter_2-fragmenter-tlinterconnectcouplersv">TLFragmenter_2 fragmenter TLInterconnectCoupler.sv&lt;/h5>
 &lt;p>&lt;figure
 class="gallery-image"
 style="
-flex-grow: 94;
-flex-basis: 227px"
+flex-grow: 110;
+flex-basis: 265px"
 >
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027.png" data-size="846x892">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027.png"
-width="846"
-height="892"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027_hu6699421544000463558.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031110902027_hu12051470061498582303.png 1024w"
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202200430.png" data-size="679x613">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202200430.png"
+width="679"
+height="613"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202200430_hu4279736998364245208.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202200430_hu6367668441550391184.png 1024w"
 loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
-&lt;h5 id="tlbuffer_6-buffer--tlinterconnectcouplersv">TLBuffer_6 buffer TLInterconnectCoupler.sv&lt;/h5>
+&lt;h4 id="tlbuffer_4-buffer-peripherybus_1sv">TLBuffer_4 buffer PeripheryBus_1.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 117;
+flex-basis: 281px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202115325.png" data-size="703x599">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202115325.png"
+width="703"
+height="599"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202115325_hu2093073729786551643.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104202115325_hu9788218670477972827.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 130;
+flex-basis: 312px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201933229.png" data-size="681x523">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201933229.png"
+width="681"
+height="523"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201933229_hu14151955852051181800.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201933229_hu10350937311788669531.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlatomicautomata_1-atomics-peripherybus_1sv">TLAtomicAutomata_1 atomics PeripheryBus_1.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 139;
+flex-basis: 333px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201838520.png" data-size="740x532">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201838520.png"
+width="740"
+height="532"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201838520_hu15474228921633105648.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201838520_hu18177123055238767923.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 121;
+flex-basis: 291px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201741377.png" data-size="715x589">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201741377.png"
+width="715"
+height="589"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201741377_hu12807145140930188950.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201741377_hu16454610261658107867.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlxbar_4-in_xbar-peripherybus_1sv">TLXbar_4 in_xbar PeripheryBus_1.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 196;
+flex-basis: 471px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201652036.png" data-size="721x367">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201652036.png"
+width="721"
+height="367"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201652036_hu15463308738735522326.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201652036_hu11076147321959160063.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 128;
+flex-basis: 308px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201454888.png" data-size="760x591">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201454888.png"
+width="760"
+height="591"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201454888_hu1648661250605773999.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104201454888_hu9220552418403513128.png 1024w"
+loading="lazy"
+alt="image-20241104201454888">
+&lt;/a>
+&lt;figcaption>image-20241104201454888&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="peripyherybus_1-subsystem_cbus-digitaltopsv">PeripyheryBus_1 subsystem_cbus DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 247;
+flex-basis: 594px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200308864.png" data-size="1196x483">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200308864.png"
+width="1196"
+height="483"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200308864_hu2987058579385441560.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200308864_hu8238927459530301682.png 1024w"
+loading="lazy"
+alt="image-20241104200308864">
+&lt;/a>
+&lt;figcaption>image-20241104200308864&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="systembus-subsystem_sbus-digitaltopsv">SystemBus subsystem_sbus DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 390;
+flex-basis: 937px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200104409.png" data-size="1051x269">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200104409.png"
+width="1051"
+height="269"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200104409_hu3587345545705323987.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104200104409_hu7002349993959100018.png 1024w"
+loading="lazy"
+alt="image-20241104200104409">
+&lt;/a>
+&lt;figcaption>image-20241104200104409&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlinterconnectcoupler-aoupler_to_bus_named_subsystem_cbus-systembussv">TLInterconnectCoupler aoupler_to_bus_named_subsystem_cbus SystemBus.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 124;
+flex-basis: 299px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104203908777.png" data-size="957x768">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104203908777.png"
+width="957"
+height="768"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104203908777_hu6125513517208744189.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104203908777_hu17150586439581193941.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlxbar-system_bus_xbar-systembussv">TLXbar system_bus_xbar SystemBus.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 196;
+flex-basis: 472px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204100508.png" data-size="850x432">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204100508.png"
+width="850"
+height="432"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204100508_hu4689703313920921600.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204100508_hu3866374991973846319.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 157;
+flex-basis: 377px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204343965.png" data-size="885x562">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204343965.png"
+width="885"
+height="562"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204343965_hu5442870221149858326.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204343965_hu15635827722560487754.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlfifofixer-fixer-systembussv">TLFIFOFixer fixer SystemBus.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 209;
+flex-basis: 503px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204454714.png" data-size="898x428">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204454714.png"
+width="898"
+height="428"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204454714_hu17321549004515328782.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204454714_hu3268317837269684717.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 269;
+flex-basis: 647px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204645357.png" data-size="1111x412">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204645357.png"
+width="1111"
+height="412"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204645357_hu14169484330165946716.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104204645357_hu1129588965761359889.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="systembus-subsystem_sbus-digitaltopsv-1">SystemBus subsystem_sbus DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 338;
+flex-basis: 812px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205256635.png" data-size="1138x336">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205256635.png"
+width="1138"
+height="336"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205256635_hu7523165942051679694.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205256635_hu15364917323929948535.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="tileprcidomain-tile_prci_domain-digitaltopsv">TilePRCIDomain tile_prci_domain DigitalTop.sv&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 318;
+flex-basis: 763px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205613883.png" data-size="1168x367">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205613883.png"
+width="1168"
+height="367"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205613883_hu5550151832250196451.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205613883_hu16612706730424766286.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="tlbuffer_15-buffer-tileprcidomainsv">TLBuffer_15 buffer TilePRCIDomain.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 154;
+flex-basis: 370px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205853472.png" data-size="770x499">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205853472.png"
+width="770"
+height="499"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205853472_hu264810291881296659.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205853472_hu13279160373168244277.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 173;
+flex-basis: 416px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205948237.png" data-size="668x385">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205948237.png"
+width="668"
+height="385"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205948237_hu18143089294266212219.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104205948237_hu3551002334042921988.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="toomtile-tile_reset_domain_boom_tile-tileprcidomainsv">ToomTile tile_reset_domain_boom_tile TilePRCIDomain.sv&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 129;
+flex-basis: 310px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104210127393.png" data-size="716x554">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104210127393.png"
+width="716"
+height="554"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104210127393_hu18425995802566615571.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104210127393_hu3630265501328523238.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h5 id="tlxbar_8-tlmasterxbar-boomtilesv">TLXbar_8 tlMasterXbar BoomTile.sv&lt;/h5>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 169;
+flex-basis: 406px"
+>
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104214423660.png" data-size="725x428">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104214423660.png"
+width="725"
+height="428"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104214423660_hu6573180292948110858.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104214423660_hu2808990919005740674.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
 &lt;p>&lt;figure
 class="gallery-image"
 style="
 flex-grow: 96;
-flex-basis: 232px"
+flex-basis: 230px"
 >
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483.png" data-size="771x797">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483.png"
-width="771"
-height="797"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483_hu13378708531855159852.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111054483_hu5077580212353300762.png 1024w"
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104215304702.png" data-size="681x708">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104215304702.png"
+width="681"
+height="708"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104215304702_hu285788930342095181.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241104215304702_hu11573631366708722688.png 1024w"
 loading="lazy"
->
+alt="image-20241104215304702">
 &lt;/a>
+&lt;figcaption>image-20241104215304702&lt;/figcaption>
 &lt;/figure>&lt;/p>
-&lt;h4 id="tlinterconnectcoupler-coupler_to_l2_ctrl-peripherybus_1sv-1">TLInterconnectCoupler coupler_to_l2_ctrl peripherybus_1.sv&lt;/h4>
 &lt;p>&lt;figure
 class="gallery-image"
 style="
-flex-grow: 113;
-flex-basis: 272px"
+flex-grow: 176;
+flex-basis: 422px"
 >
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980.png" data-size="920x809">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980.png"
-width="920"
-height="809"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980_hu9649216811834887221.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031111459980_hu11168965269890549918.png 1024w"
+&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241105144018651.png" data-size="1394x792">
+&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241105144018651.png"
+width="1394"
+height="792"
+srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241105144018651_hu16716922515995658433.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241105144018651_hu12977846780869885404.png 1024w"
 loading="lazy"
 >
 &lt;/a>
 &lt;/figure>&lt;/p>
-&lt;h3 id="peripherybus_1-subsystem_cbus--digitaltopsv-1">PeripheryBus_1 subsystem_cbus DigitalTop.sv&lt;/h3>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 298;
-flex-basis: 716px"
->
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982.png" data-size="1340x449">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982.png"
-width="1340"
-height="449"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982_hu949437431551879801.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031112132982_hu2194081511421310779.png 1024w"
-loading="lazy"
->
-&lt;/a>
-&lt;/figure>&lt;/p>
+&lt;hr>
+&lt;hr>
+&lt;p>未完&lt;/p>
 &lt;h3 id="coherencemanagerwrapper-subsystem_l2_wrapper-digitaltopsv">CoherenceManagerWrapper subsystem_l2_wrapper DigitalTop.sv&lt;/h3>
 &lt;p>&lt;figure
 class="gallery-image"
@@ -602,23 +888,7 @@ loading="lazy"
 &lt;/a>
 &lt;/figure>&lt;/p>
 &lt;h3 id="dram">Dram&lt;/h3>
-&lt;p>略&lt;/p>
-&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 128;
-flex-basis: 308px"
->
-&lt;a href="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472.png" data-size="1079x839">
-&lt;img src="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472.png"
-width="1079"
-height="839"
-srcset="https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472_hu5176489324737728561.png 480w, https://VastCircle.github.io/2024/big_soc_%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/image-20241031120949472_hu2127473252320913306.png 1024w"
-loading="lazy"
-alt="image-20241031120949472">
-&lt;/a>
-&lt;figcaption>image-20241031120949472&lt;/figcaption>
-&lt;/figure>&lt;/p></description></item><item><title>Chipyard的三个highest_level</title><link>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</link><pubDate>Tue, 29 Oct 2024 21:56:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</guid><description>&lt;p>Chipyard SoC 中三个最高层次是&lt;code>ChipTop&lt;/code>(DUT)、&lt;code>TestHarness&lt;/code>和&lt;code>TestDriver&lt;/code>。&lt;code>ChipTop&lt;/code>和&lt;code>TestHarness&lt;/code>均由 Chisel 生成器发出。&lt;code>TestDriver&lt;/code>用作我们的测试平台，是 Rocket Chip 中的 Verilog 文件。&lt;/p>
+&lt;p>略&lt;/p></description></item><item><title>Chipyard的三个highest_level</title><link>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</link><pubDate>Tue, 29 Oct 2024 21:56:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E7%9A%84%E4%B8%89%E4%B8%AAhighest_level/</guid><description>&lt;p>Chipyard SoC 中三个最高层次是&lt;code>ChipTop&lt;/code>(DUT)、&lt;code>TestHarness&lt;/code>和&lt;code>TestDriver&lt;/code>。&lt;code>ChipTop&lt;/code>和&lt;code>TestHarness&lt;/code>均由 Chisel 生成器发出。&lt;code>TestDriver&lt;/code>用作我们的测试平台，是 Rocket Chip 中的 Verilog 文件。&lt;/p>
 &lt;h2 id="chiptopdut">ChipTop(DUT)&lt;/h2>
 &lt;p>ChipTop 是顶层模块，负责实例化 System 子模块，通常是 DigitalTop 的具体实例。设计的大部分内容位于 System 中。ChipTop 层中存在的其他组件通常是 IO 单元、时钟接收器和多路复用器、重置同步器以及其他需要存在于 System 之外的模拟 IP。IOBinders 负责实例化与 System 的 IO 相对应的 ChipTop IO 的 IO 单元。HarnessBinders 负责实例化测试夹具，以连接到 ChipTop 端口。大多数类型的设备和测试夹具都可以使用自定义的 IOBinders 和 HarnessBinders 进行实例化。&lt;/p>
 &lt;h2 id="自定义-chiptop">自定义 ChipTop&lt;/h2>
