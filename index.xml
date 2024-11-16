@@ -1,4 +1,461 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 13 Nov 2024 18:55:55 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Dram访问路径查找</title><link>https://VastCircle.github.io/2024/dram%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</link><pubDate>Wed, 13 Nov 2024 18:55:55 +0800</pubDate><guid>https://VastCircle.github.io/2024/dram%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 16 Nov 2024 16:00:54 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Cache</title><link>https://VastCircle.github.io/2024/cache/</link><pubDate>Sat, 16 Nov 2024 16:00:54 +0800</pubDate><guid>https://VastCircle.github.io/2024/cache/</guid><description>&lt;h2 id="cache的一般设计">Cache的一般设计&lt;/h2>
+&lt;p>Cache line = Cache data block + Cache Tag ,如果一个数据可以存储在Cache中的多个地方,能够被同一个地址找到的多个Cache Line 称为Cache Set&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 124;
+flex-basis: 299px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116160826859.png" data-size="641x513">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116160826859.png"
+width="641"
+height="513"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116160826859_hu1332369990589390405.png 480w, https://VastCircle.github.io/2024/cache/image-20241116160826859_hu18064085407264266732.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>Cache缺失的原因(3C定理:&lt;/p>
+&lt;p>(1)Compulsory , 第一次访问的指令或数据肯定不会在Cache中,&lt;/p>
+&lt;p>(2)Capcity,容量,&lt;/p>
+&lt;p>(3)Conflict,冲突&lt;/p>
+&lt;h3 id="cache的组成方式">Cache的组成方式&lt;/h3>
+&lt;h4 id="直接相连">直接相连&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 125;
+flex-basis: 300px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116161412680.png" data-size="423x338">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116161412680.png"
+width="423"
+height="338"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116161412680_hu2800656703488485149.png 480w, https://VastCircle.github.io/2024/cache/image-20241116161412680_hu12292938691630876810.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="组相联">组相联&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 180;
+flex-basis: 432px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116161438353.png" data-size="632x351">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116161438353.png"
+width="632"
+height="351"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116161438353_hu11565796626120221971.png 480w, https://VastCircle.github.io/2024/cache/image-20241116161438353_hu7354851681176083980.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h5 id="并行访问和串行访问">并行访问和串行访问&lt;/h5>
+&lt;p>&lt;strong>并行访问&lt;/strong>&lt;/p>
+&lt;p>当Tag的地址被读取的同时,Data部分的所有数据也能够被读出来,送到一个多路选择器中,这个多路选择器受到Tag比较结果的控制,选出对应的Data block,然后根据Block offset的值,选择合适的字节,选择字节的过程称为数据对齐(Data Alignment)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 163;
+flex-basis: 391px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116162035130.png" data-size="579x355">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116162035130.png"
+width="579"
+height="355"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116162035130_hu1245071803936278610.png 480w, https://VastCircle.github.io/2024/cache/image-20241116162035130_hu18277916102578682986.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>对于i-cache,流水线的结构不会有太大的影响,可以实现每周期读取指令,因为读取指令本身就是连续的,但是对于D-cache,会增大load的延时&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 165;
+flex-basis: 397px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116162505527.png" data-size="622x376">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116162505527.png"
+width="622"
+height="376"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116162505527_hu15060017127470534791.png 480w, https://VastCircle.github.io/2024/cache/image-20241116162505527_hu14573293114003113365.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;strong>串行访问&lt;/strong>&lt;/p>
+&lt;p>首先访问Tag SRAM,根据Tag比较的结果,直接去访问对应的way ,这样就不需要多路选择器了,可以节省功耗&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 144;
+flex-basis: 345px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116163105148.png" data-size="553x384">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116163105148.png"
+width="553"
+height="384"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116163105148_hu16397395133458991088.png 480w, https://VastCircle.github.io/2024/cache/image-20241116163105148_hu9558830123433454204.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>相比于并行会增加一个周期,但是它也降低了同时访问Tag SRAM和Data RAM的延迟&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 191;
+flex-basis: 459px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116163140291.png" data-size="674x352">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116163140291.png"
+width="674"
+height="352"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116163140291_hu11023120944439539204.png 480w, https://VastCircle.github.io/2024/cache/image-20241116163140291_hu7334958423253631261.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="全相连">全相连&lt;/h4>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 159;
+flex-basis: 381px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116163346972.png" data-size="582x366">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116163346972.png"
+width="582"
+height="366"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116163346972_hu7828507688133854421.png 480w, https://VastCircle.github.io/2024/cache/image-20241116163346972_hu15099731169493597316.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="cache的写入">Cache的写入&lt;/h3>
+&lt;p>在一般的RISC处理器中,Icache都不会被直接写入内容,即使是有自修改指令,也需要借助D-cache,将要改写的指令作为数据写到D-cache中,然后将D-cahce中的内容写到下级存储器中(例如L2-cache,这个存储器是被i-cache和d-cache共享的,这个过程称为clean),并将I-cache的所有内容置为无效,这样处理器再次执行的时候,就会去读取修改过的指令&lt;/p>
+&lt;p>Write Through 和 Write Back&lt;/p>
+&lt;p>Write Allocate,在发生write miss之后先把下级数据写入D-cache,再将数据写入D-cache&lt;/p>
+&lt;p>Non-Write Allocate ,发生write miss 直接写入内存&lt;/p>
+&lt;p>Write Through 配合 Non-Write Allocate&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 69;
+flex-basis: 167px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116170905639.png" data-size="591x849">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116170905639.png"
+width="591"
+height="849"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116170905639_hu11376883461551201258.png 480w, https://VastCircle.github.io/2024/cache/image-20241116170905639_hu9755231987386440507.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 116;
+flex-basis: 280px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116171153043.png" data-size="716x613">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116171153043.png"
+width="716"
+height="613"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116171153043_hu17440820691935303671.png 480w, https://VastCircle.github.io/2024/cache/image-20241116171153043_hu14108955066647394251.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="cache的替换策略">Cache的替换策略&lt;/h3>
+&lt;h4 id="lruleast-recently-used">LRU(Least Recently Used)&lt;/h4>
+&lt;p>选择最近被使用次数最少的Cache line,这样需要为每一个Cache Line设置一个Age部分,每当一个Cache line被访问时,对应的年龄部分会增大,进行替换时,替换年龄最少的那个,实际上,为了减少代价,会使用&amp;quot;伪LRU&amp;quot;的方法,将所有的way进行分组,每一组使用一个1位的年龄部分&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 426px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116171552581.png" data-size="760x428">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116171552581.png"
+width="760"
+height="428"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116171552581_hu1017904653173853324.png 480w, https://VastCircle.github.io/2024/cache/image-20241116171552581_hu3117118189869326289.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>类似于二分法,三级年龄位可以分8个way&lt;/p>
+&lt;h4 id="随机替换">随机替换&lt;/h4>
+&lt;p>可以通过时钟算法实现近似的随机&lt;/p>
+&lt;h2 id="提高cache的性能">提高Cache的性能&lt;/h2>
+&lt;h3 id="write-buffer">Write buffer&lt;/h3>
+&lt;p>可以将dirty的数据先放到write buffer里,等到下一级存储器有空闲的时候,将write buffer的数据写到下一级存储器中&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 234;
+flex-basis: 562px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116191825344.png" data-size="464x198">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116191825344.png"
+width="464"
+height="198"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116191825344_hu7889130295197604032.png 480w, https://VastCircle.github.io/2024/cache/image-20241116191825344_hu15626345929076081660.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>当读取D-cache发生缺失时,不仅需要从下级存储器中查找数据,还需要在write buffer中也查找&lt;/p>
+&lt;h3 id="流水线">流水线&lt;/h3>
+&lt;p>对于写D-Cache来说,读取Tag SRAM和写Data SRAM只能串行的完成.&lt;/p>
+&lt;p>可以将Tag SRAM的读取和比较放在一个周期,写Data SRAM放在下一个周期&lt;/p>
+&lt;p>对于store指令,需要两个周期来完成,如果连续的执行store指令,任然可以获得没周期执行一条store指令的效果&lt;/p>
+&lt;p>当执行load指令时,可能出现load需要的数据正好在store指令的流水线寄存器中,因此还需要一种机制来检查load指令携带的地址和store指令的流水线寄存器&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 173;
+flex-basis: 417px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116192239775.png" data-size="642x369">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116192239775.png"
+width="642"
+height="369"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116192239775_hu11128785969072269180.png 480w, https://VastCircle.github.io/2024/cache/image-20241116192239775_hu2248314353265831686.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="多级结构">多级结构&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 448;
+flex-basis: 1075px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116192948742.png" data-size="771x172">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116192948742.png"
+width="771"
+height="172"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116192948742_hu15711754013701734057.png 480w, https://VastCircle.github.io/2024/cache/image-20241116192948742_hu14872485187820154820.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>一般在处理器中.L2 cache会使用write back的方式,但是对于L1 cache来说,write through也可以接受,可以简化流水线的设计,也便于在多核的环境中,管理存储器之间的一致性&lt;/p>
+&lt;h4 id="inclusive-和-exclusive">inclusive 和 exclusive&lt;/h4>
+&lt;p>Inclusive : 如果 l2包括了l1中的所有内容,称l2 cache是inclusive的&lt;/p>
+&lt;p>exclusive:如果l2 cache 和l1 cache的内容互不相同,称l2 cache是exclusive的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 250;
+flex-basis: 601px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116193314356.png" data-size="451x180">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116193314356.png"
+width="451"
+height="180"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116193314356_hu519990957970606505.png 480w, https://VastCircle.github.io/2024/cache/image-20241116193314356_hu14808646991832425164.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>inclusive类型的cache,在覆盖l1 cache不会存在问题;inclusive类型的cache也简化了一致性(coherence)的管理,例如在多核的处理器中,当其中一个处理器改变了存储器中一个地址的数据时,如果在其他处理器的私有Cache中也保存了地址的数据,需要置为无效,此时只需要检查最低级的存储器,因为如果l2 cache没有数据,l1 cache中必然没有数据&lt;/p>
+&lt;h3 id="victim-cache">Victim Cache&lt;/h3>
+&lt;p>有时候,cache中被踢出的数据在之后可能马上又要被使用,比方说对于2-way的Cache,有3个数据恰好位于同一个Cache set&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 382;
+flex-basis: 918px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116194031670.png" data-size="624x163">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116194031670.png"
+width="624"
+height="163"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116194031670_hu10040534559773902139.png 480w, https://VastCircle.github.io/2024/cache/image-20241116194031670_hu11667458781686084904.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>Victim Cache可以保存最近被踢出Cache的数据,因此所有的Cache set都可以利用它来提高way的个数,通常Victim Cache采用全相连的方式,容量比较小,Victim本质就是增加了Cache中way的个数,能够避免多个数据竞争Cache中有限的位置,从而降低Cache的缺失率.一般来说Victim Cache和 Cache的数据是互斥的,可以同时去查找Victim Cache和Cache,如果Cache中没有数据的话,就使用Victim Cache的数据&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 226;
+flex-basis: 543px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116194526437.png" data-size="534x236">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116194526437.png"
+width="534"
+height="236"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116194526437_hu16126775329523168523.png 480w, https://VastCircle.github.io/2024/cache/image-20241116194526437_hu4284953928355226590.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>Filter cache,当一个数据第一次被使用,会放在Filter cache中,当数据被再次使用,才放在Cache中,这样可以避免偶然使用的数据,从而提高Cache的利用效率&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 196;
+flex-basis: 471px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116195003330.png" data-size="464x236">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116195003330.png"
+width="464"
+height="236"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116195003330_hu8483874276382225260.png 480w, https://VastCircle.github.io/2024/cache/image-20241116195003330_hu11577955194034125407.png 1024w"
+loading="lazy"
+alt="image-20241116195003330">
+&lt;/a>
+&lt;figcaption>image-20241116195003330&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="预取">预取&lt;/h3>
+&lt;p>可以使用预取（prefetching)来猜测处理器在以后可能使用什么指令和数据，提前将其放到Cache中，可以通过硬件完成，也可以通过软件完成。&lt;/p>
+&lt;h4 id="硬件预取">硬件预取&lt;/h4>
+&lt;p>在访问I-cache的一个数据块的时候，可以将它后面的数据块也取出来放在I-cache,但是由于分支预测指令的存在，可能会使得不被使用的指令进入I-cache,一方面降低I-cache实际可用的容量，一方面有占用了本来可能有用的指令，称为“cache 污染” ，可以先将预取的指令放在一个单独的缓存中（stream Buffer)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 200;
+flex-basis: 482px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116202635573.png" data-size="482x240">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116202635573.png"
+width="482"
+height="240"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116202635573_hu8140215996625278615.png 480w, https://VastCircle.github.io/2024/cache/image-20241116202635573_hu7370200458249293033.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="软件预取">软件预取&lt;/h4>
+&lt;p>在程序的编译阶段，编译器可以对程序分析，进而知道哪些数据是需要进行预取的，在程序中设置预取指令，就可以在计算时直接从D-cache中找到需要的数据，这种预取需要把握预取的时机，&lt;/p>
+&lt;p>并且使用软件预取时，在执行预取指令的时候，处理器需要继续执行，也就是继续能够从D-cache中取数据，而不能让预取指令阻碍后面指令的执行，这要求D-cache是non-blocking结构的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 176;
+flex-basis: 423px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116203647382.png" data-size="282x160">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116203647382.png"
+width="282"
+height="160"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116203647382_hu2549777358311364986.png 480w, https://VastCircle.github.io/2024/cache/image-20241116203647382_hu6979007415998428569.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>在实现虚拟存储器器的系统中，预取指令可能会引起异常，例如发生Page Fault,虚拟地址错误（Virtual Address Falut）或者保护违例（Protection Violation),此时有两种选择，如果对异常进行处理，称这种预取指令为处理错误的预取指令（Faulting Prefetch Instruction),反之，如果不对异常处理并且抛弃掉这条预取指令，称这种预取指令为不处理错误的预取指令（NonFaulting Prefetch Instruction),此时发生异常的预取指令会变成空指令&lt;/p>
+&lt;h3 id="多端口cache">多端口Cache&lt;/h3>
+&lt;p>在超标量处理器中，为提高性能，处理器需要能够每周期执行多条load/store指令，这需要多端口D-Cache,需要一些特殊的方式来避免多端口对芯片的面积和速度带来很大的负面影响&lt;/p>
+&lt;h4 id="true-multi-port">True Multi-port&lt;/h4>
+&lt;p>真正的多端口需要所有在Cache中的控制通路和数据通路进行复制，这表示它有两套地址解码器（Address Decoder),使得两个端口可以同时寻址Tag SRAM和Data SRAM,有两个多路选择器，用来同时读取两个端口的数据，比较器的数量也需要同时增加一杯，用来判断两个端口的命中情况，同时需要两个对齐器（Aligner).&lt;/p>
+&lt;p>SRAM中的每个Cell也需要同时支持两个并行的读取操作。因此需要更长的访问时间，功耗也会随之增大。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 205;
+flex-basis: 493px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116205756405.png" data-size="576x280">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116205756405.png"
+width="576"
+height="280"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116205756405_hu18285717603797448149.png 480w, https://VastCircle.github.io/2024/cache/image-20241116205756405_hu13303096475044297097.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="multiple-cache-copies">Multiple Cache Copies&lt;/h4>
+&lt;p>和上面类似，将Cache进行复制，SRAM将不使用多端口的结构，可以基本消除对处理器周期的影响，但是浪费了很多面积，而且需要保存两个Cache的同步，即需要保证两个Cache是完全一致的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 127;
+flex-basis: 305px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116205912949.png" data-size="272x214">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116205912949.png"
+width="272"
+height="214"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116205912949_hu15815348389656329818.png 480w, https://VastCircle.github.io/2024/cache/image-20241116205912949_hu6290296688918996185.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="multi-banking">Multi-banking&lt;/h4>
+&lt;p>将Cache分为很多个小bank,每个bank只有一个端口，如果一个周期之内，Cache的多个端口上的访问地址位于不同bank之中，没有任何问题，当端口的地址位于同一个bank之中时，会引起bank冲突（bank conflict)&lt;/p>
+&lt;p>这种方法仍然需要两个地址解码器，有两个多路选择器，两套比较器，两个对齐器（Aligner)。此时Data SRAM不需要实现多端口结构了（一个地址只会读一次），提高了速度减少了面积。但是由于需要判断Cache的每个端口是不是命中，对于Tag SRAM来说，仍旧需要提供多个端口同时读取的功能（why?），即采用多端口SRAM,或者将单端口SRAM进行复制&lt;/p>
+&lt;p>当端口冲突时，当前周期Cache只能对一个端口进行响应&lt;/p>
+&lt;p>可以采用更多的bank来降低bank冲突的概率，由于每个端口都会访问所有的bank,那需要更多的布线资源&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 217;
+flex-basis: 521px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116211832055.png" data-size="404x186">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116211832055.png"
+width="404"
+height="186"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116211832055_hu18083423710349595363.png 480w, https://VastCircle.github.io/2024/cache/image-20241116211832055_hu5979318066791751977.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="amd-opteron-的多端口-cache">AMD opteron 的多端口 Cache&lt;/h4>
+&lt;p>40位物理地址，48位虚拟地址&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 155;
+flex-basis: 373px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116214350948.png" data-size="821x528">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116214350948.png"
+width="821"
+height="528"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116214350948_hu4034912218193561823.png 480w, https://VastCircle.github.io/2024/cache/image-20241116214350948_hu9904768563727028057.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>数据块的大小是64Bits,需要6字节寻址找到其中的某一个字节，每个数据块被分为8个独立的bank,每个bank都是64位的单端口SRAM&lt;/p>
+&lt;p>整个Cache的大小是64KB,采用两路组相连，每一路大小为32KB.使用“Virtually-indexed,Pyhsically-tagged&amp;quot;的实现方式，可以使用虚拟地址寻址Cache,每一路是32KB的大小，需要VA[14:0]进行寻址，前面6位寻址块内字节，所以VA[14:6]用来寻址Cache set ,&lt;/p>
+&lt;p>由于每个Cache line划分为8个bank,所以使用VA[5:3]来找到某一个bank,剩下的VA[2:0]用来找到某个字节，这种方式将两个连续的64位数据放在两个相邻的不同bank中，对它访问不会存在冲突。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 471;
+flex-basis: 1130px"
+>
+&lt;a href="https://VastCircle.github.io/2024/cache/image-20241116215448071.png" data-size="636x135">
+&lt;img src="https://VastCircle.github.io/2024/cache/image-20241116215448071.png"
+width="636"
+height="135"
+srcset="https://VastCircle.github.io/2024/cache/image-20241116215448071_hu14988285204597629743.png 480w, https://VastCircle.github.io/2024/cache/image-20241116215448071_hu8311006062730573641.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>大小为64KB,两路组相连，每一路都有8个4KB的bank,整个cache有16个4KB的bank,Cache的每一个端口访问时，都会同时访问两个way的数据，然后根据tag去选择命中了哪个，所以Cache的一个端口访问时，会同时访问到两个bank,每个way各一个，&lt;/p>
+&lt;p>PA[39:12]就是tag部分，用来判断哪个way是命中的，每一个端口都有一个TLB.每个端口都要同时读取两个way的tag进行比较，理论上来说，每个way的Tag SRAM需要支持两个读端口，这个Cache采用将Tag SRAM复制的方法&lt;/p>
+&lt;p>虚拟地址的[11:0]寻址page内部，[47：12]寻址TLB,对应PFN[39:12],它用来和Cache对应的Tag部分比较，来判断是否命中&lt;/p>
+&lt;p>该Cache相比于单端口，需要两个TLB,两个Tag比较电路，两倍的Tag SRAM,除了Data SRAM没有被复制，其他都被复制了，所以面积大，但是速度快。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Dram访问路径查找</title><link>https://VastCircle.github.io/2024/dram%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</link><pubDate>Wed, 13 Nov 2024 18:55:55 +0800</pubDate><guid>https://VastCircle.github.io/2024/dram%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
@@ -609,23 +1066,103 @@ alt="image-20241111163907552">
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">wb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 写回module的请求信号
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">wb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Cat&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">wb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">wb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">blockOffBits&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">phys&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">prober&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 控制module的请求信号
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">prober&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Cat&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">prober&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">prober&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">blockOffBits&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">phys&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">mshrs&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">//
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">mshrs&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">mshrs&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_recycle&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_req&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s2_req&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s1_clk_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">out&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#7f848e">//TODO: should be metaReadArb.io.out.fire, but triggers Verilog backend bug
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// metaReadArb按理有5个端口,但是生成的时候端口0貌似被优化了
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s2_recycle&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s2_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">blockOffBits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">~&lt;/span>&lt;span style="color:#d19a66">0.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">nWays&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">W&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s2_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">mshrs&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">2&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">prober&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">3&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">wb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">4&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">4&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">blockOffBits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">4&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">untagBits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">metaReadArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">4&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">~&lt;/span>&lt;span style="color:#d19a66">0.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">nWays&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">W&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="wbu">WBU&lt;/h3>
 &lt;p>&lt;code>WritebackUnit&lt;/code> 模块实现了一个缓存的写回单元，用于将数据从 L1 缓存写回到内存或下一级缓存。它主要负责管理写回请求和发送数据到内存或其他设备，并包含多种信号来控制写回过程&lt;/p>
 &lt;p>&lt;code>refillCycles&lt;/code> 表示在发生缓存未命中（cache miss）时，从主存或其他缓存中读取数据并将其填充到目标缓存的过程所需的时钟周期数&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">active&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">r1_data_req_fired&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">r2_data_req_fired&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">r1_data_req_fired&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 返回数据并且返回tag的时候
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 拉高r1_data_req_fired
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">r1_data_req_fired&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 计数器+1
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#d19a66">1.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">r2_data_req_fired&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 在返回后的第二拍,拉高release.valid
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">release&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span>&lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">release&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">r1_data_req_fired&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">r2_data_req_fired&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 一般都是减去2,除非refilllCycles &amp;lt;= 1
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span> &lt;span style="color:#56b6c2">-&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">[&lt;/span>&lt;span style="color:#e5c07b">UInt&lt;/span>&lt;span style="color:#56b6c2">]((&lt;/span>&lt;span style="color:#e06c75">refillCycles&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">B&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">r1_data_req_fired&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#d19a66">2.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#d19a66">1.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span>&lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">r1_data_req_fired&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// We&amp;#39;re done if this is the final data request and the Release can be sent
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">active&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">refillCycles&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">release&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 发起请求的时候进行active 和 赋值
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">active&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">req&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 同一时刻获取了多个数据
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">fire&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">if&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">refillCycles&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">Cat&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">data_req_cnt&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">log2Up&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">refillCycles&lt;/span>&lt;span style="color:#56b6c2">)-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">rowOffBits&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="probe">Probe&lt;/h3>
+&lt;p>实现了Cache管理模块的状态机，主要用于处理探测请求的操作，管理Cache的状态，判断命中情况，以及处理数据写回操作,主要针对的是tag,不是data&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 9个状态
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s_invalid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#e5c07b">:&lt;/span> &lt;span style="color:#e5c07b">s_meta_read&lt;/span> &lt;span style="color:#e5c07b">::&lt;/span> &lt;span style="color:#e5c07b">s_meta_resp&lt;/span> &lt;span style="color:#e5c07b">::&lt;/span> &lt;span style="color:#e5c07b">s_mshr_req&lt;/span> &lt;span style="color:#e5c07b">::&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s_mshr_resp&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#e5c07b">:&lt;/span> &lt;span style="color:#e5c07b">s_release&lt;/span> &lt;span style="color:#e5c07b">::&lt;/span> &lt;span style="color:#e5c07b">s_writeback_req&lt;/span> &lt;span style="color:#e5c07b">::&lt;/span> &lt;span style="color:#e5c07b">s_writeback_resp&lt;/span> &lt;span style="color:#e5c07b">::&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s_meta_write&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#e5c07b">:&lt;/span> &lt;span style="color:#e5c07b">Nil&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Enum&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">9&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_meta_resp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// we need to wait one cycle for the metadata to be read from the array
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_meta_resp&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_mshr_req&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_mshr_req&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">old_coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">block_state&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 比较有意思,如果没有rdy,不是选择wait,而是retry
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// if the read didn&amp;#39;t go through, we need to retry
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mshr_rdy&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_mshr_resp&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_meta_read&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>逻辑是比较简单的,就是当发起请求时,去meta_read,meta_read之后去读mshr,读出mshr之后,当tag_match的时候且为dirty,需要写回,所以切换到s_writeback_req ,否则到release,release之后去meta_write.写回是由wb模块控制的&lt;/p>
 &lt;h3 id="l1metadataarray-mata">L1MetadataArray mata&lt;/h3>
 &lt;p>meta就是存储tag的地方,是一个同步ram&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// () =&amp;gt; T是函数的写法 ,无输入参数,输出参数是T类型的
@@ -663,7 +1200,7 @@ alt="image-20241111163907552">
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="metareadarb-or-metawritearb">metaReadArb or metaWriteArb&lt;/h3>
 &lt;p>metaReadArb仲裁输入为 mshrs , prober , wb&lt;/p>
 &lt;h3 id="mshrfile">MSHRFile&lt;/h3>
-&lt;p>mshr 应该是保存load的目标寄存器,store的数据的&lt;/p>
+&lt;p>缓存控制中的关键部分，用于处理多组MSHR（Miss Status Holding Register），协调多种请求（读、写、填充、写回等）在一级缓存（L1 Cache）中的操作。&lt;/p>
 &lt;h4 id="cacheable">cacheable&lt;/h4>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">cacheable&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">edge&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">manager&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">supportsAcquireBFast&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">lgCacheBlockBytes&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>cacheable&lt;/code>用于检测当前请求的地址是否可以被缓存。&lt;code>edge.manager.supportsAcquireBFast&lt;/code>方法检查缓存控制器是否支持快速获取操作。&lt;/p>
@@ -697,12 +1234,145 @@ alt="image-20241111163907552">
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">replay_arb&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Module&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">Arbiter&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">ReplayInternal&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">cfg&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">nMSHRs&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="mshr">mshr&lt;/h4>
+&lt;p>每个MSHR处理一个缓存块的缺失请求&lt;/p>
+&lt;p>mshr应该就是其中的一个表项,这里通过状态机来判断表项是一次缺失还是二次缺失 ,是不是太奢侈了&lt;/p>
+&lt;p>该模块的主要功能是管理和协调多种缓存操作，&lt;/p>
+&lt;ol>
+&lt;li>处理缓存未命中时的请求。&lt;/li>
+&lt;li>向主存发出请求并等待响应。&lt;/li>
+&lt;li>维护状态机以跟踪请求的进度。&lt;/li>
+&lt;li>根据不同情况执行不同的控制流。&lt;/li>
+&lt;/ol>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">idxMatch&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Wire&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">Vec&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">cfg&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">nMSHRs&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Bool&lt;/span>&lt;span style="color:#56b6c2">()))&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">tagList&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Wire&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">Vec&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">cfg&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">nMSHRs&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Bits&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">tagBits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">W&lt;/span>&lt;span style="color:#56b6c2">)))&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// idxMatch 只有一个会拉高
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">tag_match&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Mux1H&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">idxMatch&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">tagList&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">untagBits&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="addr的划分">addr的划分&lt;/h4>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h5 id="状态转移及相应输出">状态转移及相应输出&lt;/h5>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// state 是一个寄存器，用于跟踪 MSHR 的状态。状态机的主要状态包括：
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// s_invalid：空闲状态，表示 MSHR 未被占用。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// s_wb_req 和 s_wb_resp：处理写回操作的状态。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// s_meta_clear：清理缓存元数据。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// s_refill_req 和 s_refill_resp：处理从主存中获取数据的请求。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// s_meta_write_req 和 s_meta_write_resp：更新缓存元数据。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// s_drain_rpq：处理重放队列的请求
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_drain_rpq&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">deq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_invalid&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_meta_write_resp&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// this wait state allows us to catch RAW hazards on the tags via nack_victim
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_drain_rpq&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_meta_write_req&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_meta_write_resp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_refill_resp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">refill_done&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">new_coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">coh_on_grant&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_meta_write_req&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_acquire&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#7f848e">// s_refill_req
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_refill_resp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_meta_clear&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_refill_req&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_wb_resp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">acked&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_meta_clear&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#7f848e">// s_wb_req
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_wb_resp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_sec_val&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_sec_rdy&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#7f848e">// s_wb_req, s_wb_resp, s_refill_req
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">//If we get a secondary miss that needs more permissions before we&amp;#39;ve sent
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// out the primary miss&amp;#39;s Acquire, we can upgrade the permissions we&amp;#39;re
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// going to ask for in s_refill_req
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cmd&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">dirtier_cmd&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">is_hit_again&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">new_coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">dirtier_coh&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 首次miss的时候,赋值req,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_pri_val&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_pri_rdy&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">req&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_bits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">acked&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">old_coh&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">old_meta&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">coh&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">needs_wb&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">old_coh&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">onCacheControl&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">M_FLUSH&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">_1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">is_hit&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#c678dd">_&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">coh_on_hit&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">old_coh&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">onAccess&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cmd&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag_match&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">is_hit&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#7f848e">// set dirty bit
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">new_coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">coh_on_hit&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_meta_write_req&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}.&lt;/span>&lt;span style="color:#e06c75">otherwise&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#7f848e">// upgrade permissions
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">new_coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">old_coh&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_refill_req&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}.&lt;/span>&lt;span style="color:#e06c75">otherwise&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#7f848e">// writback if necessary and refill
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">new_coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">ClientMetadata&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">onReset&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">needs_wb&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_wb_req&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_meta_clear&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// state === s_meta_write_req or s_mata_clear
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">state&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">isOneOf&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s_meta_write_req&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_meta_clear&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req_idx&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">coh&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_meta_clear&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">coh_on_clear&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">new_coh&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_write&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// state === s_wb_req
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_wb_req&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">source&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">id&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">old_meta&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req_idx&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">param&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">shrink_param&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">voluntary&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// state === s_refill_req
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_acquire&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_refill_req&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">grantackq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">enq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_acquire&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">edge&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">AcquireBlock&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">fromSource&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">id&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">toAddress&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Cat&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">req_idx&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">blockOffBits&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">lgSize&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">lgCacheBlockBytes&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">growPermissions&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">grow_param&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">_2&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// state === s_drain_rpq
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_drain_rpq&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">req_idx&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_read&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">way_en&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">~(&lt;/span>&lt;span style="color:#d19a66">0.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">nWays&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">W&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 重放接口
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_drain_rpq&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">deq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">deq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">phys&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Cat&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tag&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">req_idx&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">deq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">blockOffBits&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 115;
+flex-basis: 276px"
+>
+&lt;a href="https://VastCircle.github.io/2024/nbdcache/image-20241106195931879.png" data-size="680x590">
+&lt;img src="https://VastCircle.github.io/2024/nbdcache/image-20241106195931879.png"
+width="680"
+height="590"
+srcset="https://VastCircle.github.io/2024/nbdcache/image-20241106195931879_hu6446209596390823114.png 480w, https://VastCircle.github.io/2024/nbdcache/image-20241106195931879_hu13976723951433692804.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h5 id="rpq">rpq&lt;/h5>
+&lt;ul>
+&lt;li>用于暂存未能成功处理的请求，比如因缺少权限、数据尚未准备好等原因导致的请求失败。&lt;/li>
+&lt;li>这些请求将在条件满足时重新尝试（重放）。&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">rpq&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Module&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">NBDcacheQueue&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">ReplayInternal&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">cfg&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">nRPQ&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">enq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_pri_val&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_pri_rdy&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_sec_val&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">sec_rdy&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">isPrefetch&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cmd&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">enq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_bits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">rpq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">deq&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">replay&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_drain_rpq&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_invalid&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h5 id="addr的划分">addr的划分&lt;/h5>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">req&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Reg&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">MSHRReqInternal&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">req_idx&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">untagBits&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>&lt;span style="color:#e06c75">blockOffBits&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">req_tag&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">untagBits&lt;/span>
@@ -733,23 +1403,10 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_pri_rdy&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_invalid&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">alloc_arb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">mshr&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req_pri_rdy&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">alloc_arb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">out&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">sdq_rdy&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">cacheable&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">idx_match&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
-class="gallery-image"
-style="
-flex-grow: 115;
-flex-basis: 276px"
->
-&lt;a href="https://VastCircle.github.io/2024/nbdcache/image-20241106195931879.png" data-size="680x590">
-&lt;img src="https://VastCircle.github.io/2024/nbdcache/image-20241106195931879.png"
-width="680"
-height="590"
-srcset="https://VastCircle.github.io/2024/nbdcache/image-20241106195931879_hu6446209596390823114.png 480w, https://VastCircle.github.io/2024/nbdcache/image-20241106195931879_hu13976723951433692804.png 1024w"
-loading="lazy"
->
-&lt;/a>
-&lt;/figure>&lt;/p>
-&lt;h2 id="附录">附录&lt;/h2>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/JACKLJ1998/article/details/124907527" target="_blank" rel="noopener"
+>rocket-chip学习基础篇&lt;/a>&lt;/p>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>CPU路径查找</title><link>https://VastCircle.github.io/2024/cpu%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</link><pubDate>Thu, 07 Nov 2024 20:15:39 +0800</pubDate><guid>https://VastCircle.github.io/2024/cpu%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</guid><description>&lt;h2 id="rocket-chip">Rocket chip&lt;/h2>
