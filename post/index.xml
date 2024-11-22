@@ -1,9 +1,24 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 16 Nov 2024 16:00:54 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Cache</title><link>https://VastCircle.github.io/2024/cache/</link><pubDate>Sat, 16 Nov 2024 16:00:54 +0800</pubDate><guid>https://VastCircle.github.io/2024/cache/</guid><description>&lt;h2 id="cache的一般设计">Cache的一般设计&lt;/h2>
-&lt;p>Cache line = Cache data block + Cache Tag ,如果一个数据可以存储在Cache中的多个地方,能够被同一个地址找到的多个Cache Line 称为Cache Set&lt;/p></description></item><item><title>Dram访问路径查找</title><link>https://VastCircle.github.io/2024/dram%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</link><pubDate>Wed, 13 Nov 2024 18:55:55 +0800</pubDate><guid>https://VastCircle.github.io/2024/dram%E8%AE%BF%E9%97%AE%E8%B7%AF%E5%BE%84%E6%9F%A5%E6%89%BE/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>虚拟存储器</title><link>https://VastCircle.github.io/2024/%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8/</link><pubDate>Tue, 12 Nov 2024 20:12:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 22 Nov 2024 16:29:39 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>使用Tilelink实现缓存一致性（cache conherence）</title><link>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8tilelink%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</link><pubDate>Fri, 22 Nov 2024 16:29:39 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8tilelink%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+&lt;p>TileLink Cached (TL-C) 协议通过为主设备提供缓存共享数据块副本的能力，完善了 TileLink 协议。这些本地缓存副本必须根据实现定义的一致性策略保持一致性。本章节定义的 TL-C 标准一致性协议规定了哪些内存访问操作可以对缓存数据的副本执行，以及哪些消息可用于传输数据块的副本。实现中叠加的一致性策略则规定了在接收到内存访问操作后，如何在特定的 TileLink 代理网络中传播副本和权限。具体一致性策略的描述超出了本文档的范围。&lt;/p></description></item><item><title>Cache缓存一致性</title><link>https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</link><pubDate>Tue, 19 Nov 2024 20:03:48 +0800</pubDate><guid>https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</guid><description>&lt;h2 id="多核心的一致性问题">多核心的一致性问题&lt;/h2>
+&lt;p>在一个核心修改Cache数据后，如何同步给其他核心Cache&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 86; 
+			flex-basis: 208px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138.png" data-size="479x552">
+		&lt;img src="https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138.png"
+			width="479"
+			height="552"
+			srcset="https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138_hu8859657908439870834.png 480w, https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138_hu16115704290875044832.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>Cache</title><link>https://VastCircle.github.io/2024/cache/</link><pubDate>Sat, 16 Nov 2024 16:00:54 +0800</pubDate><guid>https://VastCircle.github.io/2024/cache/</guid><description>&lt;h2 id="cache的一般设计">Cache的一般设计&lt;/h2>
+&lt;p>Cache line = Cache data block + Cache Tag ,如果一个数据可以存储在Cache中的多个地方,能够被同一个地址找到的多个Cache Line 称为Cache Set&lt;/p></description></item><item><title>虚拟存储器</title><link>https://VastCircle.github.io/2024/%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8/</link><pubDate>Tue, 12 Nov 2024 20:12:09 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E8%99%9A%E6%8B%9F%E5%AD%98%E5%82%A8%E5%99%A8/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
 &lt;p>虚拟存储器的思想是对于一个程序来说,它的程序(code),数据(data)和堆栈(stack)的总大小可以超过实际物理内存的大小,操作系统把当前使用的部分内容放在物理内存中,而把其他未使用的内容放在更下一级的存储器中&lt;/p></description></item><item><title>NBDcache</title><link>https://VastCircle.github.io/2024/nbdcache/</link><pubDate>Mon, 11 Nov 2024 16:33:27 +0800</pubDate><guid>https://VastCircle.github.io/2024/nbdcache/</guid><description>&lt;h2 id="dcache结构图">Dcache结构图&lt;/h2>
 &lt;p>&lt;figure 
 	

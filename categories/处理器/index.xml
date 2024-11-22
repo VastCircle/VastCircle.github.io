@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>处理器 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E5%A4%84%E7%90%86%E5%99%A8/</link><description>Recent content in 处理器 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 19 Nov 2024 20:03:48 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E5%A4%84%E7%90%86%E5%99%A8/index.xml" rel="self" type="application/rss+xml"/><item><title>Cache缓存一致性</title><link>https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</link><pubDate>Tue, 19 Nov 2024 20:03:48 +0800</pubDate><guid>https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</guid><description>&lt;h2 id="多核心的一致性问题">多核心的一致性问题&lt;/h2>
+&lt;p>在一个核心修改Cache数据后，如何同步给其他核心Cache&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 86; 
+			flex-basis: 208px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138.png" data-size="479x552">
+		&lt;img src="https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138.png"
+			width="479"
+			height="552"
+			srcset="https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138_hu8859657908439870834.png 480w, https://VastCircle.github.io/2024/cache%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/image-20241119200747138_hu16115704290875044832.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item></channel></rss>
