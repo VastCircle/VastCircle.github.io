@@ -1,4 +1,592 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Fri, 22 Nov 2024 16:29:39 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>使用Tilelink实现缓存一致性（cache conherence）</title><link>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8tilelink%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</link><pubDate>Fri, 22 Nov 2024 16:29:39 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8tilelink%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 04 Dec 2024 21:26:52 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Chipyard_boot_linux</title><link>https://VastCircle.github.io/2024/chipyard_boot_linux/</link><pubDate>Wed, 04 Dec 2024 21:26:52 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard_boot_linux/</guid><description>&lt;h2 id="firemershal-生成linux-执行文件">firemershal 生成linux 执行文件&lt;/h2>
+&lt;p>以下的命令可以构建工作负载 , 在构建完成之后可以在images 可以看到 br-base-bin 和 br-base.img 分别是 boot-binary (linux + boot loader) and root filesystem&lt;/p>
+&lt;pre tabindex="0">&lt;code> ./marshal build br-base.json
+&lt;/code>&lt;/pre>&lt;p>通过 ./marshal launch br-base.json可以通过qemu启动linux&lt;/p>
+&lt;h2 id="firemarshal的实现细节">firemarshal的实现细节&lt;/h2>
+&lt;p>wlutil/build.py&lt;/p>
+&lt;p>构建工作负载的目标是生成一个可用的启动二进制文件，以及（可选的）一个用于启动的根文件系统。生成的输出可同时用于 &lt;strong>Spike&lt;/strong>、&lt;strong>Qemu&lt;/strong> 和 &lt;strong>FireSim&lt;/strong>。唯一的例外是 &lt;strong>Spike&lt;/strong> 不支持磁盘，因此用户可以选择为 &lt;strong>Spike&lt;/strong> 创建仅包含 &lt;strong>initramfs&lt;/strong> 的工作负载版本（该二进制文件同样可以在 &lt;strong>Qemu&lt;/strong> 和 &lt;strong>FireSim&lt;/strong> 上启动）。&lt;/p>
+&lt;h3 id="build-parents">Build Parents&lt;/h3>
+&lt;p>第一步是确保工作负载的&lt;strong>基础工作负载&lt;/strong>已准备就绪。Marshal 将首先遵循基础的依赖关系链，并确保在开始请求的工作负载之前构建所有依赖关系。一旦直接父级完成，Marshal 就会开始构建过程，创建父级根文件系统的副本，以用作请求的工作负载的基础（发行版对其 rootfs 进行硬编码以结束递归）。&lt;/p>
+&lt;h3 id="host-init">host init&lt;/h3>
+&lt;p>在执行任何其他操作之前，Marshal 会运行工作负载的&lt;code>host-init&lt;/code>脚本（如果有）来准备工作负载。此脚本可以执行任何操作，因此我们必须在流程早期运行它，以防它更改从 Linux 内核源代码到根文件系统覆盖的任何内容。&lt;/p>
+&lt;h3 id="build-binary">build binary&lt;/h3>
+&lt;pre tabindex="0">&lt;code>wlutil/build.py:makeBin()
+&lt;/code>&lt;/pre>&lt;p>我们在完成 rootfs 之前构建了启动二进制文件(br-base-bin)，因为我们可能需要在 Qemu 中启动工作负载才能构建它。如果用户提供了硬编码的启动二进制文件，则跳过此步骤。&lt;/p>
+&lt;h4 id="create-final-linux-configuration">Create Final Linux Configuration&lt;/h4>
+&lt;p>用户仅提供内核配置片段，必须处理这些片段才能创建真正的 Linux 配置。我们首先在 Linux 源目录（默认或用户提供）中运行“make ARCH=riscv defconfig”。然后我们附加配置选项以包含 initramfs（CONFIG_BLK_DEV_INITRD 和 CONFIG_INITRAMFS_SOURCE），更多信息见下文。然后我们调用 Linux 提供的脚本来组合内核片段（&lt;code>riscv-linux/scripts/kconfig/merge_config.sh&lt;/code>）。&lt;/p>
+&lt;h4 id="build-platform-drivers">Build Platform Drivers&lt;/h4>
+&lt;p>FireSim 提供了一些非标准设备，这些设备需要定制的 Linux 驱动程序。特别是块设备驱动程序是启动可用系统所必需的。为了避免维护一个定制的 Linux 内核分支（以及要求用户与其保持同步），我们提供了一个定制的 &lt;strong>initramfs&lt;/strong>，它在主系统启动之前加载这些驱动程序。&lt;/p>
+&lt;p>FireSim 的驱动程序位于 &lt;strong>boards/firechip/drivers&lt;/strong> 目录下。&lt;strong>Marshal&lt;/strong> 首先在 Linux 源代码树中运行 &lt;code>make modules_prepare&lt;/code>，然后基于提供的源代码编译每个驱动程序。这一过程在每次新构建时执行，以确保驱动程序与最新的内核源代码和配置保持一致（尤其是在工作负载使用定制内核时，这一点尤为重要）。&lt;/p>
+&lt;p>目前，我们不支持替代驱动程序，因此任何定制的 Linux 内核必须在这些驱动程序方面与默认内核兼容。&lt;/p>
+&lt;h4 id="generate-initramfs">Generate Initramfs&lt;/h4>
+&lt;p>由于某些驱动程序必须在系统启动时加载，因此我们将这些驱动程序打包到一个定制的 &lt;strong>initramfs&lt;/strong> 中，并将其编译到内核中。&lt;strong>Marshal&lt;/strong> 通过在 &lt;strong>wlutil/initramfs&lt;/strong> 的以下目录中组织多个文件系统来生成此归档文件：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>&lt;code>disk/&lt;/code>&lt;/strong>：
+包含一个功能齐全的根文件系统，包括基于 &lt;strong>busybox&lt;/strong> 的环境和一个 &lt;strong>init&lt;/strong> 脚本。该脚本负责加载驱动程序，并查找启动磁盘（对于 QEMU 是 &lt;code>/dev/vda&lt;/code>，对于 FireSim 是 &lt;code>/dev/iceblk&lt;/code>）。&lt;/li>
+&lt;li>&lt;strong>&lt;code>nodisk/&lt;/code>&lt;/strong>：
+仅包含用于加载驱动程序的 &lt;strong>init&lt;/strong> 脚本（需要与一个可用的根文件系统配合使用）。&lt;/li>
+&lt;li>&lt;strong>&lt;code>drivers/&lt;/code>&lt;/strong>：
+包含之前构建的硬件平台驱动程序。&lt;/li>
+&lt;li>&lt;strong>&lt;code>devNodes.cpio&lt;/code>&lt;/strong>：
+一个预构建的归档文件，包含特殊设备文件 &lt;code>/dev/console&lt;/code> 和 &lt;code>/dev/tty&lt;/code>。这些文件需要特殊的创建步骤，因此我们仅创建一次并将结果提交保存。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>Marshal&lt;/strong> 将所需的 &lt;strong>initramfs&lt;/strong> 源文件在一个临时目录中合并为单个 &lt;strong>cpio&lt;/strong> 归档文件，并配置内核在启动时包含此归档文件。&lt;/p>
+&lt;h4 id="linux-kernel-generation-and-linking">Linux Kernel Generation and Linking&lt;/h4>
+&lt;p>在所有依赖项完成后，我们终于可以编译 Linux 内核并将其与引导加载程序（bootloader）链接起来。尽管每个工作负载可以使用自定义的内核源代码，但所有工作负载都会使用相同的引导加载程序。最终链接生成的 &lt;strong>sbi+linux+initramfs&lt;/strong> 文件会被复制到 &lt;strong>&lt;code>images/workloadName-bin&lt;/code>&lt;/strong> 路径下。&lt;/p>
+&lt;h3 id="build-rootfs">Build Rootfs&lt;/h3>
+&lt;h4 id="add-files">Add Files&lt;/h4>
+&lt;p>Marshal 会将文件和叠加选项（overlay options）都转换为 &lt;strong>FileSpec&lt;/strong> 对象列表，这些对象描述了源路径和目标路径。随后，使用 &lt;strong>guestmount&lt;/strong> 工具将访客（guest）的根文件系统挂载到 &lt;code>disk-mount/&lt;/code> 目录下（具体逻辑见 &lt;code>wlutil/wlutil.py&lt;/code> 中的 &lt;strong>&lt;code>applyOverlay()&lt;/code>&lt;/strong> 和 &lt;strong>&lt;code>copyImageFiles()&lt;/code>&lt;/strong> 函数）。&lt;/p>
+&lt;h4 id="guest-init">Guest Init&lt;/h4>
+&lt;p>现在我们有了可运行的二进制文件和根文件系统，我们可以运行用户 &lt;code>guest-init&lt;/code>脚本（如果提供）。我们将映像配置为在启动时运行此脚本（请参阅下文了解如何操作），并在 Qemu 中精确启动一次。&lt;/p>
+&lt;h4 id="run-script-or-command">Run Script or Command&lt;/h4>
+&lt;p>最后一步是应用用户的&lt;code>run&lt;/code>脚本或&lt;code>command&lt;/code>选项（如果有）。为简单起见，命令在继续之前被转换成运行脚本（存储在 中 &lt;code>wlutil/generated/_command.sh&lt;/code>）。&lt;/p>
+&lt;p>运行脚本以每个发行版的方式处理（因为发行版以不同的方式实现它）。Marshal 通过请求发行版生成我们应用于映像的“bootScriptOverlay”来抽象这一点。在 Buildroot 中，这会将脚本放置在已知位置并使用运行它的硬编码 init 脚本。Fedora 有一个运行该脚本的 systemd 服务。&lt;/p>
+&lt;p>firemershal&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://gitlab.laas.fr/matana/chipyard-linux" target="_blank" rel="noopener"
+>一个成功boot的开源程序&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://wiki.gentoo.org/wiki/Initramfs/Guide/zh-cn" target="_blank" rel="noopener"
+>什么是initramfs&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://yifengyou.github.io/vita/docs/%E6%9E%84%E5%BB%BAinitramfs/initramfs%E5%8E%9F%E7%90%86%E6%8E%A2%E8%AE%A8.html#initramfs%E5%8E%9F%E7%90%86%E6%8E%A2%E8%AE%A8-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81initramfs" target="_blank" rel="noopener"
+>&amp;lt;深度探索Linux操作系统:系统构建和原理解析&amp;gt;&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://yangwang92.github.io/2023/04/03/How-to-Run-FireSim-on-a-Local-FPGA/" target="_blank" rel="noopener"
+>在本地FPGA跑firesim&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Chipyard串口疑问</title><link>https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/</link><pubDate>Tue, 03 Dec 2024 19:43:44 +0800</pubDate><guid>https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/</guid><description>&lt;h2 id="问题简述">问题简述&lt;/h2>
+&lt;p>对于chipyard的串口,猜测是通过log去打印的,但是即使是通过dpic-log打印,也应该传输到串口的地址,但是从波形图来看是没有的&lt;/p>
+&lt;h2 id="测试配置">测试配置&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">MyRocketConfig&lt;/span> &lt;span style="color:#c678dd">extends&lt;/span> &lt;span style="color:#e5c07b">Config&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">freechips&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">rocketchip&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">subsystem&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">WithNBigCores&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#7f848e">// single rocket-core
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">chipyard&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">config&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">WithUART&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">baudrate&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#d19a66">115200&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">chipyard&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">config&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">AbstractConfig&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="串口输出">串口输出&lt;/h2>
+&lt;p>通过分析hello.riscv,可以看出发送串口数据的函数是sfputc_r&lt;/p>
+&lt;p>具体ftrace是 main -&amp;gt; iprintf -&amp;gt; vfiprintf_r -&amp;gt; sfputs_r-&amp;gt;sfputc_r ,如果字符串是&amp;quot;hello world&amp;quot;,应该会循环11次&lt;/p>
+&lt;p>以下代码在遍历字符串&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly"> 80000790: 00044783 lbu a5,0(s0)
+80000794: c399 beqz a5,8000079a &amp;lt;_vfiprintf_r+0x7e&amp;gt;
+80000796: 0f779263 bne a5,s7,8000087a &amp;lt;_vfiprintf_r+0x15e&amp;gt;
+8000087a: 0405 addi s0,s0,1
+8000087c: bf11 j 80000790 &amp;lt;_vfiprintf_r+0x74&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>以下代码在输出数据,可以看出来0(s0)对应字符串对应的数据,函数输入是a1 ,所以通过观察0x800006d6读取的数据就可以得到相应字符串的值&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly"> 800006ce: 00941463 bne s0,s1,800006d6 &amp;lt;__sfputs_r+0x22&amp;gt;
+800006d2: 4501 li a0,0
+800006d4: a811 j 800006e8 &amp;lt;__sfputs_r+0x34&amp;gt;
+800006d6: 00044583 lbu a1,0(s0)
+800006da: 864e mv a2,s3
+800006dc: 854a mv a0,s2
+800006de: fadff0ef jal ra,8000068a &amp;lt;__sfputc_r&amp;gt;
+800006e2: 0405 addi s0,s0,1
+800006e4: ff4515e3 bne a0,s4,800006ce &amp;lt;__sfputs_r+0x1a&amp;gt;
+&lt;/code>&lt;/pre>&lt;p>从波形看是没什么问题的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 970;
+flex-basis: 2330px"
+>
+&lt;a href="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241203201004169.png" data-size="1398x144">
+&lt;img src="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241203201004169.png"
+width="1398"
+height="144"
+srcset="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241203201004169_hu2287500500266782612.png 480w, https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241203201004169_hu612186356014223029.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>这一段代码的作用是把字符写入缓存区 ,a1是具体的字符 ,a4代表缓存区的大小 , 12(a2)的内存区域写入的是缓冲区的大小,倒是可以看出缓存区大小是0-1,即最大值,12(a2)=0x8000021c8+12,代表的可能是调用者传入的目标缓冲区或流指针&lt;/p>
+&lt;p>所以串口的数据实际上是写入了一个构建的缓存区&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">000000008000068a &amp;lt;__sfputc_r&amp;gt;:
+8000068a: 465c lw a5,12(a2) # 从a2偏移12处加载缓冲区剩余大小到a5
+8000068c: fff7871b addiw a4,a5,-1 # 将剩余大小减1，结果存入a4
+80000690: c658 sw a4,12(a2) # 将更新后的剩余大小存回a2偏移12处
+80000692: 00075963 bgez a4,800006a4 # 如果剩余大小非负，跳转到800006a4
+80000696: 561c lw a5,40(a2) # 从a2偏移40处加载缓冲区低水位标记到a5
+80000698: 00f74563 blt a4,a5,800006a2 # 如果剩余大小小于低水位标记，跳转到800006a2
+8000069c: 47a9 li a5,10 # 将常量10加载到a5
+8000069e: 00f59363 bne a1,a5,800006a4 # 如果当前字符不是换行符，跳转到800006a4
+800006a2: a115 j 80000ac6 # 跳转到函数__swbuf_r的入口地址
+800006a4: 621c ld a5,0(a2) # 从a2偏移0处加载缓冲区当前指针到a5
+800006a6: 852e mv a0,a1 # 将当前字符（a1）复制到a0
+800006a8: 00178713 addi a4,a5,1 # 缓冲区指针递增1，结果存入a4
+800006ac: e218 sd a4,0(a2) # 更新后的缓冲区指针存回a2偏移0处
+800006ae: 00b78023 sb a1,0(a5) # 将当前字符存入缓冲区当前位置
+800006b2: 8082 ret # 返回到调用函数
+&lt;/code>&lt;/pre>&lt;p>从图中看串口是写入了0x8000023e0往后的,但是不管怎么样,这个数据都应该通过某种方式进行log出来&lt;/p>
+&lt;p>发现l2是有请求过0x8000023c0的数据 , 为什么是c0,因为l2的block size=64,所以关于64字节对齐,就是请求0x8000023c0&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 895;
+flex-basis: 2149px"
+>
+&lt;a href="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012625976.png" data-size="1469x164">
+&lt;img src="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012625976.png"
+width="1469"
+height="164"
+srcset="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012625976_hu555553607089794396.png 480w, https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012625976_hu11861810693305300885.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 552;
+flex-basis: 1325px"
+>
+&lt;a href="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012604842.png" data-size="1602x290">
+&lt;img src="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012604842.png"
+width="1602"
+height="290"
+srcset="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012604842_hu8428354499617891524.png 480w, https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012604842_hu6093035668650593194.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>究其根本,应该是serdesser去请求了l2相应地址的数据,所以根据缓存一致性的协议,先从dcache 写回到l2再被读取&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 784;
+flex-basis: 1881px"
+>
+&lt;a href="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012840910.png" data-size="1380x176">
+&lt;img src="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012840910.png"
+width="1380"
+height="176"
+srcset="https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012840910_hu1744728535732029670.png 480w, https://VastCircle.github.io/2024/chipyard%E4%B8%B2%E5%8F%A3%E7%96%91%E9%97%AE/image-20241204012840910_hu5890923293695806153.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>所以说还是只能运用于仿真&lt;/p>
+&lt;h2 id="如何得到真正的串口">如何得到真正的串口&lt;/h2>
+&lt;p>在经过一系列资料查找后,我目前得到的结论是printf本身就没有重定向到串口数据,要是需要在串口输出的话,需要实现串口数据的重定向,就是说,硬件上是没有什么问题的&lt;/p>
+&lt;p>按照这种方式重写printf之后,能够正确跳转到串口的地址了&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">/* For GCC compiler revise _write() function for printf functionality */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_write&lt;/span>(&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">file&lt;/span>, &lt;span style="color:#e5c07b">char&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">ptr&lt;/span>, &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">len&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">file&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">file&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">len&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">UART_PutByte&lt;/span>(&lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">ptr&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">len&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>发现相比与前面,主要是跳转到了函数__swbuf_r的入口地址,然后去执行__swbuf_r -&amp;gt; _fflush_r -&amp;gt;__sflush_r -&amp;gt;&lt;/p>
+&lt;p>-&amp;gt; __swrite -&amp;gt; _write_r -&amp;gt; write&lt;/p>
+&lt;p>这样得到能够写入串口的程序,但是貌似这样无法打印到终端上了&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly">000000008000068a &amp;lt;__sfputc_r&amp;gt;:
+...
+800006a2: a115 j 80000ac6 # 跳转到函数__swbuf_r的入口地址
+...
+&lt;/code>&lt;/pre>&lt;h2 id="附录">附录&lt;/h2>
+&lt;p>&lt;a class="link" href="https://stackoverflow.com/questions/76611040/rocketchip-sifive-blocks-uart-unable-to-make-use-of-system-printf-function" target="_blank" rel="noopener"
+>https://stackoverflow.com/questions/76611040/rocketchip-sifive-blocks-uart-unable-to-make-use-of-system-printf-function&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://community.infineon.com/t5/PSoC-5-3-1/printf-with-newlib-nano-vs-newlib-retargeting-to-UART/td-p/110224" target="_blank" rel="noopener"
+>https://community.infineon.com/t5/PSoC-5-3-1/printf-with-newlib-nano-vs-newlib-retargeting-to-UART/td-p/110224&lt;/a>&lt;/p>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Zotero_tag</title><link>https://VastCircle.github.io/2024/zotero_tag/</link><pubDate>Mon, 02 Dec 2024 16:37:43 +0800</pubDate><guid>https://VastCircle.github.io/2024/zotero_tag/</guid><description>&lt;h2 id="zotero7-安装">zotero7 安装&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 创建zotero目录,这里选择的是/opt/这个目录下创建的，因为这个目录通常放下Google Chrome和火狐浏览器和pycharm。&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo mkdir /opt/zotero
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 复制解压文件到/opt/zotero目录下&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo mv Zotero_linux-x86_64/* /opt/zotero/
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">##更新zotero的桌面位置&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> /opt/zotero
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo ./set_launcher_icon
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">##创造软连接到应用程序桌面&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>ln -s /opt/zotero/zotero.desktop ~/.local/share/applications/zotero.desktop
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="zotero-style">zotero style&lt;/h2>
+&lt;h3 id="配置easyscholar">配置easyscholar&lt;/h3>
+&lt;p>参见网站https://www.easyscholar.cc/blogs/10007&lt;/p>
+&lt;h2 id="zotero-tag">zotero tag&lt;/h2>
+&lt;h3 id="下载">下载&lt;/h3>
+&lt;p>&lt;a class="link" href="https://github.com/windingwind/zotero-actions-tags" target="_blank" rel="noopener"
+>https://github.com/windingwind/zotero-actions-tags&lt;/a>&lt;/p>
+&lt;p>zotero 6只能使用v0.3.0版本的&lt;/p>
+&lt;h3 id="动作">动作&lt;/h3>
+&lt;p>通过动作添加的标签便于我们对文献状态的判断（是添加进来待读的、还是已经打开读过了、还是打开度过了还做了批注和注释）。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 148;
+flex-basis: 355px"
+>
+&lt;a href="https://VastCircle.github.io/2024/zotero_tag/image-20241202163823519.png" data-size="804x543">
+&lt;img src="https://VastCircle.github.io/2024/zotero_tag/image-20241202163823519.png"
+width="804"
+height="543"
+srcset="https://VastCircle.github.io/2024/zotero_tag/image-20241202163823519_hu7240921750968695782.png 480w, https://VastCircle.github.io/2024/zotero_tag/image-20241202163823519_hu2770645525910083389.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/xinjieyuan/article/details/105407564" target="_blank" rel="noopener"
+>zotero7安装&lt;/a>&lt;/p>
+&lt;p>[插件网站][https://zotero-chinese.com/plugins/]&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.notion.so/Zotero-Style-bc2aebbbb6df4b7baa858e376e4fc5be#e46805998a264f1d8b330abede4587c7" target="_blank" rel="noopener"
+>zotero_style 文档&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/wybtpt/article/details/127386364" target="_blank" rel="noopener"
+>zotero_tag的使用&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://pkmer.cn/Pkmer-Docs/11-zotero/zotero%E4%BD%BF%E7%94%A8%E5%B8%B8%E8%A7%81bug%E5%8F%8A%E5%A4%84%E7%90%86/" target="_blank" rel="noopener"
+>pkmer-一些常见学术软件&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://zotero-chinese.com/user-guide/plugins/style#%E9%98%85%E8%AF%BB%E6%97%B6%E9%97%B4-%E9%98%85%E8%AF%BB%E6%97%B6%E9%97%B4%E5%88%97" target="_blank" rel="noopener"
+>zotero中文社区&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Vcs2018安装</title><link>https://VastCircle.github.io/2024/vcs2018%E5%AE%89%E8%A3%85/</link><pubDate>Mon, 02 Dec 2024 14:09:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/vcs2018%E5%AE%89%E8%A3%85/</guid><description>&lt;h2 id="准备相应的安装包">准备相应的安装包&lt;/h2>
+&lt;p>链接：https://pan.baidu.com/s/1n45JPBF0DrF3JXD_-WxLJQ
+提取码：172f&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://bbs.eetop.cn/thread-945307-1-1.html" target="_blank" rel="noopener"
+>安装包下载&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/guyspring/article/details/135589006" target="_blank" rel="noopener"
+>ubuntu安装vsc2018和verdi2018&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>An_Event_Triggered_Programmable_Prefetcher_for_Irregular_Workloads</title><link>https://VastCircle.github.io/2024/an_event_triggered_programmable_prefetcher_for_irregular_workloads/</link><pubDate>Fri, 29 Nov 2024 23:39:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/an_event_triggered_programmable_prefetcher_for_irregular_workloads/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Linux移植</title><link>https://VastCircle.github.io/2024/linux%E7%A7%BB%E6%A4%8D/</link><pubDate>Mon, 25 Nov 2024 10:53:14 +0800</pubDate><guid>https://VastCircle.github.io/2024/linux%E7%A7%BB%E6%A4%8D/</guid><description>&lt;h2 id="linux环境搭建的要求">linux环境搭建的要求&lt;/h2>
+&lt;p>&lt;strong>1.搭建交叉开发环境&lt;/strong>
+需要搭建交叉开发环境在pc机上编译出符合相应嵌入式系统体系结构和指令集的机器码，同时确定目标机和主机的连接方式，搭建数据传输通道。&lt;/p>
+&lt;p>一般而言，目标机、主机的连接方式有：&lt;/p>
+&lt;p>UART异步串行通信接口
+USB串行通信接口
+TCP/IP网络通信接口
+Debug Jtag调试接口
+连接方式的选择将会相应决定需要给SoC增加什么外设。&lt;/p>
+&lt;p>&lt;strong>2.移植u-boot&lt;/strong>&lt;/p>
+&lt;p>u-boot是一个通用的引导程序，也就是bootloader的一种，它的功能是引导操作系统，即将内核加载到DDR中，而DDR必须要软件进行初始化才能运行，因此在搬运内核之前U-boot还需要初始化内存。U-boot的启动过程分为stage1和stage2两大部分，处理器驱动一般在stage1用汇编语言来实现，这一部分代码位于start.s文件中，实现定义执行入口，设置异常向量，设置中断控制器等功能。而stage2则一般用c语言实现，包括调用一系列初始化函数，初始化SD卡等系统设备。&lt;/p>
+&lt;p>&lt;strong>3.Kernel的配置，编译和移植&lt;/strong>&lt;/p>
+&lt;p>Kernel本质上也是一个程序，从开始运行一直进入到最后的while(1),内核一旦成功运行，U-boot即完成工作，内核则会一直在内存中运行，直到系统复位重启。内核会根据U-boot传递的参数去指定地址寻找根文件系统rootfs,一旦找到rootfs之后，控制权则会传递给文件系统。&lt;/p>
+&lt;p>&lt;strong>4.根文件系统的制作&lt;/strong>&lt;/p>
+&lt;p>Linux需要在一个分区上存放系统启动的必要文件，内核启动运行后的第一个程序(init一号进程)、用于挂接文件系统的脚本、shell程序等，这些必要的文件的集合称为根文件系统，根文件系统的制作和移植则是Linux系统移植的最后一部。&lt;/p>
+&lt;p>通过上述四个步骤我们可以确定一个能运行Linux系统的SoC最少需要如下外设：&lt;/p>
+&lt;p>UART异步串行通信接口：实现目标机和主机交互
+Debug Jtag调试接口：这里是根据选择的数据传输通道确定，用于完成程序的加载
+BootRom:一小块内存单元，包含处理器在上电或者复位时执行的第一个代码。用来存储引导程序U-boot或者其他外设测试程序，一旦系统上电处理器就会运行BootRom中存储的程序。
+SPI接口：与SD卡通讯，搬运存储在SD卡中的Linux内核和根文件系统。
+DDR控制器：访问DDR4，用于存储处理器运行过程中产生的数据。&lt;/p>
+&lt;h2 id="启动原理">启动原理&lt;/h2>
+&lt;h3 id="各级简介">各级简介&lt;/h3>
+&lt;p>BootROM：上电后固定首先执行的代码，由芯片厂家烧录，不可更改，可看作硬件初始化状态机的一种实现。它一般进行安全相关的工作，然后从外部存储中加载并启动后级代码。&lt;/p>
+&lt;p>U-Boot SPL：SPL（Second Program Loader）的存在是由于U-Boot太大了，无法装在片上SRAM中，只能放在DDR，但DDR又还没有初始化，所以先加载一段简易程序，负责初始化DDR，并加载U-Boot到DDR执行。&lt;/p>
+&lt;p>U-Boot：主要负责初始化板上硬件，然后加载并启动操作系统。&lt;/p>
+&lt;p>OpenSBI：SBI（Supervisor Binary Interface）是伴随着RISC-V的M态概念而诞生的：利用M态，构建一个特权级在操作系统之上的管理程序，负责处理OS启动引导、M态中断&amp;amp;异常服务、来自S态的系统调用服务等。OpenSBI则是SBI的一个开源实现。&lt;/p>
+&lt;p>Linux：一般而言，Linux镜像需要一个dtb镜像和一个可选的initramfs（或initrd）。Linux在启动过程中，会根据设备树提供的信息了解自己所拥有的硬件资源，从而使用正确的驱动操作它们。最终，Linux会运行根文件系统中的某个指定的init程序。作为第一个用户态进程，该进程一般不会退出，是一个死循环。至此启动完成。&lt;/p>
+&lt;h2 id="方案">方案&lt;/h2>
+&lt;h3 id="平头哥方案">平头哥方案&lt;/h3>
+&lt;p>BootROM—&amp;gt;U-Boot SPL—&amp;gt;U-Boot—&amp;gt;OpenSBI—&amp;gt;Linux&lt;/p>
+&lt;p>**外部存储：**该方案的外部存储使用eMMC，有三个分区，第一个分区没有安装文件系统，用来存放U-Boot和U-Boot SPL，第二、三个分区分别叫boot和root，都安装了ext4文件系统，其中boot存放Linux镜像、opensbi镜像、&lt;strong>Linux&lt;/strong>设备树镜像、以及（如果需要的话）&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237033676&amp;amp;content_type=Article&amp;amp;match_order=2&amp;amp;q=initramfs&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>initramfs&lt;/a>；root中是Linux的根文件系统。&lt;/p>
+&lt;p>**运行流程：**U-Boot SPL运行在片上SRAM中，负责初始化DDR，然后从第一个（裸）分区中加载U-Boot镜像到DDR。U-Boot会从boot分区中读取opensbi镜像、Linux镜像、&lt;strong>Linux&lt;/strong>设备树镜像、（如果需要的话）initramfs，分别加载到DDR的特定位置，然后从openSBI开始运行。（强调“&lt;strong>Linux&lt;/strong>”设备树是因为该设备树只是给openSBI和Linux使用，U-Boot及其SPL则使用另一份在编译时分别被链接进它们各自的&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237033676&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e4%ba%8c%e8%bf%9b%e5%88%b6%e6%96%87%e4%bb%b6&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>二进制文件&lt;/a>中的设备树。）&lt;/p>
+&lt;h3 id="chipyard方案">chipyard方案&lt;/h3>
+&lt;p>BootROM—&amp;gt;OpenSBI—&amp;gt;Linux&lt;/p>
+&lt;p>**外部存储：**该方案使用SD卡作为外部存储。有两个分区，分区1没有安装文件系统，存放OpenSBI+Linux镜像。之所以这么称呼是因为其OpenSBI使用了payload模式，所以在编译时会将Linux镜像和OpenSBI链接在一起；分区2中是Linux的根文件系统。&lt;/p>
+&lt;p>**运行流程：**BootROM将OpenSBI+Linux镜像和设备树镜像加载到DDR指定位置，然后开始运行OpenSBI。在这个方案中，设备树镜像存放在BootROM中。&lt;/p>
+&lt;h2 id="u-boot及其spl">U-Boot及其SPL&lt;/h2>
+&lt;h3 id="启动汇编">启动汇编&lt;/h3>
+&lt;p>初始化（start.S）—&amp;gt;board_init_f()—&amp;gt;清空bss，重定位数据段（start.S）—&amp;gt;board_init_r()，然后board_init_r()函数不返回，直接跳转到U-Boot。我们这里先讲述start.S用于初始化的部分，我把它分为&lt;strong>设置中断&lt;/strong>，&lt;strong>决定启动核&lt;/strong>，&lt;strong>开辟空间&lt;/strong>，&lt;strong>设置gd变量&lt;/strong>4件事。&lt;/p>
+&lt;h4 id="设置中断">&lt;strong>设置中断&lt;/strong>&lt;/h4>
+&lt;p>在整个U-Boot及其SPL中，mstatus的MIE（全局中断使能）都是关闭的，只是在mie（中断使能寄存器）中打开了MSIE（软件中断使能）。这种情况下，中断是无法trap的（因此赋值给mtvec的函数只是用于异常处理，我们不关心它），然而wfi状态的核心却可以被唤醒，且唤醒之后会执行pc+4的指令。这是wfi指令有趣设定的一部分，详见risc-v手册的wfi指令部分。利用wfi机制，非启动核等待ipi的函数被写成这样（删去了多个&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237033676&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e6%9d%a1%e4%bb%b6%e7%bc%96%e8%af%91&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>条件编译&lt;/a>宏）：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">secondary_hart_loop&lt;/span>:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">wfi&lt;/span> &lt;span style="color:#7f848e">// 等待唤醒
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">csrr&lt;/span> &lt;span style="color:#e06c75">t0&lt;/span>, &lt;span style="color:#61afef;font-weight:bold">MODE_PREFIX&lt;/span>(&lt;span style="color:#e06c75">ip&lt;/span>) &lt;span style="color:#7f848e">// 读mip
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">andi&lt;/span> &lt;span style="color:#e06c75">t0&lt;/span>, &lt;span style="color:#e06c75">t0&lt;/span>, &lt;span style="color:#e06c75">MIE_MSIE&lt;/span> &lt;span style="color:#7f848e">// 判断被唤醒原因
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">beqz&lt;/span> &lt;span style="color:#e06c75">t0&lt;/span>, &lt;span style="color:#e06c75">secondary_hart_loop&lt;/span> &lt;span style="color:#7f848e">// 若唤醒原因不是MSIP，继续wfi
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">mv&lt;/span> &lt;span style="color:#e06c75">a0&lt;/span>, &lt;span style="color:#e06c75">tp&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">jal&lt;/span> &lt;span style="color:#e06c75">handle_ipi&lt;/span> &lt;span style="color:#7f848e">//处理ipi
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这些做法实际上也都是risc-v手册中要求的。&lt;/p>
+&lt;h4 id="设置gd变量">&lt;strong>设置gd变量&lt;/strong>&lt;/h4>
+&lt;p>在启动代码（bootloader，例如 U-Boot）中，&lt;code>gd&lt;/code> 是一个全局变量，指向一个全局数据结构（&lt;code>global_data&lt;/code>）。&lt;/p>
+&lt;p>这个结构体通常包含系统运行时的信息，比如内存布局、设备状态等。&lt;/p>
+&lt;p>即初始化gd指向的gd_t类型结构体的一些成员。gd变量是gd_t类型结构体的指针，该变量在C语言中声明为“以gp寄存器分派”：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">register&lt;/span> &lt;span style="color:#e5c07b">gd_t&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">gd&lt;/span> &lt;span style="color:#c678dd">asm&lt;/span> (&lt;span style="color:#e06c75">gp&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>汇编中会将从栈中开辟的gd的地址赋值给gp寄存器：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">jal&lt;/span> &lt;span style="color:#e06c75">board_init_f_alloc_reserve&lt;/span> &lt;span style="color:#7f848e">// 该函数返回值是指向gd结构体起始的指针
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">mv&lt;/span> &lt;span style="color:#e06c75">gp&lt;/span>, &lt;span style="color:#e06c75">a0&lt;/span> &lt;span style="color:#7f848e">// 赋值给gp寄存器
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>需要注意的是，多个核更改gd变量时需要维护一个锁：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">/* 摘自每个核分别在gd中注册自己的代码 */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 多核处理器初始化：多个核在启动时注册自己到共享数据结构中，防止并发冲突。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">la&lt;/span> &lt;span style="color:#e06c75">t0&lt;/span>, &lt;span style="color:#e06c75">available_harts_lock&lt;/span> &lt;span style="color:#7f848e">// 锁
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">li&lt;/span> &lt;span style="color:#e06c75">t1&lt;/span>, &lt;span style="color:#d19a66">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#e06c75">amoswap&lt;/span>.&lt;span style="color:#e06c75">w&lt;/span> &lt;span style="color:#e06c75">t1&lt;/span>, &lt;span style="color:#e06c75">t1&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>(&lt;span style="color:#e06c75">t0&lt;/span>) &lt;span style="color:#7f848e">// 获取锁
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">fence&lt;/span> &lt;span style="color:#e06c75">r&lt;/span>, &lt;span style="color:#e06c75">rw&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">bnez&lt;/span> &lt;span style="color:#e06c75">t1&lt;/span>, &lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#e06c75">b&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">/* 临界区 */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">fence&lt;/span> &lt;span style="color:#e06c75">rw&lt;/span>, &lt;span style="color:#e06c75">w&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">amoswap&lt;/span>.&lt;span style="color:#e06c75">w&lt;/span> &lt;span style="color:#e06c75">zero&lt;/span>, &lt;span style="color:#e06c75">zero&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>(&lt;span style="color:#e06c75">t0&lt;/span>) &lt;span style="color:#7f848e">// 释放锁
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>完成初始化后，启动核继续执行board_init_f()，其他核进入刚刚分析过的secondary_hart_loop等待ipi。&lt;/p>
+&lt;h4 id="设备树与驱动模型httpszhidazhihucomsearchcontent_id237033676content_typearticlematch_order1q驱动模型zhida_sourceentity">设备树与&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237033676&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e9%a9%b1%e5%8a%a8%e6%a8%a1%e5%9e%8b&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>驱动模型&lt;/a>&lt;/h4>
+&lt;p>board_init_f()在源码中有多处定义。因为平头哥版本专门为ice-c910板写了一个board_init_f()，在board/thead/ice-c910/spl.c中，所以我们基于这个函数来讲解。它主要做了两件事：调用spl_early_init()生成udevice节点，以及调用preloader_console_init()首次初始化串口。本节就介绍第一个函数。&lt;/p>
+&lt;p>但在介绍函数的具体操作之前，我们要先了解U-Boot驱动模型。首先，U-Boot驱动模型最终试图对驱动开发者、平台开发者、驱动调用者三方展现的大致接口是这样的：&lt;/p>
+&lt;p>（a）&lt;strong>驱动的编写者&lt;/strong>无须考虑运行代码的硬件平台。他们只需知道两点。第一，他们需要在一个可查找到的地方[&lt;a class="link" href="https://zhuanlan.zhihu.com/p/670064991#ref_3" target="_blank" rel="noopener"
+>3]&lt;/a>静态定义一个drvier结构体，其中至少要包含诸如**（1）&lt;strong>表示的驱动名字的of_match等字段，&lt;/strong>（2）&lt;strong>指向外设初始化函数的probe字段，&lt;/strong>（3）**指向dm_xxx_ops结构体的指针等。（dm_xxx_ops结构体可以由驱动开发者定义（当然需要将定义告知调用者），其中存放驱动编写者实现的各&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237033676&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e9%a9%b1%e5%8a%a8%e5%87%bd%e6%95%b0&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>驱动函数&lt;/a>的指针。）第二，存在一种udevice结构体，每个udevice代表一个可用的设备，其中含有该设备所有信息。而驱动函数每次被调用时，调用者都会传入要操作的设备的udevice。&lt;/p>
+&lt;p>（b）&lt;strong>硬件平台的开发者&lt;/strong>无须了解驱动函数的实现，只需用设备树描述设备信息，及用compatible属性指定驱动名字。设备树在启动时传入。&lt;/p>
+&lt;p>（c）&lt;strong>驱动函数的调用者&lt;/strong>（调用者可以是U-Boot中其他模块，也可以是App）应当能通过驱动系统提供的udevice查找函数，找到任何udevice。且udevice应当包含一个driver字段，指向对应的driver，从而调用者得以进行“搜索udevice—&amp;gt;索引到其driver—&amp;gt;调用probe()—&amp;gt;调用各驱动函数”的流程。&lt;/p>
+&lt;h4 id="移植改动">移植改动&lt;/h4>
+&lt;p>移植U-Boot要做的改动。主要有三处。第一，要在include/configs下改动各个宏的值，主要包括SPL级和U-Boot的代码段起始及大小，&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237190095&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=BSS%e6%ae%b5&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>BSS段&lt;/a>起始及大小，SPL级MALLOC的起始及大小。另外还能使用CONFIG_EXTRA_ENV_SETTINGS宏指定一些环境变量，例如可以指定自己的启动命令序列。第二，要确保时钟、串口、SPI驱动能用。主要修改设备树和各硬件层ops即可。第三，SPL级的镜像加载函数可以自己写，并使用SPL_LOAD_IMAGE_METHOD宏静态注册。&lt;/p>
+&lt;h3 id="opensbi">OpenSBI&lt;/h3>
+&lt;p>OpenSBI有两个任务：（1）引导Linux，（2）作为Linux的SBI接口的提供者。其中第二部分将以定时器为例介绍。&lt;/p>
+&lt;h4 id="引导linux">引导Linux&lt;/h4>
+&lt;p>OpenSBI启动流程大致可以分为fw_base.S—&amp;gt;sbi_init()两个阶段。和我们分6小节讲解。从“平台相关初始化”开始，进入sbi_init()阶段。&lt;/p>
+&lt;h5 id="重定位">重定位&lt;/h5>
+&lt;p>若编译时定义了FW_PIC make变量，OpenSBI会被编译为无论被加载到哪里都能就地运行的模式。其原理为，定义_link_start变量，其值初始化为FW_TEXT_START，该宏在编译时确定，为代码起始的链接时地址：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>_link_start:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> RISCV_PTR FW_TEXT_START
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>运行时再动态获取代码段起始标号的地址：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>lla t1, _start # 该标号为代码段起始处标号
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>这句&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237190095&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e4%bc%aa%e6%8c%87%e4%bb%a4&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>伪指令&lt;/a>在-pic参数下会被编译为相对PC寻址：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>lla t1, _start
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> b8: 00000317 auipc t1,0x0
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> bc: f4830313 addi t1,t1,-184 # 0 &amp;lt;_fw_start&amp;gt;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>_start 代码段起始的地址 ， _link_start 代码起始的链接时的地址&lt;/p>
+&lt;p>意思是_link_start是在链接脚本中假定的加载地址，_start是实际的加载地址，但是_start 是在程序运行时才能够得到的，通过_link_start和_start差值就能够去纠正后续的指令，使得无论程序加载到哪里都能够运行&lt;/p>
+&lt;p>本身在链接时程序的加载地址是能够被确定的，但是动态重定位能够使得在不加载到这个地址的情况下还能够正常运行&lt;/p>
+&lt;p>也就是说，可以得到该标号真实的加载地址。只要将该地址与_link_start所存地址做差即可得到动态重定位所需的BASE。&lt;/p>
+&lt;h5 id="引导信息获取">引导信息获取&lt;/h5>
+&lt;p>OpenSBI提供了三类获取引导信息的方法，分别对应jump，dynamic和payload三种模式，使用make变量配置。代码不多但较为零碎，所以这里只做总结。对于每种模式，我们主要关心两个信息的获取：**（1）&lt;strong>如何获取要传递给Linux的dtb（设备树），并知道应当把dtb加载到哪里[&lt;a class="link" href="https://zhuanlan.zhihu.com/p/670769929#ref_8" target="_blank" rel="noopener"
+>8]&lt;/a>，&lt;/strong>（2）**如何获取要跳转的地址。&lt;/p>
+&lt;p>&lt;strong>jump模式：&lt;/strong>&lt;/p>
+&lt;p>通常由引导加载程序（如BootROM）负责，将控制权从OpenSBI转移到下一阶段的操作系统（如Linux）&lt;/p>
+&lt;ul>
+&lt;li>有三种方式指定要给Linux的dtb，优先级从低到高：**（1）&lt;strong>由BootROM通过a1传入dtb地址；&lt;/strong>（2）&lt;strong>FW_FDT_PATH指定一个dtb编译进OpenSBI镜像；&lt;/strong>（3）**调用由硬件平台开发者定义的fw_platform_init()函数，其中允许修改前二者指定的dtb，或直接指定一个位于其他地址的dtb。&lt;/li>
+&lt;li>有两种方式指定应当把dtb加载到哪里，优先级从低到高：**（1）&lt;strong>设备树存在哪里，便放在那里；&lt;/strong>（2）**通过FW_JUMP_FDT_ADDR宏定义要加载到哪里。&lt;/li>
+&lt;li>跳转地址通过FW_JUMP_ADDR宏指定。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>dynamic模式：&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>指定dtb的方式同上。&lt;/li>
+&lt;li>dtb加载位置只能由前级&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237190095&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e5%bc%95%e5%af%bc%e7%a8%8b%e5%ba%8f&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>引导程序&lt;/a>通过a1传入。&lt;/li>
+&lt;li>跳转地址只能由前级引导程序通过a1传入。a2应当是一个fw_dynamic_info结构体的首地址，该结构体中包含next_addr成员。&lt;/li>
+&lt;/ul>
+&lt;p>&lt;strong>payload模式：&lt;/strong>&lt;/p>
+&lt;p>引导程序（如BootROM）通过&lt;code>a1&lt;/code>传递DTB和跳转地址，适用于更动态的引导场景。&lt;/p>
+&lt;ul>
+&lt;li>指定dtb的方式同上。&lt;/li>
+&lt;li>有两种方式指定应当把dtb加载到哪里，优先级从低到高：**（1）&lt;strong>设备树存在哪里，便放在那里；&lt;/strong>（2）**通过FW_PAYLOAD_FDT_ADDR宏定义要加载到哪里。&lt;/li>
+&lt;li>因为payload模式将Linux镜像编译进OpenSBI镜像，因此具体的跳转地址由OpenSBI在链接时自动决定。&lt;/li>
+&lt;/ul>
+&lt;h5 id="中断初始化">中断初始化&lt;/h5>
+&lt;p>中断初始化主要包括mtvec，stvec，mstatus的MIE和SIE，sie打开情况，mie打开情况，mideleg代理情况，以及medeleg代理情况。这里总结如下：&lt;/p>
+&lt;ul>
+&lt;li>&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237190095&amp;amp;content_type=Article&amp;amp;match_order=2&amp;amp;q=mtvec&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>mtvec&lt;/a>在fw_base.S中被初始化为_trap_handler。&lt;/li>
+&lt;li>stvec在跳转前的最后一个函数sbi_hart_switch_mode()中被设为next_addr，因此若在Linux还未设定stvec之前发生异常，会跳回Linux第一条指令。&lt;/li>
+&lt;li>mstatus的MIE在sbi_hart_switch_mode()中使用清空MPP再MRET的方式再跳转时清空，SIE则未设置。注意：MIE虽然不打开，但当hart运行在低特权级时，只要发生被mie打开的M态中断，会无视MIE位跳转回来。&lt;/li>
+&lt;li>sie未设置。&lt;/li>
+&lt;li>mie未设置。注意：M态各中断一般由SBI服务函数打开。&lt;/li>
+&lt;li>mideleg和medeleg在delegate_traps()中被设置。该函数被调用流程如下：&lt;/li>
+&lt;/ul>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>sbi_init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> init_coldboot()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sbi_hart_init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sbi_hart_reinit()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> delegate_traps()
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>其中代理的中断有SSIP、STIP和SEIP；代理的异常有：取指非对齐，断点，U态ECALL。如果平台定义了SBI_PLATFORM_HAS_MFAULTS_DELEGATION feature，则还会代理指令、load、store的page falut。&lt;/p>
+&lt;h5 id="平台相关初始化">平台相关初始化&lt;/h5>
+&lt;p>OpenSBI中，硬件平台拥有两个自定义内容：（1）第一，也是最主要的，一个sbi_platform结构体全局变量。该变量必须命名为platform。在启动流程进入sbi_init()前，fw_base.S会初始化一个sbi_scratch结构体，其中存放OpenSBI启动相关的所有信息。platform的地址也会被存入其中，从而在后续启动流程中可以访问它。platform中最关键的成员是platform_ops_addr，它指向一个&lt;a class="link" href="https://zhida.zhihu.com/search?content_id=237190095&amp;amp;content_type=Article&amp;amp;match_order=1&amp;amp;q=%e5%87%bd%e6%95%b0%e6%8c%87%e9%92%88&amp;amp;zhida_source=entity" target="_blank" rel="noopener"
+>函数指针&lt;/a>结构体，其中存放启动流程各步骤中会进行的回调。硬件平台需要定义这些函数。（2）第二，可选的fw_platform_init()函数，如果定义了，该函数会在fw_base.S早期被调用。&lt;/p>
+&lt;p>OpenSBI本身自带了一个generic平台。其“通用性”在于，它定义的各个回调中会再执行其他硬件平台的回调：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">/* generic平台的回调 */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">static&lt;/span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#61afef;font-weight:bold">generic_early_init&lt;/span>(&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">cold_boot&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">/* generic_plat指向另一个平台 */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">generic_plat&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">generic_plat&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">early_init&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">rc&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">generic_plat&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#61afef;font-weight:bold">early_init&lt;/span>(&lt;span style="color:#e06c75">cold_boot&lt;/span>, &lt;span style="color:#e06c75">generic_plat_match&lt;/span>);&lt;span style="color:#7f848e">/* 执行另一个平台的回调 */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>具体来说，硬件平台的开发者可以在使用generic平台的基础上，自己定义一个platform_override类型变量，静态注册到special_platforms数组中：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">static&lt;/span> &lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#c678dd">struct&lt;/span> &lt;span style="color:#e06c75">platform_override&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">special_platforms&lt;/span>[] &lt;span style="color:#56b6c2">=&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">sifive_fu540&lt;/span>, &lt;span style="color:#7f848e">// 这是sifive的一个示例
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>platform_override包含一个match table和各回调函数指针。match table用于和设备树中的platform匹配，special_platforms[]中第一个匹配成功者被注册为上面看到的generic_plat。匹配和赋值的过程均在generic定义的fw_platform_init()中进行。&lt;/p>
+&lt;h5 id="串口初始化">串口初始化&lt;/h5>
+&lt;p>串口初始化函数sbi_console_init()被调用流程是：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>sbi_init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> init_coldboot()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sbi_console_init()
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>该函数最终会调用platform的console_init。generic平台中，该函数被赋值为fdt_serial_init()。fdt_serial_init()中会使用设备树的chosen节点的stdout-path属性指定的节点作为控制台，然后在静态定义的serial_drivers[]数组中寻找可匹配的串口。serial_drivers[]数组中的fdt_serial类型元素并非串口驱动，而是只包含match table和init函数。init函数负责解析设备树节点，初始化串口，并调用sbi_console_set_device()将真正的驱动结构体（含有putc()和getc()函数）注册到console_dev变量。OpenSBI中各种输入输出函数均依赖该变量进行输出。所有可用的输入输出函数见include/sbi/sbi_console.h。&lt;/p>
+&lt;h5 id="跳转至linux">跳转至Linux&lt;/h5>
+&lt;p>跳转主要在sbi_hart_switch_mode()函数中处理，其被调用流程是：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-text" data-lang="text">&lt;span style="display:flex;">&lt;span>sbi_init()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> init_coldboot()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> sbi_hart_switch_mode()
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>sbi_hart_switch_mode()通过设置好mepc和mstatus.MPP后，执行MRET的方式来跳转。其简略定义如下：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">__attribute__&lt;/span>((&lt;span style="color:#e06c75">noreturn&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#61afef;font-weight:bold">sbi_hart_switch_mode&lt;/span>(&lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e5c07b">long&lt;/span> &lt;span style="color:#e06c75">arg0&lt;/span>, &lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e5c07b">long&lt;/span> &lt;span style="color:#e06c75">arg1&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e5c07b">long&lt;/span> &lt;span style="color:#e06c75">next_addr&lt;/span>, &lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e5c07b">long&lt;/span> &lt;span style="color:#e06c75">next_mode&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">next_virt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">val&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">csr_read&lt;/span>(&lt;span style="color:#e06c75">CSR_MSTATUS&lt;/span>); &lt;span style="color:#7f848e">// read
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">val&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">INSERT_FIELD&lt;/span>(&lt;span style="color:#e06c75">val&lt;/span>, &lt;span style="color:#e06c75">MSTATUS_MPP&lt;/span>, &lt;span style="color:#e06c75">next_mode&lt;/span>); &lt;span style="color:#7f848e">// 将MPP字段设为下一特权级
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">val&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">INSERT_FIELD&lt;/span>(&lt;span style="color:#e06c75">val&lt;/span>, &lt;span style="color:#e06c75">MSTATUS_MPIE&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>); &lt;span style="color:#7f848e">// MPIE设为0
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">csr_write&lt;/span>(&lt;span style="color:#e06c75">CSR_MSTATUS&lt;/span>, &lt;span style="color:#e06c75">val&lt;/span>); &lt;span style="color:#7f848e">// write
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#61afef;font-weight:bold">csr_write&lt;/span>(&lt;span style="color:#e06c75">CSR_MEPC&lt;/span>, &lt;span style="color:#e06c75">next_addr&lt;/span>); &lt;span style="color:#7f848e">// 设置跳转位置
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">next_mode&lt;/span> &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#e06c75">PRV_S&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">csr_write&lt;/span>(&lt;span style="color:#e06c75">CSR_STVEC&lt;/span>, &lt;span style="color:#e06c75">next_addr&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">csr_write&lt;/span>(&lt;span style="color:#e06c75">CSR_SSCRATCH&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">csr_write&lt;/span>(&lt;span style="color:#e06c75">CSR_SIE&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">csr_write&lt;/span>(&lt;span style="color:#e06c75">CSR_SATP&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ...
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">/* 设置寄存器 */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">register&lt;/span> &lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e5c07b">long&lt;/span> &lt;span style="color:#e06c75">a0&lt;/span> &lt;span style="color:#c678dd">asm&lt;/span>(&lt;span style="color:#98c379">&amp;#34;a0&amp;#34;&lt;/span>) &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">arg0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">register&lt;/span> &lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e5c07b">long&lt;/span> &lt;span style="color:#e06c75">a1&lt;/span> &lt;span style="color:#c678dd">asm&lt;/span>(&lt;span style="color:#98c379">&amp;#34;a1&amp;#34;&lt;/span>) &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">arg1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">__asm__&lt;/span> &lt;span style="color:#61afef;font-weight:bold">__volatile__&lt;/span>(&lt;span style="color:#98c379">&amp;#34;mret&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#98c379">&amp;#34;r&amp;#34;&lt;/span>(&lt;span style="color:#e06c75">a0&lt;/span>), &lt;span style="color:#98c379">&amp;#34;r&amp;#34;&lt;/span>(&lt;span style="color:#e06c75">a1&lt;/span>)); &lt;span style="color:#7f848e">// 使用mret跳转
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#61afef;font-weight:bold">__builtin_unreachable&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="xiangshan构建linux">xiangshan构建Linux&lt;/h2>
+&lt;h2 id="heading">&lt;/h2>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/qq_30031349/article/details/135368366" target="_blank" rel="noopener"
+>玄铁处理器的linux移植&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/zhi-z/EmbeddedLinux/blob/master/Chapter5/README.md" target="_blank" rel="noopener"
+>动态重定位&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>使用conda创建一个隔离的环境</title><link>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8conda%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%9A%84%E7%8E%AF%E5%A2%83/</link><pubDate>Sun, 24 Nov 2024 21:58:06 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8conda%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%9A%84%E7%8E%AF%E5%A2%83/</guid><description>&lt;p>在chipyard的build-setup.sh里可以看到它是如何创建一个conda环境的&lt;/p>
+&lt;p>具体来说就是通过conda-lock去将一个锁文件里的配置加载到一个conda环境了去，锁文件也是通过脚本generate-conda-lockfiles.sh生成的，所以根本文件是chipyard.yaml的配置文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># setup and install conda environment&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">if&lt;/span> run_step &lt;span style="color:#98c379">&amp;#34;1&amp;#34;&lt;/span>; &lt;span style="color:#c678dd">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># note: lock file must end in .conda-lock.yml - see https://github.com/conda-incubator/conda-lock/issues/154&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">CONDA_REQS&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$CYDIR&lt;/span>/conda-reqs
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">CONDA_LOCK_REQS&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$CONDA_REQS&lt;/span>/conda-lock-reqs
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># must match with the file generated by generate-conda-lockfile.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">LOCKFILE&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$CONDA_LOCK_REQS&lt;/span>/conda-requirements-&lt;span style="color:#e06c75">$TOOLCHAIN_TYPE&lt;/span>-linux-64.conda-lock.yml
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">[&lt;/span> &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$USE_UNPINNED_DEPS&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span> &lt;span style="color:#56b6c2">]&lt;/span>; &lt;span style="color:#c678dd">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># auto-gen the lockfiles&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">$CYDIR&lt;/span>/scripts/generate-conda-lockfiles.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># use conda-lock to create env&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> conda-lock install -p &lt;span style="color:#e06c75">$CYDIR&lt;/span>/.conda-env &lt;span style="color:#e06c75">$LOCKFILE&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">source&lt;/span> &lt;span style="color:#e06c75">$CYDIR&lt;/span>/.conda-env/etc/profile.d/conda.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> conda activate &lt;span style="color:#e06c75">$CYDIR&lt;/span>/.conda-env
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## chipyard.yaml&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>channels:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - ucb-bar
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - conda-forge
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - litex-hub
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - nodefaults
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>platforms:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - linux-64
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>dependencies:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># https://conda-forge.org/feedstock-outputs/&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># filterable list of all conda-forge packages&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># https://conda-forge.org/#contribute&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># instructions on adding a recipe&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/pkg-specs.html#package-match-specifications&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># documentation on package_spec syntax for constraining versions&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># handy tool for introspecting package relationships and file ownership&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># see https://github.com/rvalieris/conda-tree&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - conda-tree
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># bundle FireSim driver with deps into installer shell-script&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - constructor
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - gcc
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - gxx
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - sysroot_linux-64&lt;span style="color:#56b6c2">=&lt;/span>2.17 &lt;span style="color:#7f848e"># needed to match pre-built CI XRT glibc version&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - conda-gcc-specs
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - binutils
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - dromajo &lt;span style="color:#7f848e"># from ucb-bar channel - https://github.com/riscv-boom/dromajo&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> - &lt;span style="color:#e06c75">firtool&lt;/span>&lt;span style="color:#56b6c2">==&lt;/span>1.30.0 &lt;span style="color:#7f848e"># from ucb-bar channel - https://github.com/ucb-bar/firtool-feedstock&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>...
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>有部分不存在的就还是通过apt安装&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 262;
+flex-basis: 629px"
+>
+&lt;a href="https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8conda%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%9A%84%E7%8E%AF%E5%A2%83/image-20241125003535087.png" data-size="813x310">
+&lt;img src="https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8conda%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%9A%84%E7%8E%AF%E5%A2%83/image-20241125003535087.png"
+width="813"
+height="310"
+srcset="https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8conda%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%9A%84%E7%8E%AF%E5%A2%83/image-20241125003535087_hu12008603055710581184.png 480w, https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8conda%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E9%9A%94%E7%A6%BB%E7%9A%84%E7%8E%AF%E5%A2%83/image-20241125003535087_hu16950151743253815472.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>然后构建脚本&lt;/p>
+&lt;p>build-setup.sh&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">USE_UNPINNED_DEPS&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e5c07b">true&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">CYDIR&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#c678dd">$(&lt;/span>&lt;span style="color:#e5c07b">pwd&lt;/span>&lt;span style="color:#c678dd">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">CONDA_REQS&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$CYDIR&lt;/span>/conda-req
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">CONDA_LOCK_REQS&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$CONDA_REQS&lt;/span>/conda-lock-reqs
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># must match with the file generated by generate-conda-lockfile.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">LOCKFILE&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$CONDA_LOCK_REQS&lt;/span>/conda-requirements-linux-64.conda-lock.yml
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">[&lt;/span> &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$USE_UNPINNED_DEPS&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span> &lt;span style="color:#56b6c2">]&lt;/span>; &lt;span style="color:#c678dd">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># auto-gen the lockfiles&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> ./generate-conda-lockfiles.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># use conda-lock to create env&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>conda-lock install -p &lt;span style="color:#e06c75">$CYDIR&lt;/span>/.conda-env &lt;span style="color:#e06c75">$LOCKFILE&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">source&lt;/span> &lt;span style="color:#e06c75">$CYDIR&lt;/span>/.conda-env/etc/profile.d/conda.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>conda activate &lt;span style="color:#e06c75">$CYDIR&lt;/span>/.conda-env
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>generate-conda-lockfiles.sh&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#!/usr/bin/env bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">set&lt;/span> -ex
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">CUR_DIR&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#c678dd">$(&lt;/span> &lt;span style="color:#e5c07b">cd&lt;/span> -- &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#c678dd">$(&lt;/span> dirname -- &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#98c379">${&lt;/span>&lt;span style="color:#e06c75">BASH_SOURCE&lt;/span>[0]&lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span> &lt;span style="color:#c678dd">)&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span> &amp;amp;&amp;gt; /dev/null &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e5c07b">pwd&lt;/span> &lt;span style="color:#c678dd">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">REQS_DIR&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$CUR_DIR&lt;/span>&lt;span style="color:#98c379">/conda-req&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">[&lt;/span> ! -d &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$REQS_DIR&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">]&lt;/span>; &lt;span style="color:#c678dd">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">echo&lt;/span> &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$REQS_DIR&lt;/span>&lt;span style="color:#98c379"> does not exist, make sure you&amp;#39;re calling this script from xs-env/&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">exit&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>mkdir -p &lt;span style="color:#e06c75">$REQS_DIR&lt;/span>/conda-lock-reqs
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># note: lock file must end in .conda-lock.yml - see https://github.com/conda-incubator/conda-lock/issues/154&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">LOCKFILE&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$REQS_DIR&lt;/span>/conda-lock-reqs/conda-requirements-linux-64.conda-lock.yml
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>conda-lock -f &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#e06c75">$REQS_DIR&lt;/span>&lt;span style="color:#98c379">/xs-env.yaml&amp;#34;&lt;/span> -p linux-64 --lockfile &lt;span style="color:#e06c75">$LOCKFILE&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>使用Tilelink实现缓存一致性（cache conherence）</title><link>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8tilelink%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</link><pubDate>Fri, 22 Nov 2024 16:29:39 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E4%BD%BF%E7%94%A8tilelink%E5%AE%9E%E7%8E%B0%E7%BC%93%E5%AD%98%E4%B8%80%E8%87%B4%E6%80%A7/</guid><description>&lt;h2 id="概述">概述&lt;/h2>
 &lt;p>TileLink Cached (TL-C) 协议通过为主设备提供缓存共享数据块副本的能力，完善了 TileLink 协议。这些本地缓存副本必须根据实现定义的一致性策略保持一致性。本章节定义的 TL-C 标准一致性协议规定了哪些内存访问操作可以对缓存数据的副本执行，以及哪些消息可用于传输数据块的副本。实现中叠加的一致性策略则规定了在接收到内存访问操作后，如何在特定的 TileLink 代理网络中传播副本和权限。具体一致性策略的描述超出了本文档的范围。&lt;/p>
 &lt;p>总的来说，TL-C 在 TileLink 协议规范中增加了以下内容：&lt;/p>
 &lt;ul>
@@ -1386,6 +1974,11 @@ alt="image-20241111163907552">
 &lt;p>Misses are tracked in the MSHR using primary miss tags and replay queues. Primary miss tags hold the address of an in-flight refill request and are searched on every miss to determine if it is a secondary miss. A primary miss allocates a new primary miss tag to hold the address, issues a refill request, performs an eviction if needed, and adds a new replay queue entry to a linked list next to the primary miss tag. Replay queue entries contain information about the access including the corresponding cache line offset, the byte width, the destination register for loads, and pending data for stores. A secondary miss adds a new replay queue entry to the appropriate replay queue, but does not send an additional refill request to main memory&lt;/p>
 &lt;h2 id="模块介绍">模块介绍&lt;/h2>
 &lt;h3 id="nonblockingdcachemodule">NonBlockingDCacheModule&lt;/h3>
+&lt;p>目前配置的dcache , 16路&lt;/p>
+&lt;p>​ d-cache-block-size = &amp;lt;64&amp;gt;;
+​ d-cache-sets = &amp;lt;16&amp;gt;;
+​ d-cache-size = &amp;lt;4096&amp;gt;&lt;/p>
+&lt;p>4路组相联cache 4096/16/64=4&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s1_req&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Reg&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">HellaCacheReq&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// s1主要是打了一拍,下面其实是在决定把什么数据打一拍，第一拍就是在仲裁什么数据地址该去读data和meta
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// cpu_req : cpu的请求信号
@@ -1471,7 +2064,8 @@ alt="image-20241111163907552">
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">idx&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">rowOffBits&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="probe">Probe&lt;/h3>
 &lt;p>实现了Cache管理模块的状态机，主要用于处理探测请求的操作，管理Cache的状态，判断命中情况，以及处理数据写回操作,主要针对的是tag,不是data&lt;/p>
-&lt;p>prober的请求输入的数据不是cpu_req,而是auto_out_b_ , 代表这是下一级存储，最直接的就是sbus对其发送的req ，比方说外设发起的读数据，或者在多核心的情况下，core0去读cache0,为了缓存一致性的问题，可能需要sbus去读cache1，然后再去写cache0等&lt;/p>
+&lt;p>&lt;del>prober的请求输入的数据不是cpu_req,而是auto_out_b_ , 代表这是下一级存储l2，比方说外设发起的读数据，或者在多核心的情况下，core0去读cache0,为了缓存一致性的问题，可能需要sbus去读cache1，然后再去写cache0等&lt;/del>&lt;/p>
+&lt;p>prober应该就是去把dcache的内容给disabled并且写入l2 cache的&lt;/p>
 &lt;p>发起auto_out_b_*的是l2 cache&lt;/p>
 &lt;p>&lt;figure
 class="gallery-image"
@@ -1508,7 +2102,42 @@ loading="lazy"
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// if the read didn&amp;#39;t go through, we need to retry
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mshr_rdy&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_mshr_resp&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_meta_read&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 如果是脏数据的话，就要写回到l2, 反之需要释放相应的权限（我觉得主要就是权限的改变，但是不需要伴随数据）
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_mshr_resp&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">tag_matches&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">is_dirty&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_writeback_req&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_release&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_release&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">rep&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">tag_matches&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_meta_write&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_invalid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 不管怎么样，最后一步都是write_meta
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// wait for the writeback request to finish before updating the metadata
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// meta write 应该有将改变的权限写入meta
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_writeback_resp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wb_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ready&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s_meta_write&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>逻辑是比较简单的,就是当发起请求时,去meta_read,meta_read之后去读mshr,读出mshr之后,当tag_match的时候且为dirty,需要写回,所以切换到s_writeback_req ,否则到release,release之后去meta_write.写回是由wb模块控制的&lt;/p>
+&lt;p>b通道找不到opcode,但和probe相关是肯定的，param代表10,和c一致&lt;/p>
+&lt;p>c通道是probe_ack , c_param指示由于探测而在主代理中发生的特定类型的权限更改,&lt;/p>
+&lt;p>如下代表probe_ack , BtoN ,降权限的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 325;
+flex-basis: 780px"
+>
+&lt;a href="https://VastCircle.github.io/2024/nbdcache/image-20241122205333780.png" data-size="1369x421">
+&lt;img src="https://VastCircle.github.io/2024/nbdcache/image-20241122205333780.png"
+width="1369"
+height="421"
+srcset="https://VastCircle.github.io/2024/nbdcache/image-20241122205333780_hu6178936314293379860.png 480w, https://VastCircle.github.io/2024/nbdcache/image-20241122205333780_hu14194576438853189490.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>如果是通过wb写回的话，c通道返回就是probe_ackdata ,TtoB,权限降到可读&lt;/p>
 &lt;h3 id="l1metadataarray-mata">L1MetadataArray mata&lt;/h3>
 &lt;p>meta就是存储tag的地方,是一个同步ram&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// () =&amp;gt; T是函数的写法 ,无输入参数,输出参数是T类型的
@@ -7605,6 +8234,7 @@ _dtb:
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>第一条指令应该是从0x10000开始&lt;/p>
 &lt;h2 id="源码解读">源码解读&lt;/h2>
 &lt;h3 id="variablesmk">variables.mk&lt;/h3>
+&lt;p>构建系统的不同方式之间共享的变量和/或值在目录结构中位于较高位置。因此，该项目的一些最重要的命令和变量chipyard/variables.mk中定义.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-makefile" data-lang="makefile">&lt;span style="display:flex;">&lt;span>ifeq (&lt;span style="color:#c678dd">$(&lt;/span>&lt;span style="color:#e06c75">SUB_PROJECT&lt;/span>&lt;span style="color:#c678dd">)&lt;/span>,chipyard)
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SBT_PROJECT&lt;/span> &lt;span style="color:#56b6c2">?=&lt;/span> chipyard
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> MODEL ?&lt;span style="color:#56b6c2">=&lt;/span> TestHarness
@@ -7617,9 +8247,29 @@ _dtb:
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> TOP ?&lt;span style="color:#56b6c2">=&lt;/span> ChipTop
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>endif
 &lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="sub_project">SUB_PROJECT&lt;/h4>
-&lt;p>这对应于chipyard/generators 目录中的项目之一。更正式地说，它是由相应生成器目录中的 build.sbt 文件中的条目之一以及 Chipyard 根目录中的主 build.sbt 文件定义的&lt;/p>
+&lt;p>这对应于chipyard/generators 目录中的项目之一。更正式地说，它是由相应生成器目录中的 build.sbt 文件中的条目之一以及 Chipyard 根目录中的主 build.sbt 文件定义的.&lt;/p>
+&lt;p>通过在定义良好的选项之一之间更改此文件，人们可以轻松地重用 Chipyard 架构的主要部分。&lt;/p>
 &lt;p>constellation icenet rocketchip testchipip hwacha &amp;hellip;&lt;/p>
-&lt;h4 id="sbt_project">SBT_PROJECT&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 可以看到chipyard depend on 几乎所有其他的文件
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">lazy&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">chipyard&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">project&lt;/span> &lt;span style="color:#e06c75">in&lt;/span> &lt;span style="color:#e06c75">file&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;generators/chipyard&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dependsOn&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">testchipip&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">rocketchip&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">boom&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">hwacha&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">sifive_blocks&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">sifive_cache&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">iocell&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">sha3&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#7f848e">// On separate line to allow for cleaner tutorial-setup patches
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">dsptools&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">`rocket-dsp-utils`&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">gemmini&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">icenet&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">tracegen&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">cva6&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">nvdla&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">sodor&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">ibex&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">fft_generator&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">constellation&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">mempress&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">barf&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">shuttle&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">settings&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">libraryDependencies&lt;/span> &lt;span style="color:#56b6c2">++=&lt;/span> &lt;span style="color:#e06c75">rocketLibDeps&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">value&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">settings&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">libraryDependencies&lt;/span> &lt;span style="color:#56b6c2">++=&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#98c379">&amp;#34;org.reflections&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">%&lt;/span> &lt;span style="color:#98c379">&amp;#34;reflections&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">%&lt;/span> &lt;span style="color:#98c379">&amp;#34;0.10.2&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">settings&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">commonSettings&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">lazy&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">hwacha&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">project&lt;/span> &lt;span style="color:#e06c75">in&lt;/span> &lt;span style="color:#e06c75">file&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;generators/hwacha&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dependsOn&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">rocketchip&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">settings&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">libraryDependencies&lt;/span> &lt;span style="color:#56b6c2">++=&lt;/span> &lt;span style="color:#e06c75">rocketLibDeps&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">value&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">settings&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">commonSettings&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="sbt_project">SBT_PROJECT&lt;/h4>
 &lt;p>这对应于要构建的芯片的顶级存储库。这是定义许多更高级别的构造的地方，例如测试工具和测试平台。&lt;/p>
 &lt;h4 id="model">MODEL&lt;/h4>
 &lt;p>该模型是 Chisel 应该使用的项目的顶级模块。通常，这应该定义为与测试工具相同，但不一定必须如此。&lt;/p>
@@ -7630,7 +8280,7 @@ _dtb:
 &lt;h4 id="config">CONFIG&lt;/h4>
 &lt;p>这定义了项目应使用的参数。通常，这用于选择 SBT_PROJECT 中定义的 CPU 配置之一。&lt;/p>
 &lt;h4 id="config_package">CONFIG_PACKAGE&lt;/h4>
-&lt;p>这是定义 Config 类的 Scala 包。该文件必须包含 Config 的类定义，这意味着对象 Config 必须存在。&lt;/p>
+&lt;p>这是定义 Config 类的 Scala 包。该文件必须包含 Config 的类定义，这意味着对象 Config 必须存在。例如CONFIG=IceNetUnitTestConfig ,CONFIG_PACKAGE=icenet,这代表IceNetUnitTestConfig这个类是在包icenet里面的&lt;/p>
 &lt;h4 id="generator_package">GENERATOR_PACKAGE&lt;/h4>
 &lt;p>这是定义 Generator 类的 Scala 包。该文件必须包含 Generator 的类定义，这意味着 Generator 对象必须存在。&lt;/p>
 &lt;h4 id="tb">TB&lt;/h4>
@@ -7761,6 +8411,8 @@ _dtb:
 >https://www.cnblogs.com/hwzhao/p/17363380.html&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://github.com/ucb-bar/chipyard/blob/main/docs/Advanced-Concepts/Top-Testharness.rst" target="_blank" rel="noopener"
 >Tops,Test-Harnesses,and the Test-Driver&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.cnblogs.com/hwzhao/p/17306298.html" target="_blank" rel="noopener"
+>chipyard的设备树介绍&lt;/a>&lt;/p>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>博客搭建</title><link>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</link><pubDate>Sun, 06 Oct 2024 21:57:38 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/</guid><description>&lt;h2 id="安装hugo">安装Hugo&lt;/h2>
