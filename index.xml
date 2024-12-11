@@ -1,4 +1,287 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 07 Dec 2024 20:28:43 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>ParaVerser_Harnessing_Heterogeneous_Parallelism_For_Affordable_Fault_Detection_in_Data_Centers</title><link>https://VastCircle.github.io/2024/paraverser_harnessing_heterogeneous_parallelism_for_affordable_fault_detection_in_data_centers/</link><pubDate>Sat, 07 Dec 2024 20:28:43 +0800</pubDate><guid>https://VastCircle.github.io/2024/paraverser_harnessing_heterogeneous_parallelism_for_affordable_fault_detection_in_data_centers/</guid><description>&lt;h1 id="paraverser利用异构并行性实现数据中心中经济实惠的故障检测">ParaVerser：利用异构并行性实现数据中心中经济实惠的故障检测&lt;/h1>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 11 Dec 2024 21:00:41 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Failed_to_connetct_socket</title><link>https://VastCircle.github.io/2024/failed_to_connetct_socket/</link><pubDate>Wed, 11 Dec 2024 21:00:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/failed_to_connetct_socket/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Ssh版本不匹配</title><link>https://VastCircle.github.io/2024/ssh%E7%89%88%E6%9C%AC%E4%B8%8D%E5%8C%B9%E9%85%8D/</link><pubDate>Wed, 11 Dec 2024 20:58:55 +0800</pubDate><guid>https://VastCircle.github.io/2024/ssh%E7%89%88%E6%9C%AC%E4%B8%8D%E5%8C%B9%E9%85%8D/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Gem5_修改扩展</title><link>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</link><pubDate>Wed, 11 Dec 2024 20:52:34 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Gem5_learning</title><link>https://VastCircle.github.io/2024/gem5_learning/</link><pubDate>Mon, 09 Dec 2024 15:11:13 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_learning/</guid><description>&lt;h2 id="配置">配置&lt;/h2>
+&lt;p>使用如下命令去安装gem5&lt;/p>
+&lt;pre tabindex="0">&lt;code>git clone https://github.com/gem5/gem5
+&lt;/code>&lt;/pre>&lt;p>安装依赖 &lt;a class="link" href="https://www.gem5.org/documentation/general_docs/building" target="_blank" rel="noopener"
+>https://www.gem5.org/documentation/general_docs/building&lt;/a>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>sudo apt install build-essential git m4 scons zlib1g zlib1g-dev &lt;span style="color:#98c379">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#98c379">&lt;/span> libprotobuf-dev protobuf-compiler libprotoc-dev libgoogle-perftools-dev &lt;span style="color:#98c379">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#98c379">&lt;/span> python3-dev libboost-all-dev pkg-config python3-tk
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>执行&lt;/p>
+&lt;pre tabindex="0">&lt;code>python3 `which scons` build/X86/gem5.opt -j9
+&lt;/code>&lt;/pre>&lt;h3 id="问题1--youre-missing-the-pre-commitcommit-msg-hooks-未解决">问题1 : you&amp;rsquo;re missing the pre-commit/commit-msg hooks (未解决)&lt;/h3>
+&lt;p>出现错误&lt;/p>
+&lt;blockquote>
+&lt;p>You&amp;rsquo;re missing the pre-commit/commit-msg hooks. These hook help to ensure your
+code follows gem5&amp;rsquo;s style rules on git commit and your commit messages follow
+our commit message requirements. This script will now install these hooks in
+your .git/hooks/ directory.&lt;/p>
+&lt;/blockquote>
+&lt;h3 id="问题2--cant-find-a-working-python-installation">问题2 : can&amp;rsquo;t find a working python installation&lt;/h3>
+&lt;blockquote>
+&lt;p>Error: Can&amp;rsquo;t find a working Python installation with Python-3.11 version&lt;/p>
+&lt;/blockquote>
+&lt;p>在.zshrc里增加&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">export&lt;/span> &lt;span style="color:#e06c75">LD_LIBRARY_PATH&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">$LD_LIBRARY_PATH&lt;/span>:/opt/python361/lib
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="问题3--couldnt-find-any-hdf5-c-libraries-未解决">问题3 : couldn&amp;rsquo;t find any hdf5 c++ libraries (未解决)&lt;/h3>
+&lt;blockquote>
+&lt;p>Warning: Header file &amp;lt;png.h&amp;gt; not found. This host has no libpng library. Disabling support for PNG framebuffers. Warning: Couldn&amp;rsquo;t find any HDF5 C++ libraries. Disabling HDF5 support.&lt;/p>
+&lt;/blockquote>
+&lt;pre tabindex="0">&lt;code>sudo apt-get install libhdf5-dev
+sudo apt-get install libpng-dev
+&lt;/code>&lt;/pre>&lt;p>上面的指令还是无效(应该是没有含c++库),需要自己构建hdf5的c++库&lt;/p>
+&lt;p>从&lt;a class="link" href="https://support.hdfgroup.org/downloads/hdf5/hdf5_1_14_5.html" target="_blank" rel="noopener"
+>链接&lt;/a>获取hdf5的安装包&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 210;
+flex-basis: 504px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_learning/image-20241209202620390.png" data-size="1477x702">
+&lt;img src="https://VastCircle.github.io/2024/gem5_learning/image-20241209202620390.png"
+width="1477"
+height="702"
+srcset="https://VastCircle.github.io/2024/gem5_learning/image-20241209202620390_hu10008969366492264879.png 480w, https://VastCircle.github.io/2024/gem5_learning/image-20241209202620390_hu831555886710106580.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 解压 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>tar zxf hdf5-X.Y.Z.tar.gz
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 修改configure文件&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">HDF_CXX&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>no -&amp;gt; &lt;span style="color:#e06c75">HDF_CXX&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>yes
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 构建&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>./configure --prefix&lt;span style="color:#56b6c2">=&lt;/span>/usr/local/hdf5
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo make
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sudo make install
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>没救了,还是找不到&lt;/p>
+&lt;h2 id="vscode-python-环境配置">vscode python 环境配置&lt;/h2>
+&lt;p>GEM 5 的 SimObject Python 定义都在 &lt;code>m5.objects&lt;/code> 包下，但 python 文件组织却不是按照目录进行的，每个 SimObject 虽然都属于 &lt;code>m5.objects&lt;/code> 包，但其对应的文件却各自位于对应 C++ 源代码目录下。GEM 5 本身使用了其他的技巧来使得这些分散的 python 文件都置于 &lt;code>m5.objects&lt;/code> 包下方便使用（详见 &lt;code>src/SConscript&lt;/code> 文件中的 &lt;code>SimObject&lt;/code> 以及 &lt;code>src/python/importer.py&lt;/code> 文件）。&lt;/p>
+&lt;p>为了使 vscode 的 pylance 能够正确识别所有的 SimObject 方便代码阅读，可以将这些文件通过软链接的方式置于 &lt;code>build/ARM/python/m5/objects&lt;/code> 目录下。可以在 GEM 5 运行的 python 脚本（比如 &lt;code>config/learning_gem5/part1/simple.py&lt;/code>）中添加以下代码来生成创建软链接的脚本：&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">f&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">open&lt;/span>(&lt;span style="color:#98c379">&amp;#39;create_link.sh&amp;#39;&lt;/span>, &lt;span style="color:#98c379">&amp;#39;w&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">for&lt;/span> &lt;span style="color:#e06c75">key&lt;/span>,&lt;span style="color:#e06c75">val&lt;/span> &lt;span style="color:#56b6c2">in&lt;/span> &lt;span style="color:#e06c75">sys&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">meta_path&lt;/span>[&lt;span style="color:#d19a66">0&lt;/span>]&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">modules&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">items&lt;/span>():
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#e06c75">key&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">startswith&lt;/span>(&lt;span style="color:#98c379">&amp;#39;m5.objects&amp;#39;&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e"># 将 xx 改为对应的前缀长度&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">f&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">write&lt;/span>(&lt;span style="color:#98c379">&amp;#34;ln -s ../../../../../src/&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">val&lt;/span>[&lt;span style="color:#d19a66">0&lt;/span>][&lt;span style="color:#e06c75">xx&lt;/span>:] &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#98c379">&amp;#34; ./&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>通过运行 &lt;code>./build/ARM/gem5.opt simple.py&lt;/code> 就可以生成对应的脚本。之后将该脚本在 &lt;code>build/ARM/python/m5/objects&lt;/code> 目录下执行。注意生成的脚本中有一些 python 文件是在 &lt;code>build/ARM&lt;/code> 文件夹下的所以使用 &lt;code>val[0][xx:]&lt;/code> 截取会有问题，需要手动修改（几个 &lt;code>mem/ruby/protocol&lt;/code> 下的 python 文件）。&lt;/p>
+&lt;p>之后还需要在 &lt;code>m5/objects/__init__.py&lt;/code> 文件中加入对应的 &lt;code>from xx import *&lt;/code> 来使这些 SimObject 能够通过 &lt;code>from m5.objects import *&lt;/code> 导入。将上面 python 代码中的 &lt;code>f.write&lt;/code> 一行变为：&lt;code>f.write(&amp;quot;from &amp;quot; + key.split('.')[-1] + &amp;quot; import *\n&amp;quot;)&lt;/code> 来生成这些代码并将这些代码加入到 &lt;code>m5/objects/__init__.py&lt;/code> 文件中。&lt;/p>
+&lt;p>最后在 vscode 的 pylance 配置中将 &lt;code>./build/ARM/python&lt;/code> 加入到 &lt;code>extraPaths&lt;/code> 中：修改 &lt;code>.vscode/settings.json&lt;/code> 文件，将其加入到 &lt;code>python.analysis.extraPaths&lt;/code> 中。&lt;/p>
+&lt;h2 id="创建简单配置脚本">创建简单配置脚本&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">import&lt;/span> &lt;span style="color:#e06c75">m5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">from&lt;/span> &lt;span style="color:#e06c75">m5.ojbects&lt;/span> &lt;span style="color:#c678dd">import&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 创建SimObject &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">System&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 设计时钟&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">clk_domain&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">SrcClockDomain&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">clk_domain&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">clock&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#39;1GHz&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">clk_domain&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">voltage_domain&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">VoltageDomain&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 设置模拟内存&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_mode&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#39;timing&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_ranges&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> [&lt;span style="color:#e06c75">AddrRange&lt;/span>(&lt;span style="color:#98c379">&amp;#39;512MB&amp;#39;&lt;/span>)]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 设置cpu &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">X86TimingSimpleCPU&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 创建内存总线&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">SystemXBar&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 将cpu的缓存端口连接到内存总线&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">icache_port&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dcache_port&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">createInterruptController&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">interrupts&lt;/span>[&lt;span style="color:#d19a66">0&lt;/span>]&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">pio&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">interrupts&lt;/span>[&lt;span style="color:#d19a66">0&lt;/span>]&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">int_requestor&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">interrupts&lt;/span>[&lt;span style="color:#d19a66">0&lt;/span>]&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">int_responder&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">system_port&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 创建内存控制器并将其连接到membus&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_ctrl&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">MemCtrl&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dram&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">DDR3_1600_8x8&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dram&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">range&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_ranges&lt;/span>[&lt;span style="color:#d19a66">0&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">port&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">membus&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_side_ports&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## bin文件的路径&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">thispath&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">os&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">path&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dirname&lt;/span>(&lt;span style="color:#e06c75">os&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">path&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">realpath&lt;/span>(&lt;span style="color:#e06c75">__file__&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">binary&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">os&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">path&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">join&lt;/span>(
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">thispath&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#98c379">&amp;#34;../../../&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#98c379">&amp;#34;tests/test-progs/hello/bin/x86/linux/hello&amp;#34;&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"># 创建一个进程给&amp;#34;hello world&amp;#34;应用&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">workload&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">SEWorkload&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">init_compatible&lt;/span>(&lt;span style="color:#e06c75">binary&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">process&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">Process&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">process&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cmd&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> [&lt;span style="color:#e06c75">binary&lt;/span>]
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">workload&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">process&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">system&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">createThreads&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">root&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">Root&lt;/span>(&lt;span style="color:#e06c75">full_system&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">False&lt;/span>, &lt;span style="color:#e06c75">system&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">system&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">m5&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">instantiate&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">print&lt;/span>(&lt;span style="color:#98c379">&amp;#34;Beginning simulation!&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">exit_event&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">m5&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">simulate&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">print&lt;/span>(&lt;span style="color:#98c379">&amp;#39;Exiting @ tick &lt;/span>&lt;span style="color:#98c379">{}&lt;/span>&lt;span style="color:#98c379"> because &lt;/span>&lt;span style="color:#98c379">{}&lt;/span>&lt;span style="color:#98c379">&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">format&lt;/span>(&lt;span style="color:#e06c75">m5&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">curTick&lt;/span>(), &lt;span style="color:#e06c75">exit_event&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">getCause&lt;/span>()))
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 139;
+flex-basis: 334px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_learning/image-20241210144442456.png" data-size="583x418">
+&lt;img src="https://VastCircle.github.io/2024/gem5_learning/image-20241210144442456.png"
+width="583"
+height="418"
+srcset="https://VastCircle.github.io/2024/gem5_learning/image-20241210144442456_hu6692497068779717089.png 480w, https://VastCircle.github.io/2024/gem5_learning/image-20241210144442456_hu15383879969304235760.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>通过build/X86/gem5.opt configs/tutorial/part1/simple.py可以观察到终端能够输出具体的结果&lt;/p>
+&lt;h2 id="将缓存添加到配置脚本">将缓存添加到配置脚本&lt;/h2>
+&lt;h3 id="经典缓存和ruby">经典缓存和Ruby&lt;/h3>
+&lt;p>gem5 目前有两个完全不同的子系统来模拟系统中的片上缓存，即“经典缓存”和“Ruby”。历史原因是 gem5 是密歇根州的 m5 和威斯康星州的 GEMS 的组合。GEMS 使用 Ruby 作为其缓存模型，而经典缓存来自 m5 代码库（因此称为“经典”）。这两个模型之间的区别在于 Ruby 旨在详细模拟缓存一致性。&lt;/p>
+&lt;h3 id="cache">cache&lt;/h3>
+&lt;p>Cache SimObject 声明可以在 src/mem/cache/Cache.py 中找到&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 53;
+flex-basis: 129px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_learning/image-20241210210757575.png" data-size="402x746">
+&lt;img src="https://VastCircle.github.io/2024/gem5_learning/image-20241210210757575.png"
+width="402"
+height="746"
+srcset="https://VastCircle.github.io/2024/gem5_learning/image-20241210210757575_hu8240875021614920086.png 480w, https://VastCircle.github.io/2024/gem5_learning/image-20241210210757575_hu11555729507939211325.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="gem5的数据统计和输出">gem5的数据统计和输出&lt;/h2>
+&lt;p>运行gem5在m5out生成三个文件&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>&lt;strong>config.ini&lt;/strong>&lt;/p>
+&lt;p>包含为模拟创建的每个 SimObject 的列表及其参数值。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>config.json&lt;/strong>&lt;/p>
+&lt;p>与 config.ini 相同，但采用 json 格式。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>stats.txt&lt;/strong>&lt;/p>
+&lt;p>为模拟注册的所有 gem5 统计数据的文本表示。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;h3 id="statstxt">stats.txt&lt;/h3>
+&lt;p>比较重要的数据&lt;/p>
+&lt;p>simSeconds : 模拟的总时间&lt;/p>
+&lt;p>simInsts : CPU提交的指令数&lt;/p>
+&lt;p>hostInstrate : gem5的性能&lt;/p>
+&lt;p>cpi : 指令周期,每条指令运行的周期&lt;/p>
+&lt;p>ipc : 周期指令,每周期运行的指令&lt;/p>
+&lt;p>numCycles:总运行周期&lt;/p>
+&lt;p>sytem.cpu. : cpu的统计信息&lt;/p>
+&lt;p>system.mem_ctrl : 内存的统计信息&lt;/p>
+&lt;h2 id="gem5自带的配置文件">gem5自带的配置文件&lt;/h2>
+&lt;p>在config里面&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>configs/boot:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>bbench-gb.rcS bbench-ics.rcS hack_back_ckpt.rcS halt.sh
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/common:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Benchmarks.py Caches.py cpu2000.py FileSystemConfig.py GPUTLBConfig.py HMC.py MemConfig.py Options.py Simulation.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>CacheConfig.py cores CpuConfig.py FSConfig.py GPUTLBOptions.py __init__.py ObjectList.py SimpleOpts.py SysPaths.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/dist:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sw.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/dram:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>lat_mem_rd.py low_power_sweep.py sweep.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/example:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>apu_se.py etrace_replay.py garnet_synth_traffic.py hmctest.py hsaTopology.py memtest.py read_config.py ruby_direct_test.py ruby_mem_test.py sc_main.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>arm fs.py hmc_hello.py hmc_tgen.cfg memcheck.py noc_config riscv ruby_gpu_random_test.py ruby_random_test.py se.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/learning_gem5:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>part1 part2 part3 README
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/network:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>__init__.py Network.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/nvm:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>sweep_hybrid.py sweep.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/ruby:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>AMD_Base_Constructor.py CHI.py Garnet_standalone.py __init__.py MESI_Three_Level.py MI_example.py MOESI_CMP_directory.py MOESI_hammer.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>CHI_config.py CntrlBase.py GPU_VIPER.py MESI_Three_Level_HTM.py MESI_Two_Level.py MOESI_AMD_Base.py MOESI_CMP_token.py Ruby.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/splash2:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>cluster.py run.py
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>configs/topologies:
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>BaseTopology.py Cluster.py CrossbarGarnet.py Crossbar.py CustomMesh.py __init__.py MeshDirCorners_XY.py Mesh_westfirst.py Mesh_XY.py Pt2Pt.py
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="boot">boot&lt;/h3>
+&lt;p>全系统的rcS文件.这些文件在Linux启动后由模拟器加载并由shell执行.大多数用于在全系统模式下运行时控制基准测试 .有些是实用函数，例如 &lt;code>hack_back_ckpt.rcS&lt;/code>&lt;/p>
+&lt;h3 id="common">common&lt;/h3>
+&lt;p>包含许多用于创建模拟系统的辅助脚本和函数.&lt;/p>
+&lt;p>Caches.py和上述caches.py类似&lt;/p>
+&lt;p>Options.py包含可能在命令行中设置的选项.例如CPU数量,系统时钟&lt;/p>
+&lt;p>CaceConfig.py包含用于设置经典内存系统缓存参数的选项和函数&lt;/p>
+&lt;p>MemConfig.py提供用于设置内存系统的辅助函数&lt;/p>
+&lt;p>FSConfig.py包含为多种不同类型的系统设置全系统模拟所需的功能&lt;/p>
+&lt;p>Simulations.py饱和用于设置和运行gem5的辅助函数.许多代码用于管理saving and restoring checkpoints.&lt;/p>
+&lt;h3 id="dram">Dram&lt;/h3>
+&lt;p>包含测试DRAM的脚本&lt;/p>
+&lt;h3 id="example">example&lt;/h3>
+&lt;p>此目录包含一些示例 gem5 配置脚本，可立即用于运行 gem5。具体来说，&lt;code>se.py&lt;/code>和 &lt;code>fs.py&lt;/code>非常有用(这两脚本被移动到/deprecated/example里面了)。&lt;/p>
+&lt;h3 id="learning_gem5">learning_gem5&lt;/h3>
+&lt;p>包含learning_gem5 book的所有脚本&lt;/p>
+&lt;h3 id="network">network&lt;/h3>
+&lt;p>包含HeteroGarnet network的配置脚本&lt;/p>
+&lt;h3 id="nvm">nvm&lt;/h3>
+&lt;p>包含NVM接口的示例脚本&lt;/p>
+&lt;h3 id="ruby">ruby&lt;/h3>
+&lt;p>包含ruby及其包含的缓存一致性的配置脚本&lt;/p>
+&lt;h3 id="splash2">splash2&lt;/h3>
+&lt;p>该目录包含运行 splash2 基准测试套件的脚本以及一些用于配置模拟系统的选项。&lt;/p>
+&lt;h3 id="topologies">topologies&lt;/h3>
+&lt;p>包含创建Ruby缓存层次结构时可以使用的拓扑的实现&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/yihuajack/article/details/125629179" target="_blank" rel="noopener"
+>wsl安装gem5&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.gem5.org/getting_started/" target="_blank" rel="noopener"
+>gem5入门(官方)&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/qq_34898487/article/details/121896267" target="_blank" rel="noopener"
+>gem5安装修复python3-config&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/wokaowokaowokao12345/article/details/126642061" target="_blank" rel="noopener"
+>HDF5 install&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://jianyue.tech/posts/gem5/" target="_blank" rel="noopener"
+>vscode python环境&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>ParaVerser_Harnessing_Heterogeneous_Parallelism_For_Affordable_Fault_Detection_in_Data_Centers</title><link>https://VastCircle.github.io/2024/paraverser_harnessing_heterogeneous_parallelism_for_affordable_fault_detection_in_data_centers/</link><pubDate>Sat, 07 Dec 2024 20:28:43 +0800</pubDate><guid>https://VastCircle.github.io/2024/paraverser_harnessing_heterogeneous_parallelism_for_affordable_fault_detection_in_data_centers/</guid><description>&lt;h1 id="paraverser利用异构并行性实现数据中心中经济实惠的故障检测">ParaVerser：利用异构并行性实现数据中心中经济实惠的故障检测&lt;/h1>
 &lt;h2 id="abstract">abstract&lt;/h2>
 &lt;p>数据中心运营商已经意识到，由于有缺陷的硅计算单元导致的无声数据损坏是大规模流行的。已经部署了软件扫描仪来缓解该问题，但要么覆盖率低，要么需要数月时间，从而导致长时间不正确行为。相比之下，汽车中使用的冗余机制使所需的功率和面积增加了一倍，因此无法实际部署在服务器空间中。我们推出了 ParaVerser，这是一种高覆盖率、低开销的服务器硬件级错误检测解决方案。通过较小的架构修改，我们使异构服务器级处理器中的传统核心能够充当检查器核心，从而利用异构性、扩展频率和重复运行中固有的并行性来提供节能的错误检查。通过将 big.LITTLE 型无序超标量核心与有序超标量核心动态耦合，在相同保证的情况下，我们相对于典型锁步系统将能源开销降低了 70%，而性能仅下降 4.3%，每核心面积开销为 1064B 。&lt;/p>
 &lt;h2 id="简介">简介&lt;/h2>
