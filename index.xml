@@ -6,8 +6,260 @@
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
->vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Gem5_修改扩展</title><link>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</link><pubDate>Wed, 11 Dec 2024 20:52:34 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Gem5_修改扩展</title><link>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</link><pubDate>Wed, 11 Dec 2024 20:52:34 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</guid><description>&lt;h2 id="create-a-simple-simobject">create a simple simobject&lt;/h2>
+&lt;h3 id="create-a-python-class">create a python class&lt;/h3>
+&lt;p>每个 SimObject 都有一个与之关联的 Python 类。此 Python 类描述了 SimObject 的参数，这些参数可以通过 Python 配置文件进行控制.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">from&lt;/span> &lt;span style="color:#e06c75">m5.params&lt;/span> &lt;span style="color:#c678dd">import&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">from&lt;/span> &lt;span style="color:#e06c75">m5.SimObject&lt;/span> &lt;span style="color:#c678dd">import&lt;/span> &lt;span style="color:#e06c75">SimObject&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">HelloObject&lt;/span>(&lt;span style="color:#e06c75">SimObject&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">type&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#39;HelloObject&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">cxx_header&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#34;learning_gem5/part2/hello_object.hh&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">cxx_class&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#34;gem5::HelloObject&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="implement-your-simobject-in-c">implement your simobject in c++&lt;/h3>
+&lt;p>创建hello_object.cc 和 hello_object.hh&lt;/p>
+&lt;p>代码略&lt;/p>
+&lt;p>&lt;strong>Note&lt;/strong>: If the constructor of your SimObject follows the following signature,&lt;/p>
+&lt;pre tabindex="0">&lt;code>Foo(const FooParams &amp;amp;)
+&lt;/code>&lt;/pre>&lt;p>then a &lt;code>FooParams::create()&lt;/code> method will be automatically defined. The purpose of the &lt;code>create()&lt;/code> method is to call the SimObject constructor and return an instance of the SimObject.&lt;/p>
+&lt;h3 id="注册simobject和c文件">注册SimObject和C++文件&lt;/h3>
+&lt;p>创建SConscript文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>Import&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#39;*&amp;#39;&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>SimObject&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#39;HelloObject.py&amp;#39;&lt;/span>, &lt;span style="color:#e06c75">sim_objects&lt;/span>&lt;span style="color:#56b6c2">=[&lt;/span>&lt;span style="color:#98c379">&amp;#39;HelloObject&amp;#39;&lt;/span>&lt;span style="color:#56b6c2">])&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>Source&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#39;hello_object.cc&amp;#39;&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="重新构建gem5">重新构建gem5&lt;/h3>
+&lt;pre tabindex="0">&lt;code>scons build/X86/gem5.opt
+&lt;/code>&lt;/pre>&lt;h3 id="创建配置脚本使用新的simobject">创建配置脚本使用新的SimObject&lt;/h3>
+&lt;h2 id="调试gem5">调试gem5&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## DRAM &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>build/X86/gem5.opt --debug-flags&lt;span style="color:#56b6c2">=&lt;/span>DRAM configs/learning_gem5/part1/simple.py | head -n &lt;span style="color:#d19a66">50&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## EXEC &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>build/X86/gem5.opt --debug-flags&lt;span style="color:#56b6c2">=&lt;/span>Exec configs/learning_gem5/part1/simple.py | head -n &lt;span style="color:#d19a66">50&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## 通过 &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>build/X86/gem5.opt --debug-help 可以看出相应的debug指令
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="添加新的调试标志">添加新的调试标志&lt;/h3>
+&lt;p>在SConscript 添加&lt;/p>
+&lt;pre tabindex="0">&lt;code>DebugFlag(&amp;#39;HelloExample&amp;#39;)
+&lt;/code>&lt;/pre>&lt;p>就可以创造新的调试标志 ,就可以在SimObject中使用&lt;/p>
+&lt;p>在cc文件中添加&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;base/trace.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;debug/HelloExample.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>可以使用&lt;/p>
+&lt;pre tabindex="0">&lt;code>DPRINTF(HelloExample, &amp;#34;Created the hello object\n&amp;#34;);
+&lt;/code>&lt;/pre>&lt;p>去打印调试信息&lt;/p>
+&lt;p>DPRINTF会打印 (1) the current tick . (2)the name of the SimObject that called DPRINFT . (3)whatever format string you passed to the DPRINTF function&lt;/p>
+&lt;h2 id="event-driven-programming">Event-driven programming&lt;/h2>
+&lt;h3 id="creating-a-simple-event-callback">creating a simple event callback&lt;/h3>
+&lt;p>在gem5的事件驱动模型中,每个事件都有一个回调函数,在函数中处理该事件.该函数继承自cppEvent&lt;/p>
+&lt;p>在helloObject中声明一个新函数,函数每次触发的时候会执行processEvent ,.该函数不采用任何参数,也不返回任何内容&lt;/p>
+&lt;p>接下来,添加Event实例. helloObject中使用EventFunctionWrapper允许执行任何函数的实例&lt;/p>
+&lt;p>event的第一个参数是一个std : : function &amp;lt; void (void)&amp;gt;类型的,表示无参数也无返回值&lt;/p>
+&lt;p>[this]{processEvent();}是一个lambda函数,使用[this]捕获当前对象的指针.通过this,lambda函数可以调用类的成员函数或者访问类的成员变量,这里访问了函数processEvent&lt;/p>
+&lt;p>lambda函数可以直接隐式转换为 std::function&amp;lt;void(void)&amp;gt;&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">HelloObject&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">HelloObject&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">HelloObjectParams&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">params&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimObject&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>), &lt;span style="color:#e06c75">event&lt;/span>([&lt;span style="color:#c678dd">this&lt;/span>]{&lt;span style="color:#e06c75">processEvent&lt;/span>();}, &lt;span style="color:#e06c75">name&lt;/span>())
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">HelloExample&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Created the hello object&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="补充lambda函数">补充(lambda函数)&lt;/h4>
+&lt;p>一种匿名函数&lt;/p>
+&lt;p>[捕获列表](参数列表) -&amp;gt; 返回类型{函数体}&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">add&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> [](&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">a&lt;/span>, &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">b&lt;/span>) &lt;span style="color:#56b6c2">-&amp;gt;&lt;/span> &lt;span style="color:#e5c07b">int&lt;/span>{ &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">a&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">b&lt;/span>; };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">auto&lt;/span> &lt;span style="color:#e06c75">sum1&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> [&lt;span style="color:#e06c75">x&lt;/span>,&lt;span style="color:#e06c75">y&lt;/span>](){&lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">x&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">y&lt;/span>;}; &lt;span style="color:#7f848e">// 捕获 x,y
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">auto&lt;/span> &lt;span style="color:#e06c75">sum2&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> [&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">x&lt;/span>,&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">y&lt;/span>](){&lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">x&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">y&lt;/span>;}; &lt;span style="color:#7f848e">//按引用捕获
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="scheduling-events">scheduling events&lt;/h3>
+&lt;p>for the event to be processed , we first have to schedule(调度) the event . for this we use the : cppschedule function. this function schedules some instance of an Event for some time in the future&lt;/p>
+&lt;p>我们会在添加到 &lt;code>HelloObject&lt;/code> 类中的 &lt;code>startup()&lt;/code> 函数里初始调度事件。&lt;code>startup()&lt;/code> 函数是允许 SimObjects 调度内部事件的地方。它在tick = 0时会执行（即从 Python 配置文件中调用 &lt;code>simulate()&lt;/code> 函数时才会执行）。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 在tick = 100 时schedule一次事件
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">HelloObject&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">startup&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">schedule&lt;/span>(&lt;span style="color:#e06c75">event&lt;/span>,&lt;span style="color:#d19a66">100&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="结果">结果&lt;/h3>
+&lt;p>此时的hello_object.cc&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;learning_gem5/part2/hello_object.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;lt;iostream&amp;gt;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#7f848e">// debug
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;base/trace.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;debug/HelloExample.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">namespace&lt;/span> &lt;span style="color:#e06c75">gem5&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">HelloObject&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">HelloObject&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">HelloObjectParams&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">params&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#e06c75">SimObject&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">event&lt;/span>([&lt;span style="color:#c678dd">this&lt;/span>]{&lt;span style="color:#e06c75">processEvent&lt;/span>();}, &lt;span style="color:#e06c75">name&lt;/span>()),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">latency&lt;/span>(&lt;span style="color:#d19a66">100&lt;/span>),&lt;span style="color:#e06c75">timesLeft&lt;/span>(&lt;span style="color:#d19a66">10&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">HelloExample&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Created the hello object&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">HelloObject&lt;/span> &lt;span style="color:#56b6c2">::&lt;/span> &lt;span style="color:#e06c75">processEvent&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">timesLeft&lt;/span>&lt;span style="color:#56b6c2">--&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">HelloExample&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Processing the event&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">timesLeft&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">HelloExample&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Done firing!&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#c678dd">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">schedule&lt;/span>(&lt;span style="color:#e06c75">event&lt;/span>, &lt;span style="color:#e06c75">curTick&lt;/span>() &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">latency&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">HelloObject&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">startup&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">schedule&lt;/span>(&lt;span style="color:#e06c75">event&lt;/span>,&lt;span style="color:#e06c75">latency&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>hello_object.hh&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#ifndef __LEARNING_GEM5_HELLO_OBJECT_HH__
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#define __LEARNING_GEM5_HELLO_OBJECT_HH__
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;params/HelloObject.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;sim/sim_object.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">namespace&lt;/span> &lt;span style="color:#e06c75">gem5&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">HelloObject&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#e06c75">SimObject&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">processEvent&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">EventFunctionWrapper&lt;/span> &lt;span style="color:#e06c75">event&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">Tick&lt;/span> &lt;span style="color:#e06c75">latency&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">timesLeft&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">HelloObject&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">HelloObjectParams&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">p&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">startup&lt;/span>() &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> };
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#endif &lt;/span>&lt;span style="color:#7f848e">// __LEARNING_GEM5_HELLO_OBJECT_HH__
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="向simobjects添加参数">向SimObjects添加参数&lt;/h2>
+&lt;p>gem5 python 能够将参数从Python传递到gem5中的C++对象&lt;/p>
+&lt;h3 id="简单参数">简单参数&lt;/h3>
+&lt;p>可以在HelloObject.py class HelloObject中加入&lt;/p>
+&lt;p>Param.&amp;lt;TypeName&amp;gt;&lt;/p>
+&lt;p>第一个parameter为default value . 第二个为discreption&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-py" data-lang="py">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## time_to_wait is a Latency.Latency takes a value as a time value as a string and converts it into simulator ticks . 默认刻度为1ps. 1ns会自动转化为1000 , Latency parameter&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">time_to_wait&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">Param&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">Latency&lt;/span>(&lt;span style="color:#98c379">&amp;#34;Time before firing the event&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">## int parameter &lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">number_of_fires&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">Param&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">Int&lt;/span>(&lt;span style="color:#d19a66">1&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Number of times to fire the event before &amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#98c379">&amp;#34;goodbye&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>修改hello_object.cc为&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">HelloObject&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">HelloObject&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">HelloObjectParams&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">params&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimObject&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">event&lt;/span>([&lt;span style="color:#c678dd">this&lt;/span>]{ &lt;span style="color:#e06c75">processEvent&lt;/span>(); }, &lt;span style="color:#e06c75">name&lt;/span>() &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#98c379">&amp;#34;.event&amp;#34;&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">myName&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>.&lt;span style="color:#e06c75">name&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">latency&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>.&lt;span style="color:#e06c75">time_to_wait&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">timesLeft&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>.&lt;span style="color:#e06c75">number_of_fires&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">HelloExample&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Created the hello object&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>hello.hh的private加入 const std::string myName;&lt;/p>
+&lt;p>run_hello.py 指定time_to_wait&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">root&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">hello&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">HelloObject&lt;/span>(&lt;span style="color:#e06c75">time_to_wait&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#39;2us&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="其他simobject作为参数">其他SimObject作为参数&lt;/h3>
+&lt;p>直接将goodbyeobject作为HelloObject的参数 ,能直接写 Param.GoodbyeObject的原因应该是GoodByeObject继承的SimObject吧&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">goodbye_object&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">Param&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">GoodbyeObject&lt;/span>(&lt;span style="color:#98c379">&amp;#34;A goodbye object&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>需要去构造goodbyeobject然后再将goodbyeobject作为HelloObject的参数&lt;/p>
+&lt;p>在hello_object.hh中需要包含头文件&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;#34;learning_gem5/part2/goodbye_object.hh&amp;#34;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在HelloObject.py中&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">HelloObject&lt;/span>(&lt;span style="color:#e06c75">SimObject&lt;/span>):
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">...&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">goodbye_object&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">Param&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">GoodbyeObject&lt;/span>(&lt;span style="color:#98c379">&amp;#34;A goodbye object&amp;#34;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>在配置文件hello_goodbye.py中必须是goodbye_object,相当于hello的一个配置选项,但是root.hello这个hello是可以任意取的&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">root&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">hello&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">HelloObject&lt;/span>(&lt;span style="color:#e06c75">time_to_wait&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#39;2us&amp;#39;&lt;/span>,&lt;span style="color:#e06c75">number_of_fires&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">5&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">root&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">hello&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">goodbye_object&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">GoodbyeObject&lt;/span>(&lt;span style="color:#e06c75">buffer_size&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#98c379">&amp;#39;100B&amp;#39;&lt;/span>)
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;pre tabindex="0">&lt;code>bandwidth * bytes_copied
+&lt;/code>&lt;/pre>&lt;p>bandwidth 是带宽,代表每s传输多少个Bit(这里实际是每s传输多少Byte) , bytes_copied代表总共传输的Bytes数,两者相乘代表消耗的时间&lt;/p>
+&lt;p>配置的 bandwidth = 100MB/s bandwidth=9537,所以这个bandwidth = 1/(100MB/s) = 1/1024/1024 = 9.537*10^(-9)s =9537ps&lt;/p>
+&lt;p>配置的bandwidth = 50MB/s , bandwidth = 19073&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 401;
+flex-basis: 964px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213182604593.png" data-size="233x58">
+&lt;img src="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213182604593.png"
+width="233"
+height="58"
+srcset="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213182604593_hu2015761740272110441.png 480w, https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213182604593_hu12518504977208311537.png 1024w"
+loading="lazy"
+alt="image-20241213182604593">
+&lt;/a>
+&lt;figcaption>image-20241213182604593&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>总共100B , saygoodbye一次 13&lt;/p>
+&lt;p>processEvent 7次, 13 *8 = 104 ,够了&lt;/p>
+&lt;h2 id="creating-simobjects-in-the-memory-system">Creating SimObjects in the memory system&lt;/h2>
+&lt;p>创建位于CPU和内存总线之间的简单内存对象&lt;/p>
+&lt;h3 id="gem5请求和响应端口">gem5请求和响应端口&lt;/h3>
+&lt;p>three different memory system modes : timing,atomic and functional .&lt;/p>
+&lt;p>timing mode is theomly mode that produces correct simulation .&lt;/p>
+&lt;p>&lt;em>Atomic mode&lt;/em> is useful for fastforwarding simulation to a region of interest and warming up the simulator. this mode assumes that no events will be generated in the memory system.&lt;/p>
+&lt;p>Function mode is better described as debugging mode . Functional mode is used for things like reading data from the host into the simulator memory. or instance, functional mode is used to load the binary in the &lt;code>process.cmd&lt;/code> from the host into the simulated system’s memory so the simulated system can access it.功能访问应该在读取时返回最新的数据，无论数据在哪里，并且应该在写入时更新所有可能的有效数据（例如，在具有缓存的系统中，可能有多个具有相同地址的有效缓存块）。&lt;/p>
+&lt;h3 id="packets">Packets&lt;/h3>
+&lt;p>Packets are sent across ports . A packet is made up of a &lt;strong>memreq&lt;/strong> which is the memory request object.The MemReq holds information about the original request that initiated the packet such as t&lt;strong>he requestor , the address and the typed of request&lt;/strong> .&lt;/p>
+&lt;p>Packets also have a MemCmd , which is the current command of the packet .此命令可以在数据包的整个生命周期内发生变化.The most common &lt;code>MemCmd&lt;/code> are &lt;code>ReadReq&lt;/code> (read request), &lt;code>ReadResp&lt;/code> (read response), &lt;code>WriteReq&lt;/code> (write request), &lt;code>WriteResp&lt;/code> (write response). There are also writeback requests (&lt;code>WritebackDirty&lt;/code>, &lt;code>WritebackClean&lt;/code>) for caches and many other command types.&lt;/p>
+&lt;p>Packets also either keep the data for the request, or a pointer to the data. There are options when creating the packet whether the data is dynamic (explicitly allocated and deallocated), or static (allocated and deallocated by the packet object)(由数据包对象分配和释放).&lt;/p>
+&lt;p>Finally, packets are used in the classic caches as the unit to track coherency.因此，大部分数据包代码特定于经典缓存一致性协议。但是，数据包用于 gem5 中内存对象之间的所有通信，即使它们不直接涉及一致性（例如，DRAM 控制器和 CPU 模型）。&lt;/p>
+&lt;p>gem5 includes a typedef for it : PacketPtr&lt;/p>
+&lt;h3 id="port-interface">Port interface&lt;/h3>
+&lt;p>request ports and response ports&lt;/p>
+&lt;p>To do this, you create a new class that inherits from either &lt;code>RequestPort&lt;/code> or &lt;code>ResponsePort&lt;/code> for request and response ports,&lt;/p>
+&lt;p>all of the port interfaces require a &lt;code>PacketPtr&lt;/code> as a parameter. Each of these functions (&lt;code>sendTimingReq&lt;/code>, &lt;code>recvTimingReq&lt;/code>, etc.), accepts a single parameter, a &lt;code>PacketPtr&lt;/code>.&lt;/p>
+&lt;p>To send a request packet, the requestor calls &lt;code>sendTimingReq&lt;/code>. In turn, (and in the same callchain), the function &lt;code>recvTimingReq&lt;/code> is called on the responder with the same &lt;code>PacketPtr&lt;/code> as its sole parameter.&lt;/p>
+&lt;p>where the responder is busy when the original request was sent.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 179;
+flex-basis: 430px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213201946502.png" data-size="589x328">
+&lt;img src="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213201946502.png"
+width="589"
+height="328"
+srcset="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213201946502_hu7895636963218854921.png 480w, https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213201946502_hu2675049832876778857.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>when the requestor is busy at the time the responder tries to send a response.&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 162;
+flex-basis: 389px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213202456920.png" data-size="616x380">
+&lt;img src="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213202456920.png"
+width="616"
+height="380"
+srcset="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213202456920_hu4317689210990905296.png 480w, https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213202456920_hu12672958142998574135.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="simple-memory-object">simple memory object&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 99;
+flex-basis: 237px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213203001091.png" data-size="592x597">
+&lt;img src="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213203001091.png"
+width="592"
+height="597"
+srcset="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213203001091_hu13583053307651841828.png 480w, https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241213203001091_hu3189944316771512279.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="补充-c的private-protect-和-public">补充 (c++的prIvate protect 和 public)&lt;/h4>
+&lt;p>private: 只能由该类中的函数、其友元函数访问，不能被其他任何访问，该类的对象也不能访问；&lt;/p>
+&lt;p>protected: 可以被该类中的函数，子类的函数，以及其友元函数访问，不能被该类的对象访问；&lt;/p>
+&lt;p>public: 可以被该类中的函数，子类中的函数，其友元函数访问，也可以由该类的对象访问。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://www.cnblogs.com/DswCnblog/p/5629165.html" target="_blank" rel="noopener"
+>lambda函数&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.cnblogs.com/shiyublog/p/10996062.html" target="_blank" rel="noopener"
+>c++中public,protected,private的区别&lt;/a>&lt;/p>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Gem5_learning</title><link>https://VastCircle.github.io/2024/gem5_learning/</link><pubDate>Mon, 09 Dec 2024 15:11:13 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_learning/</guid><description>&lt;h2 id="配置">配置&lt;/h2>
