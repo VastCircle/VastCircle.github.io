@@ -1,4 +1,493 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 11 Dec 2024 21:00:41 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Failed_to_connetct_socket</title><link>https://VastCircle.github.io/2024/failed_to_connetct_socket/</link><pubDate>Wed, 11 Dec 2024 21:00:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/failed_to_connetct_socket/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 18 Dec 2024 17:03:41 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>SIMD和Vector</title><link>https://VastCircle.github.io/2024/simd/</link><pubDate>Wed, 18 Dec 2024 17:03:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/simd/</guid><description>&lt;h2 id="simd技术简介">SIMD技术简介&lt;/h2>
+&lt;p>&lt;strong>传统的通用处理器都是标量处理器，一条指令执行只得到一个数据结果&lt;/strong>。但对于图像、信号处理等应用，存在大量的数据并行性计算操作，这个时候，提高数据的并行性从而提高运算的性能就显得尤为重要。因此，SIMD技术应运而生。&lt;/p>
+&lt;p>&lt;strong>SIMD的英文全称是Single Instruction Multiple Data，即单指令流多数据技术&lt;/strong>，SIMD的概念是相对于SISD（Single Instruction Single Data，单指令流单数据）提出的。&lt;/p>
+&lt;h2 id="向量计算技术简介">&lt;strong>向量计算技术简介&lt;/strong>&lt;/h2>
+&lt;p>提高数据并行性的另一种方式就是&lt;strong>向量计算技术&lt;/strong>。与传统的SIMD技术一样，其也是通过扩展寄存器位宽，来增加计算的并行度；但不同的是，向量寄存器是可变长度的寄存器，而不像SIMD那样嵌入在操作码中。矢量技术的代表就是RISC-VV扩展指令集和ARM的SVE架构。&lt;/p>
+&lt;h2 id="从mmx到sse--再到avx">从MMX到SSE , 再到AVX&lt;/h2>
+&lt;p>Pentium MMX系列处理器上新引入的MMX指令集开创了x86处理器支持SIMD操作的先河，该指令集定义了8个64-bit宽度的寄存器，每个寄存器的64-bit容量中可以放入八个8-bit长度的整数或四个16-bit长度整数或两个32-bit整数，CPU在识别到MMX指令集的新指令时会自动将寄存器中的数据进行分割计算，这样一来，单个指令就成功操作了多个数据，实现了SIMD&lt;/p>
+&lt;p>但MMX毕竟太嫩，它实际上是通过复用CPU内部x87浮点单元的寄存器来实现SIMD的，所以与运行浮点运算的x87指令集有冲突，两者不能交叉使用，必须先进行切换。另外，由于上述的冲突，它只支持整数操作，在即将要到来的3D时代中显得有些不够用。&lt;/p>
+&lt;p>SSE指令集解决了MMX指令集身上存在的两大问题，通过引入新的独立寄存器解决了与浮点运算间的冲突问题，同时也就支持了浮点SIMD运算.它的寄存器宽度随着处理器架构的进步而达到了128-bit.&lt;/p>
+&lt;p>但Intel准备在未来的Sandy Bridge架构中引入一套新的SIMD指令集，这套新指令集在2008年公布，被命名为高级向量扩展（&lt;strong>A&lt;/strong>dvanced &lt;strong>V&lt;/strong>ector E&lt;strong>x&lt;/strong>tensions）&lt;/p>
+&lt;h2 id="革新的avx越来越宽的寄存器">革新的AVX,越来越宽的寄存器&lt;/h2>
+&lt;p>相比起迭代了多年的SSE系列指令集，AVX指令集带来了巨大的革新，其中最为主要的是，它在兼容SSE指令集性的同时，将SSE时代最大宽度为128-bit的寄存器拓宽到了256-bit&lt;/p>
+&lt;p>但如果以为Intel会就此停下脚步的话，那就大错特错了，他们很快捣鼓出了更宽的AVX-512指令集，顾名思义，其寄存器宽度再次加倍，来到512-bit。&lt;/p>
+&lt;p>宽度越大，处理器的计算能力也就越强，尤其是在浮点运算方面，理论上提升有一倍之多，而实际应用中，如果优化得当，其提升幅度还要大一些。但是，新指令集在带来性能增长的同时也带来了另一个让人感到头痛的问题——功耗。&lt;/p>
+&lt;h2 id="举例">举例&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// main.cpp
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;lt;iostream&amp;gt;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;lt;immintrin.h&amp;gt; // 包含 AVX 指令集头文件&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">matrix_addition_avx&lt;/span>(&lt;span style="color:#e5c07b">float&lt;/span>&lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">A&lt;/span>, &lt;span style="color:#e5c07b">float&lt;/span>&lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">B&lt;/span>, &lt;span style="color:#e5c07b">float&lt;/span>&lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">C&lt;/span>, &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">+=&lt;/span> &lt;span style="color:#d19a66">8&lt;/span>) { &lt;span style="color:#7f848e">// 每次处理 8 个元素（AVX 可以处理 256 位，即 8 个单精度浮点数）
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">__m256&lt;/span> &lt;span style="color:#e06c75">vecA&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_mm256_loadu_ps&lt;/span>(&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">A&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">__m256&lt;/span> &lt;span style="color:#e06c75">vecB&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_mm256_loadu_ps&lt;/span>(&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">__m256&lt;/span> &lt;span style="color:#e06c75">vecC&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_mm256_add_ps&lt;/span>(&lt;span style="color:#e06c75">vecA&lt;/span>, &lt;span style="color:#e06c75">vecB&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">_mm256_storeu_ps&lt;/span>(&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">C&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>], &lt;span style="color:#e06c75">vecC&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#61afef;font-weight:bold">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">8&lt;/span>; &lt;span style="color:#7f848e">// 假设矩阵大小为 8x8
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#e06c75">A&lt;/span>[&lt;span style="color:#d19a66">64&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> { &lt;span style="color:#7f848e">/* ... */&lt;/span> }; &lt;span style="color:#7f848e">// 初始化矩阵 A
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#e06c75">B&lt;/span>[&lt;span style="color:#d19a66">64&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> { &lt;span style="color:#7f848e">/* ... */&lt;/span> }; &lt;span style="color:#7f848e">// 初始化矩阵 B
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#e06c75">C&lt;/span>[&lt;span style="color:#d19a66">64&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> { &lt;span style="color:#d19a66">0&lt;/span> }; &lt;span style="color:#7f848e">// 结果矩阵 C
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">matrix_addition_avx&lt;/span>(&lt;span style="color:#e06c75">A&lt;/span>, &lt;span style="color:#e06c75">B&lt;/span>, &lt;span style="color:#e06c75">C&lt;/span>, &lt;span style="color:#e06c75">size&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 输出结果
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">cout&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">C&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#98c379">&amp;#34; &amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">cout&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">endl&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;code>_m256 vecA = _mm256_loadu_ps(&amp;amp;A[i * size + j])&lt;/code>：从矩阵 A 中加载 8 个浮点数（一次性处理 256 位数据），存储在一个名为 vecA 的 __m256 类型变量中。&lt;/p>
+&lt;p>&lt;code>__m256 vecB = _mm256_loadu_ps(&amp;amp;B[i * size + j])&lt;/code>：同样地，从矩阵 B 中加载 8 个浮点数，存储在一个名为 vecB 的 __m256 类型变量中。&lt;/p>
+&lt;p>&lt;code>__m256 vecC = _mm256_add_ps(vecA, vecB)&lt;/code>：使用 AVX 指令 _mm256_add_ps 对 vecA 和 vecB 中的浮点数分别进行逐元素加法，并将结果存储在名为 vecC 的 __m256 类型变量中。&lt;/p>
+&lt;p>&lt;code>_mm256_storeu_ps(&amp;amp;C[i * size + j], vecC)&lt;/code>：将 vecC 中的 8 个加法结果存储回矩阵 C 的相应位置&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;lt;iostream&amp;gt;&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#include&lt;/span> &lt;span style="color:#7f848e">&amp;lt;immintrin.h&amp;gt; // 包含 AVX-512 指令集头文件&lt;/span>&lt;span style="color:#7f848e">
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">matrix_addition_avx512&lt;/span>(&lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">A&lt;/span>, &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>, &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">C&lt;/span>, &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">+=&lt;/span> &lt;span style="color:#d19a66">16&lt;/span>) { &lt;span style="color:#7f848e">// 每次处理 16 个元素（AVX-512 可以处理 512 位，即 16 个单精度浮点数）
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">__m512&lt;/span> &lt;span style="color:#e06c75">vecA&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_mm512_loadu_ps&lt;/span>(&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">A&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">__m512&lt;/span> &lt;span style="color:#e06c75">vecB&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_mm512_loadu_ps&lt;/span>(&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>]);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">__m512&lt;/span> &lt;span style="color:#e06c75">vecC&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">_mm512_add_ps&lt;/span>(&lt;span style="color:#e06c75">vecA&lt;/span>, &lt;span style="color:#e06c75">vecB&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">_mm512_storeu_ps&lt;/span>(&lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">C&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>], &lt;span style="color:#e06c75">vecC&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#61afef;font-weight:bold">main&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">16&lt;/span>; &lt;span style="color:#7f848e">// 假设矩阵大小为 16x16
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#e06c75">A&lt;/span>[&lt;span style="color:#d19a66">256&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> { &lt;span style="color:#7f848e">/* ... */&lt;/span> }; &lt;span style="color:#7f848e">// 初始化矩阵 A
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#e06c75">B&lt;/span>[&lt;span style="color:#d19a66">256&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> { &lt;span style="color:#7f848e">/* ... */&lt;/span> }; &lt;span style="color:#7f848e">// 初始化矩阵 B
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">float&lt;/span> &lt;span style="color:#e06c75">C&lt;/span>[&lt;span style="color:#d19a66">256&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> {&lt;span style="color:#d19a66">0&lt;/span>}; &lt;span style="color:#7f848e">// 结果矩阵 C
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#61afef;font-weight:bold">matrix_addition_avx512&lt;/span>(&lt;span style="color:#e06c75">A&lt;/span>, &lt;span style="color:#e06c75">B&lt;/span>, &lt;span style="color:#e06c75">C&lt;/span>, &lt;span style="color:#e06c75">size&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 输出结果
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">cout&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">C&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#98c379">&amp;#34; &amp;#34;&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">cout&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">endl&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://developer.aliyun.com/article/808364" target="_blank" rel="noopener"
+>RISC-V生态全景解析(五):Vector向量计算技术与SIMD技术的对比&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://baijiahao.baidu.com/s?id=1670915069941232375&amp;amp;wfr=spider&amp;amp;for=pc" target="_blank" rel="noopener"
+>AVX-512&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Vector_runahead</title><link>https://VastCircle.github.io/2024/vector_runahead/</link><pubDate>Tue, 17 Dec 2024 14:50:55 +0800</pubDate><guid>https://VastCircle.github.io/2024/vector_runahead/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
+&lt;p>内存墙对许多现代工作负载的性能造成了重大限制。这些应用程序具有复杂的依赖间接内存访问链，即使是最先进的微架构预取器也无法获取。结果是，当前无序超标量处理器的大部分时间都处于停滞状态。但是，为了实现高内存级别的并行性，标准的提前执行会在缓存未命中之前跳过。在现代工作负载中，这意味着它只预取每个依赖链中的第一个缺少缓存的负载。我们认为，这不是一个根本的限制。如果 runahead 是在 cache 未命中时停止以生成依赖链负载，那么如果它可以同时在多个 cache 上停止，则可以重新获得性能。&lt;/p>
+&lt;h2 id="introduction">introduction&lt;/h2>
+&lt;p>1.Runahead执行可以预取独立的Load Miss,但无法处理由相关负载未命中链构成的复杂间接访问模式 (间接加载链:一个加载指令的地址依赖于另一个加载指令的结果),Runahead 执行无法解决数据之间的&lt;strong>依赖关系&lt;/strong>，它仅能处理&lt;strong>无依赖的独立加载&lt;/strong>。&lt;/p>
+&lt;p>2.Runahead执行仍然要经过正常的流水线前端,受限于处理器前端的Fetch/Decode/Rename宽度,如果未来指令流中存在大量 &lt;strong>非 Load 指令&lt;/strong>（如算术运算、分支指令等），它们会占据前端处理带宽，导致处理器在进入 Runahead 模式后生成新的 &lt;strong>Load Miss&lt;/strong> 的速率非常低。&lt;/p>
+&lt;p>3.Runahead执行的推测深度受限于处理器后端的资源 .包括物理寄存器数量,指令队列插槽 .虽然指令的执行结果不会被提交，但它们仍然占用后端资源（如物理寄存器和调度队列）。一旦这些资源耗尽，Runahead 执行就会停止，无法继续生成新的内存请求。&lt;/p>
+&lt;p>Vector Runahead &lt;strong>延长 Runahead 执行的时间&lt;/strong>，直到依赖链中的&lt;strong>所有加载指令都被发出&lt;/strong>，而不仅仅停在第一个阻塞的 Load Miss,这使得 Vector Runahead 能够预取整个负载链。&lt;/p>
+&lt;p>Vector Runahead 通过将标量指令重新解释为矢量运算来矢量化 runahead 指令流，以便在不同的偏移量处生成许多不同的缓存未命中。等效增加了取指/解码带宽,同时需要非常少的后端资源，&lt;/p>
+&lt;p>Vector Runahead 通过向量展开和流水线发出多轮这些矢量化指令，以更深入地推测并进一步增加有效的提前获取/解码带宽，&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Decoupled_Vector_Runahead</title><link>https://VastCircle.github.io/2024/decoupled_vector_runahead/</link><pubDate>Tue, 17 Dec 2024 12:28:27 +0800</pubDate><guid>https://VastCircle.github.io/2024/decoupled_vector_runahead/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
+&lt;p>我们提出了解耦矢量预取 （DVR），这是一种内核内预取技术，与主应用程序线程分开执行，它利用大量内存级并行性来提高具有间接内存访问功能的应用程序的性能。DVR 在运行时动态推断循环边界，识别跨步负载，并矢量化作为间接链一部分的后续指令。它会主动为将来的负载发出内存访问，即使无序内核尚未停止，也会将其数据带入 L1 缓存，从而为主线程提供及时的预取。DVR 可以在运行时调整矢量化程度，在内部循环的多次调用中对同一间接内存访问链进行矢量化，并有效地处理沿矢量化链的分支发散。DVR 作为按需、推测性、按顺序、轻量级硬件子线程与内核内的主线程一起运行，并且产生的最小硬件开销仅为 1139 字节。相对于大型超标量 5 宽无序基线和 Vector Runahead（一种用于加速乱序处理器上的间接内存访问的最新微架构技术），DVR 为一组图形分析、数据库和 HPC 工作负载提供了 2.4× 和 2× 的性能。&lt;/p>
+&lt;h2 id="introduction">introduction&lt;/h2>
+&lt;p>Vector Runahead 不像早期的 runahead 提案那样跳过工作 [29,40,62,66] 来不断发现内存级并行性，而是将在 runahead 模式下执行的瞬态执行重新格式化为主要基于循环级并行性，遵循程序中未来循环迭代中许多不同依赖内存访问链的独立组，并以矢量化方式运行它们以减少前端和后端管道资源需求。&lt;/p>
+&lt;p>传统 Runahead 依赖于主线程的停滞条件，当处理器在 &lt;strong>ROB（Reorder Buffer）&lt;/strong> 上停滞时才启动 Runahead 模式。DVR在一个轻量级,有序的子线程上下文中运行runahead进程 ,即使内核没有在完整的ROB上停滞,也允许启动,并允许主线程继续在其预期的计算上取得进展.&lt;/p>
+&lt;p>其次，它基于 VR 构建，在推测性提前上下文中的许多未来循环迭代产生的许多动态生成的 “通道” 上实现了 GPU 风格的发散和再收敛。&lt;strong>发散&lt;/strong>：动态生成的通道可以独立执行，允许预取大量潜在的内存请求。&lt;strong>再收敛&lt;/strong>：将这些发散的执行路径重新合并，从而有效组织内存请求，避免资源浪费。&lt;/p>
+&lt;p>第三，它在主计算的线程中执行发现模式，以精确预测将访问多少个未来的循环，以限制不准确的预取。当 DVR 发现 &lt;strong>单个发现模式&lt;/strong>（仅外部循环）不足以覆盖足够的未来循环时，它进一步&lt;strong>深入内部循环&lt;/strong>,然后可以有效地将所有这些输入矢量化在一起，以实现极端的内存级并行性.&lt;/p>
+&lt;p>DVR 技术可以&lt;strong>大幅提前&lt;/strong>预取那些会导致缓存未命中的 load 指令,避免它们在 ROB 中长时间占据资源&lt;/p>
+&lt;p>DVR 意味着 runahead 不再是乱序处理器的超大指令窗口的替代品&lt;/p>
+&lt;h2 id="background">background&lt;/h2>
+&lt;h3 id="间接内存访问-indirect-memory-accesses">间接内存访问 (Indirect Memory Accesses)&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 341;
+flex-basis: 819px"
+>
+&lt;a href="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217200930813.png" data-size="645x189">
+&lt;img src="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217200930813.png"
+width="645"
+height="189"
+srcset="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217200930813_hu18053708814167547954.png 480w, https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217200930813_hu15723172993509979074.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>数组A[i]是顺序访问的.但是,访问数组 B 的索引是通过对 A 的特定索引处的值进行哈希处理来计算的，而数组 C 的索引是通过对 B 的访问进行哈希处理来计算的。也就是说，对 C 的访问依赖于对 B 的访问，而对 B 的访问又依赖于对 A 的访问。对 B 和 C 的访问分别称为间接内存访问的第一级和第二级，数组 A 的访问和对数组 C 的访问之间的指令链称为间接链.&lt;/p>
+&lt;p>当访问需要多级间接寻址时，Runahead 的执行将因为前一级 Load 未完成而停滞，无法预取后续地址。对于图 1 中的示例，根据工作跳过技术，数组 C 的输入将无效，或者无法在提前终止之前返回.&lt;/p>
+&lt;p>受到处理器前端宽度和runahead 间隔的限制。&lt;/p>
+&lt;h3 id="vector-runahead">Vector runahead&lt;/h3>
+&lt;p>&lt;strong>自动生成不同索引&lt;/strong>,在遇到间接链开始的跨步 &lt;code>load&lt;/code> 时，VR 会自动推测出多个不同偏移量的索引地址。这些地址会被解析并产生多个新的指令，模拟未来循环迭代中的不同访问位置。&lt;/p>
+&lt;p>将不同索引处的指令进行&lt;strong>重排序&lt;/strong>，并同时发送多个 &lt;code>load&lt;/code> 指令到内存系统。当处理器遇到 &lt;code>load&lt;/code> 指令链时，不是按顺序执行一个接一个的加载，而是&lt;strong>并行等待多个加载&lt;/strong>返回。&lt;/p>
+&lt;p>向量化标量指令以节约后端资源,将多个重排序的标量指令&lt;strong>分组为向量&lt;/strong>指令。&lt;strong>向量化&lt;/strong>使得多个 &lt;code>load&lt;/code> 或计算操作可以同时发出，并通过一个向量操作完成。&lt;/p>
+&lt;p>延迟终止,生成完整的内存访问链.继续运行 Runahead 模式，直到生成完整的间接内存访问链。通过这种&lt;strong>延迟终止&lt;/strong>，VR 能够覆盖更多的内存加载并提高预取的覆盖范围。&lt;/p>
+&lt;h2 id="motivation">Motivation&lt;/h2>
+&lt;h3 id="vector-runahead-的劣势">Vector Runahead 的劣势&lt;/h3>
+&lt;ol>
+&lt;li>
+&lt;p>ROB增大时性能提升减少 ,ROB的大小一直在增加,需要跟多周期才能填充,进入runahead模式的机会随着ROB大小的增大而减少 .因此为了能够最大限度的利用预取机会,&lt;/p>
+&lt;p>&lt;strong>VR不能等待full-ROB stall .&lt;/strong>&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>在**矢量超前执行（Vector Runahead, VR）**中，超前执行模式的终止是基于将整个间接内存访问链中的所有加载指令进行矢量化并生成预取。这意味着，尽管原本导致重排序缓冲区（ROB）填满的加载指令可能已经从内存中返回，但 VR 依然保持超前执行状态，直到处理完所有相关的加载指令。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>无法适应运行时特征。Vector Runahead 尝试为每个标量负载生成尽可能多的收集。**目标是通过保持所有未命中状态保持寄存器 （MSHR） 被未完成的内存访问占用来实现高内存级并行性。**对于类似于广度优先搜索,循环长度与图的大小和结构相关,这意味着Vector Runahead 会预取大量数据，而这些数据在真实执行中永远不会被访问.&lt;/p>
+&lt;/li>
+&lt;/ol>
+&lt;p>​ &lt;strong>VR 需要 （i） 了解它运行的每个循环的数据依赖性的动态迭代次数，以避免获取无用的数据，以及 （ii） 每次运行时更新它以响应最新的运行时值&lt;/strong>&lt;/p>
+&lt;ol start="4">
+&lt;li>无法矢量化同个循环的多个调用.希望不仅从循环内部运行许多加载，而且同时从不同的外部循环运行许多不同版本的内循环。&lt;/li>
+&lt;/ol>
+&lt;p>如果动态确定单个循环太小而无法使内存系统饱和，VR 需要提前查看同一循环的许多未来迭代，方法是向前跳以发现来自将在不久的将来执行的不同外部循环迭代的相同代码的输入。&lt;/p>
+&lt;ol start="5">
+&lt;li>在 &lt;strong>Vector Runahead (VR)&lt;/strong> 执行中，控制流分歧（Control-Flow Divergence）是一个挑战. 一旦在矢量化指令集中发生控制流分歧，VR 将失去对所有分支路径的跟踪，无法继续执行预取操作. 就是if 的存在会使得直接跳出循环,使得后续的预取全部失效.&lt;/li>
+&lt;/ol>
+&lt;p>GPU的单指令多线程(SIMT)模型,支持分支重合和分支分歧&lt;/p>
+&lt;p>&lt;strong>分支分歧&lt;/strong>：当某个矢量化通道在执行过程中遇到控制流分歧时，VR 可以允许每个通道独立地执行不同的路径，就像在 GPU 中，线程可以在遇到分支时分别执行不同的路径。&lt;/p>
+&lt;p>&lt;strong>分支重合&lt;/strong>：在分支结束后，VR 可以重新将所有矢量化通道合并到一个统一的控制流中，避免各个通道分支的不同执行路径对整体性能的影响。&lt;/p>
+&lt;h2 id="dvr微架构">DVR微架构&lt;/h2>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 271;
+flex-basis: 652px"
+>
+&lt;a href="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217210543320.png" data-size="1348x496">
+&lt;img src="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217210543320.png"
+width="1348"
+height="496"
+srcset="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217210543320_hu9939517555593631683.png 480w, https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241217210543320_hu10285306206105120918.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>跨步检测器(stride detector)从管道的调度和执行(dispatch and execute)阶段获取有关负载的信息。一旦检测到跨步，DVR 就会进入发现模式(Discovery Mode)，该模式使用污点跟踪器和循环绑定检测器(Taint Tracker and Loop-Bound Detector)来发现后续运行的信息。如果发现模式发现循环中需要向量化的元素太少，则将使用嵌套发现模式(Nested Discovery Mode)逻辑。一旦发现模式完成，向量程序计数器 vector program counter (PCv) 将填充跨步加载的 PC，VRAT 将填充跨步加载地址和主线程标量寄存器的副本，以及解耦的向量运行子线程将启动。再收敛堆栈(Reconvergence Stack)将在矢量通道之间的控制流出现分歧时进行处理。&lt;/p>
+&lt;p>DVR 通过引入一个与主线程并行执行的 &lt;strong>专用子线程&lt;/strong>，来预取未来的内存访问，从而在不干扰主线程执行的情况下提高性能。&lt;/p>
+&lt;p>核发现它正在执行具有相关负载的循环时，基于可用于预测未来循环迭代的跨步负载，将在与当前正在执行的主线程相同的内核上激活专用的 vector-runahead 子线程。此子线程是动态生成的，用于将许多内存访问预取到将来，但不会影响主线程的语义。vector-runahead 子线程在同一内核上与主线程一起运行，很像线程在同步多线程 （SMT） [91] 中协同执行的方式，不同之处在于子线程是微架构生成的、瞬态的（预取到缓存中而不是实现实际计算）、推测性的、重新排序以实现极高的内存级并行性，并且明显更简单，即子线程按顺序执行。&lt;/p>
+&lt;p>为了从这个按顺序向量运行子线程实现高内存级并行性，即使遵循使子线程停顿的依赖负载链，我们使用单指令多线程 （SIMT） 数据级并行性 [54]，从前端执行大量每条指令，每条指令同时代表不同的循环迭代，从而预取到很远的未来。由于这种情况是连续发生的，并且与主线程的执行重叠，因此大多数主乱序线程的内存访问在到达 L1 时都会命中 - 因此，即使对于具有巨大窗口的超大型处理器，也可以实现显著的加速。&lt;/p>
+&lt;h3 id="41-discovery-mode">4.1 Discovery Mode&lt;/h3>
+&lt;p>系统需要识别一个合适的诱导变量加载（induction-variable load），以便从中派生出多个未来循环的副本.这个过程首先通过检测一个&lt;strong>步幅加载&lt;/strong>来开始，步幅加载是指访问内存时采用规律的地址序列（即具有可预测步幅的加载）。Discovery Mode的目的（i） 检查跨步负载是否是最适合 DVR 的候选者，通过成为最内层的跨步负载，（ii） 派生循环边界，以确定要生成多少个推测性向量预取，以及 （iii） 发现是否有任何基于跨步负载的依赖负载可以由 vector-runahead 子线程适当地预取。Discovery Mode 通过循环的一次迭代跟踪主线程的执行，直到它再次达到跨步加载，此时它退出 Discovery Mode。&lt;/p>
+&lt;h4 id="411-最内层步幅加载检测">4.1.1 最内层步幅加载检测&lt;/h4>
+&lt;p>一旦检测到初始的步幅加载并进入&lt;strong>发现模式（Discovery Mode）&lt;/strong>，系统会继续跟踪主线程的执行，检测其他可能更适合启动向量超前执行的步幅加载。特别是，系统可能会发现某个步幅加载属于一个更内层的循环，且如果在向量超前执行模式下预取它们的未来迭代，这些加载将更加及时。因此，&lt;strong>步幅加载检测&lt;/strong>的目标是识别最合适的内层循环加载。(对于内层循环,确实会更快的进入steady状态)&lt;/p>
+&lt;h5 id="步幅加载检测流程">步幅加载检测流程：&lt;/h5>
+&lt;ol>
+&lt;li>&lt;strong>使用参考预测表（RPT）&lt;/strong>： 步幅加载检测是通过使用**参考预测表（RPT）**来完成的。RPT跟踪所有步幅加载及其对应的步幅。RPT中保存了每个步幅加载的位图（bit-map），每个条目对应一个加载，且每个条目中有一位用于表示该步幅加载的状态。&lt;/li>
+&lt;li>&lt;strong>检测新步幅加载&lt;/strong>： 系统会保持一个寄存器，初始值为零，并且每个RPT条目都有一个对应的位。当一个步幅加载被检测到时，它会将对应的位设置为1。如果在&lt;strong>发现模式&lt;/strong>中，在当前目标步幅加载之前，已经见过相同的步幅加载地址（程序计数器PC），并且对应位已经被设置为1，则表示这个新步幅加载属于一个更内层的循环。&lt;/li>
+&lt;li>&lt;strong>切换到更内层步幅加载&lt;/strong>： 当检测到新的步幅加载属于更内层循环时，系统会切换到该步幅加载上继续执行&lt;strong>发现模式&lt;/strong>。这时需要重置之前的寄存器和其他相关的状态信息，如&lt;strong>VTT&lt;/strong>（向量目标表）和&lt;strong>FLR&lt;/strong>（加载结果队列），以确保新的步幅加载被正确处理。&lt;/li>
+&lt;li>&lt;strong>选择触发步幅&lt;/strong>： 系统可以在同一个循环中向量化多个步幅加载（例如，因循环展开导致的多个步幅加载）。在这种情况下，系统会选择一个步幅加载作为向量化的触发器，通常优先选择最内层的步幅加载，因为它会更频繁且更及时地被执行。&lt;/li>
+&lt;/ol>
+&lt;h5 id="补充rpt">补充(RPT)&lt;/h5>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 148;
+flex-basis: 355px"
+>
+&lt;a href="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218114917559.png" data-size="680x459">
+&lt;img src="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218114917559.png"
+width="680"
+height="459"
+srcset="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218114917559_hu1241057847065859796.png 480w, https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218114917559_hu6107072329876365025.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 130;
+flex-basis: 314px"
+>
+&lt;a href="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218115252006.png" data-size="588x449">
+&lt;img src="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218115252006.png"
+width="588"
+height="449"
+srcset="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218115252006_hu9025556592825104260.png 480w, https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218115252006_hu13549264763494486546.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>correct : addr = prev_addr + stride , incorrect : addr != prev_addr + stride&lt;/p>
+&lt;p>A.1.没有对应的条目。指令输入到RPT中，prev addr字段设置为addr，stride设置为0，state设置为initial&lt;/p>
+&lt;p>A.2.有相应的条目。然后：&lt;/p>
+&lt;p>When incorrect and state = initial , Set prev_addr to addr , stride to (addr - prev_addr) ,and state to transient&lt;/p>
+&lt;p>when correct and (state = initial ,transient , or steady), set prev_addr to addr , leave stride unchanged ,and set state to steady&lt;/p>
+&lt;p>when incorrect and state = steady: set prev_addr to addr , leave stride unchanged , and set state to initial&lt;/p>
+&lt;p>when incorrect and state = transient , set prev_addr to addr , stride to addr - prev_addr and state = no prediction&lt;/p>
+&lt;p>when correct and state = no prediction , set prev_addr to addr , leave stride unchange , and set state to transient&lt;/p>
+&lt;p>when incorrect and state = no prediction : set prev_addr to addr , stride to addr - prv_addr , and leave state unchanged&lt;/p>
+&lt;p>和分支预测类似, 在 steady 状态时,两次连续的错误才会修改 stride&lt;/p>
+&lt;p>在initial , transient , 和 steady状态如果miss会去启动预取&lt;/p>
+&lt;h4 id="412-依赖加载检查dependent-load-checking">4.1.2 依赖加载检查（Dependent-Load Checking）&lt;/h4>
+&lt;p>为了使向量超前执行（DVR）触发有意义，它必须带来比简单的步幅预取器更有用的数据到缓存中。我们假设系统中总会有一个步幅预取器，并且始终保持启用（即使向量超前执行并未触发）。这意味着，必须有更多依赖于通过步幅检测器识别出的值的加载操作，才有必要启动向量超前执行。&lt;/p>
+&lt;p>为此，我们使用一个小型的&lt;strong>向量污染跟踪器&lt;/strong>（Vector Taint Tracker，VTT），它为每个架构整数寄存器分配一个比特位，以标识将来会被向量化的指令。&lt;/p>
+&lt;p>&lt;strong>初始化VTT&lt;/strong>： 在进入发现模式（Discovery Mode）时，VTT被初始化为全零，除了触发步幅加载的目标架构寄存器，该寄存器的位被设置为1。也就是说，我们将初始步幅加载指令的目标寄存器的污染位设置为1，表示该寄存器将在未来的指令中被使用并可能被向量化。&lt;/p>
+&lt;p>&lt;strong>污染传播&lt;/strong>： 在发现模式中，污染通过指令进行传播。具体来说，如果某条指令的源寄存器已经被污染（VTT中的比特位为1），那么该指令的目标寄存器的污染位会被设置为1。这样，后续的指令就知道它们依赖于先前的污染寄存器。&lt;/p>
+&lt;p>&lt;strong>重置污染位&lt;/strong>： 如果某条指令写入的寄存器的污染位已经设置为1，但它的源寄存器并未被污染，那么该目标寄存器的污染位会被重置为0。这是因为该指令并没有依赖于污染寄存器的内容，所以它不需要向量化。&lt;/p>
+&lt;p>&lt;strong>最终加载寄存器（FLR）&lt;/strong>： 每当某个加载指令的输入被污染时，最终加载寄存器（Final-Load Register，FLR）会更新为该加载指令的程序计数器（PC）。FLR用于跟踪&lt;strong>从触发步幅加载&lt;/strong>开始的依赖链中最后一个加载指令的PC。&lt;/p>
+&lt;h4 id="413-循环边界推断loop-bound-inference">4.1.3 循环边界推断(Loop-Bound Inference)&lt;/h4>
+&lt;p>它决定了在 &lt;strong>Discovery Mode&lt;/strong> 阶段，应该为当前内循环执行多少次预测性的向量预取（speculative vector prefetches）。&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>检测循环开始&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>在 &lt;strong>Discovery Mode&lt;/strong> 中，首先会检测到一个向后跳转的分支（backward branch），这个分支指示一个循环的开始。&lt;/li>
+&lt;li>通过该分支的比较指令（compare instruction）来确定循环的边界（loop bound）。具体而言，这个比较指令提供了控制流是否应继续执行的依据，并且它的操作数会帮助推断循环的边界。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>重要数据结构&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>LCR (Last-Compare Register)&lt;/strong>：用于保存上一个比较指令的源和目标寄存器的 ID。&lt;/li>
+&lt;li>&lt;strong>SBB (Seen-Branch Bit)&lt;/strong>：这个标志位用于记录是否已经处理过这个分支。每次更新 &lt;strong>Final-Load Register (FLR)&lt;/strong> 时，&lt;strong>LCR&lt;/strong> 和 &lt;strong>SBB&lt;/strong> 都会被清零。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>检查比较指令与分支&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>当发现一个比较指令并且 &lt;strong>SBB&lt;/strong> 为零时，会将比较指令的源和目标寄存器的 ID 存入 &lt;strong>LCR&lt;/strong>。&lt;/li>
+&lt;li>如果后续遇到一个分支，且该分支的源寄存器与 &lt;strong>LCR&lt;/strong> 中保存的目标寄存器相匹配，并且该分支跳转的目标地址小于或等于 &lt;strong>striding load&lt;/strong> 的程序计数器（PC），则表示当前分支属于该循环，更新 &lt;strong>SBB&lt;/strong>，以指示不再修改 &lt;strong>LCR&lt;/strong>，直到发现新的最终加载指令。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>循环边界推断&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>通过进入 &lt;strong>Discovery Mode&lt;/strong> 和离开 &lt;strong>Discovery Mode&lt;/strong> 时的两个检查点，我们可以查看寄存器文件的状态。&lt;/p>
+&lt;/li>
+&lt;li>
+&lt;p>比较指令的输入寄存器的映射关系：&lt;/p>
+&lt;ul>
+&lt;li>
+&lt;p>如果其中一个寄存器在 Discovery Mode期间保持不变，而另一个发生了变化，我们就可以推断出：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>常量值&lt;/strong>（不变寄存器的值）作为循环的边界（loop bound）。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>变化值的差异&lt;/strong>（变化寄存器的值）作为循环的增量（loop increment）。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>通过这些信息，我们可以准确推测出循环的剩余迭代次数。&lt;/p>
+&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>失败的情况&lt;/strong>：&lt;/p>
+&lt;ul>
+&lt;li>如果在 &lt;strong>Discovery Mode&lt;/strong> 中无法找到合适的匹配（即没有找到合适的比较指令或者无法推断出循环的边界），则默认为执行 &lt;strong>128 次迭代&lt;/strong>，这是 DVR 的最大迭代次数。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h3 id="42-vector-runahead-subthread-operation">4.2 Vector-Runahead Subthread Operation&lt;/h3>
+&lt;p>一旦发现模式识别出跨步负载、其跨步、其依赖链以及内部循环的剩余迭代，一旦主线程再次达到候选跨步负载，就会生成向量运行超前子线程。子线程从&lt;strong>跨步加载开始，到存储在 FLR 中的 PC 结束&lt;/strong>，其目标是推测性地预取大量（在我们的设置中最多 128 个）矢量化副本。特别是，矢量化器通过使用其步幅生成的矢量化副本来替换步幅负载。未来指令流中依赖于跨步负载的任何指令也会被矢量化。&lt;/p>
+&lt;p>对于下面这一段程序,Vector Runahead thread 应该是从lw r4,0(r2)到 lw r7,0(r1)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 146;
+flex-basis: 351px"
+>
+&lt;a href="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218161358613.png" data-size="530x362">
+&lt;img src="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218161358613.png"
+width="530"
+height="362"
+srcset="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218161358613_hu10767954509094571583.png 480w, https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218161358613_hu8519797815985386616.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>子线程使用与主线程相同的获取、解码和执行单元。子线程指令是从前端缓冲区生成的，前端缓冲区通过保存解码的微操作（在我们的设置中为八个）将提取阶段与管道的其余部分解耦。虽然子线程指令使用相同的执行单元，但它们使用不同的向量发出寄存器（VIR）——而不是乱序指令队列，因为它是有序的——来处理向量指令副本的执行。每当主线程没有为同一执行端口准备好指令时，就会发出向量运行子线程的发出寄存器中的指令。&lt;/p>
+&lt;h4 id="421-vector-register-allocation-table">4.2.1 Vector Register Allocation Table&lt;/h4>
+&lt;p>VRAT（向量寄存器分配表）用于管理子线程（Vector Runahead Subthread）的&lt;strong>标量架构寄存器到物理寄存器&lt;/strong>的映射关系。即使子线程是有序的，我们仍然需要重命名它的架构寄存器，因为它与&lt;strong>主线程共享物理标量和向量寄存器文件&lt;/strong>.标量架构寄存器可以重命名为 （i） 所有矢量通道中的相同标量物理寄存器，如果架构寄存器未矢量化且通道之间没有控制流发散，或 （ii） 多个矢量物理寄存器，其中架构寄存器已矢量化或存在控制流发散。&lt;/p>
+&lt;p>为了初始化 VRAT，主线程中的所有架构寄存器都分配了一个新的物理标量寄存器，以将子线程与其主线程解耦,当跨步负载被发送到 VIR 时，我们分配 16 个向量（例如 AVX-512）物理寄存器来映射负载的目标架构寄存器。与乱序处理器不同，物理寄存器不会随每条新指令重新映射，因为重命名不会试图删除 WAW 或 WAR 依赖项，即子线程按程序顺序执行。&lt;/p>
+&lt;p>物理寄存器被覆盖后(指的是它的值被后续的指令取代了)，将返回到空闲列表。被覆盖的寄存器会立即释放，前提是它们不用作发射指令的源寄存器,and tracked in the Vector Issue Register via the ‘dead-source’ bits&lt;/p>
+&lt;p>&lt;strong>VRAT 的寄存器分配规则&lt;/strong>&lt;/p>
+&lt;ol>
+&lt;li>
+&lt;p>&lt;strong>子线程中寄存器的分配触发条件&lt;/strong> 子线程的物理寄存器分配只发生在以下两种情况：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>源寄存器被向量化，但目标寄存器尚未向量化&lt;/strong>：
+在这种情况下，目标寄存器需要分配 &lt;strong>16 个空闲的向量物理寄存器&lt;/strong>。&lt;/li>
+&lt;li>&lt;strong>目标寄存器已被向量化，但即将被标量指令覆盖&lt;/strong>：
+这种情况可能是由于原始代码中的写后写（WAW）依赖导致，目标寄存器会被分配到&lt;strong>空闲标量物理寄存器&lt;/strong>。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>处理控制流分歧&lt;/strong> 当由于&lt;strong>分支跳转（Branch Divergence）&lt;/strong>，部分向量 lanes 被禁用时：&lt;/p>
+&lt;ul>
+&lt;li>只有相关的 lanes 的寄存器会被重命名，而非所有 lanes。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>
+&lt;p>&lt;strong>寄存器释放策略&lt;/strong>&lt;/p>
+&lt;ul>
+&lt;li>当寄存器被覆盖时，立即将其归还到空闲列表，前提是它不再被用作源寄存器。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ol>
+&lt;h4 id="422-vector-issue-register">4.2.2 Vector Issue Register&lt;/h4>
+&lt;p>为了实现比单个向量寄存器（8 个 64 位加载，如 AVX-512）显着更高程度的内存级并行性，我们重叠执行同一指令的多个向量副本，目标是实现 16 个 AVX -512 个向量（或 16 × 8 = 128 个标量等效循环）同时进行。我们不使用标量发布队列，而是使用单个向量发布寄存器 (VIR)，负责发布标量指令的每个向量副本（图 5）。&lt;/p>
+&lt;p>如果指令的所有 inputs 都是标量，则只发出一条标量指令。如果指令被标记为步幅加载，我们使用步幅检测器填充所有 128 个值，并将这些值作为 16 个矢量化 AVX-512 加载发出。如果指令依赖于至少一个矢量化输入，我们同样会按顺序向执行单元发出指令的 16 个矢量化副本。每当有合适的单元空闲时（主线程未使用），就会向执行单元发出矢量化指令副本。在一个 AVX-512 指令中，我们有 8 个掩码位，用于指示其中一个源被标记为无效的通道，无论是由于故障、使用浮点寄存器还是通过控制流发散。如果 Discovery Mode 的 loop-bound inference 预测它可以获取的标量等效循环将少于 128 个，则某些通道可能会以掩码 out 开始。一旦所有指令副本都发出并执行，如果在任何源上设置了 &amp;lsquo;dead-source&amp;rsquo; 位，则释放物理寄存器。然后，我们获取下一条指令，并重复。&lt;/p>
+&lt;p>矢量化加载指令被视为矢量收集操作[87]：它们在 LSQ 中被拆分为标量加载并发送到单独缓存层次结构。内存系统与其他常规标量加载同时处理它们，分配不同的 MSHR。&lt;/p>
+&lt;h4 id="423-branch-reconvergence">4.2.3 Branch Reconvergence.&lt;/h4>
+&lt;p>相关负载可能是有条件的，即它们出现在某些控制流路径上，而不是内循环内的其他路径上。我们允许每个标量等效车道与其他车道分开。因此，我们使用类似 **GPU 的再收敛堆栈。**所有活动通道中的分支结果都会相互比较。如果任何通道的下一个 PC 与其他通道不同，我们会根据新的目的地分割通道，根据公共组生成掩码，并将掩码和目标 PC 放置到重新收敛堆栈上。我们沿着第一条路径一直到达重新收敛点(是不是相同的指令地址?)，我们将其设置为矢量超前运行终止点（第 4.2.4 节），以避免特殊跟踪。一旦我们到达一组匹配通道的终止点，我们就会将头从再收敛堆栈中弹出，重置掩码，然后从堆栈中的下一个 PC 继续。&lt;/p>
+&lt;p>每个车道同时映射到 VRAT 中。如果我们在标量重命名中存在分歧（因为我们使用不同的标量），并且这种分歧整齐地发生在 AVX-512 指令边界上，那么我们会根据 16 个 AVX-512 指令中的哪一个使用它来覆盖每个标量。如果 AVX-512 指令中的标量重命名存在分歧，我们会将目标转换为 AVX-512 物理寄存器，并复制要替换的标量值。&lt;/p>
+&lt;h4 id="424-termination">4.2.4 Termination.&lt;/h4>
+&lt;p>当(1)通道到达序列中的最终间接负载（由 FLR 识别）时，或者(2)在发散的情况下达到步幅 PC 的下一次迭代时，向量运行子线程终止，并(3)具有 200 条指令超时（如果我们离开以循环绑定检测器未拾取的方式完全循环，例如，通过中断）。主线程与向量运行子线程同时执行。一旦子线程终止，主线程下次执行跨步加载时将再次有资格进入发现模式，从而重新启动 DVR。此时主线程将取得重大进展，并且如果 DVR 子线程准确且及时，其大部分缓存访问将成为 L1 命中。&lt;/p>
+&lt;h3 id="43-嵌套向量运行nested-vector-runahead">4.3 嵌套向量运行(Nested Vector Runahead)&lt;/h3>
+&lt;p>&lt;strong>Nested Vector Runahead&lt;/strong> 通过分析嵌套循环结构，对外层和内层循环&lt;strong>联合向量化&lt;/strong>,来解决内层循环次数不够的问题&lt;/p>
+&lt;p>Nested Vector Runahead 分两步工作。首先，它执行嵌套发现模式 （NDM） 以将指令链从外部跨步负载矢量化到内部跨步负载，并发现循环边界和数据输入到内部循环的多个调用。其次，在到达 inner striding loop 时，它会进一步扩展矢量化以覆盖 inner loop。&lt;/p>
+&lt;h4 id="431-nested-discovery-mode">4.3.1 Nested Discovery Mode&lt;/h4>
+&lt;p>NDM 的目标是同时找到内部循环的许多不同调用的起始跨步地址和循环边界。discovery 模式（第 4.1 节）期间，loop-bound detector 可能会发现 loop 的 Approximate 迭代少于 64 次。在这种情况下，一旦生成了 vector-runahead 子线程，我们不是立即执行 vector runahead，而是用backward edge 改变分支的方向(把跳转转为不跳转,那就直接跑到外部去了)，并通过将PCv设置为分支后面的指令（未采用路径指令）来在in-order subthread上开始 NDM。子线程与主线程同时运行。仍然将两个 source registers 保存在 LCR 中。跨步负载的常数循环增量和地址分别保存在两个新寄存器中，分别称为增量寄存器 （IR） 和内部负载寄存器 （ILR）。&lt;/p>
+&lt;p>NDM 子线程开始执行标量操作，但由于分支方向更改而跳过内部循环的所有即将进行的迭代，并执行内部循环外部的指令。&lt;strong>当它发现一个外跨步负载的地址小于 ILR 中的地址时（例如，算法 1 中的第 4 行与第 8 行），它执行第一个向量化步骤：它对跨步负载进行向量化（乘以 16，以尝试找到至少 128 个可行的内循环迭代）并在污点向量中标记负载的目的地。&lt;/strong>&lt;/p>
+&lt;p>对于每个外部跨步负载的依赖项，矢量化过程继续进行，直到到达每个内部跨步负载的第一次迭代。在算法 1 中，第 4 行的外部跨步负载在第 5 行和第 6 行都有相关性。&lt;/p>
+&lt;p>当它达到 inner striding load （第 8 行） 时，它会读取 LCR 中源寄存器的矢量化副本的值，并使用这些值和 IR 中的值来计算每个矢量化 outer loops 的 inner loops 调用次数。如果在进入 NDM 后的 200 条指令内没有出现地址低于内跨步负载的外部跨步负载，则子线程将根据 LCR 和 IR 中的值重新计算循环边界，并通过循环边界对内部跨步负载进行矢量化。也就是说，子线程会回到 loop bound detector 在初始发现模式期间计算的迭代次数。 (LCR中保存cmp的源寄存器,在外部矢量化的时候,这个源寄存器也会被矢量化,通过这个值和)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 129;
+flex-basis: 310px"
+>
+&lt;a href="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218205326943.png" data-size="715x553">
+&lt;img src="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218205326943.png"
+width="715"
+height="553"
+srcset="https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218205326943_hu13753689612781104591.png 480w, https://VastCircle.github.io/2024/decoupled_vector_runahead/image-20241218205326943_hu446235333281578278.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h4 id="432-further-vectorization">4.3.2 Further Vectorization&lt;/h4>
+&lt;p>根据检测到的循环边界，NDM 子线程收集尽可能多的跨步内存地址，最多限于128个地址。超过前128个的地址将被丢弃。然后，NDM 子线程从内跨步加载开始执行向量化，通过将这些128个目标地址填充到其向量寄存器中，其他寄存器根据它是从哪个外循环的 16 个 lane 中生成的来设置（对于当前未污点的寄存器使用标量，对于在 NDM 中被污点的寄存器使用向量）。它将内跨步加载的目标标记为污点，并按照第 4.2 节所述，进入 DVR 模式，每个 lane 都会启动和终止。&lt;/p>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://www.xinhecuican.tech/post/8be42a2d.html" target="_blank" rel="noopener"
+>向量寄存器和gpu&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Secure_prefetching_for_secure_cache_systems</title><link>https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/</link><pubDate>Sat, 14 Dec 2024 13:17:45 +0800</pubDate><guid>https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
+&lt;p>像Spectre及其变种这样的瞬态执行攻击可能通过缓存层次结构导致信息泄漏。缓解推测执行攻击的技术分为两类：基于延迟的技术和不可见推测技术。像GhostMinion这样的基于不可见推测的技术是高性能且安全的技术，可以缓解所有类型的推测执行攻击。与缓存系统类似，硬件预取器也可能导致推测性信息泄漏。为了解决这个问题，GhostMinion提倡在缓存系统中基于严格排序的提交时预取。我们的实验表明，GhostMinion缓存系统与硬件预取器之间的互动产生了负面影响，导致不同缓存层次之间的冗余流量。这些流量会引起争用，并增加丢失延迟，从而导致性能下降。接下来，我们观察到，由GhostMinion强制执行的提交时预取导致性能损失，因为它影响了预取器的及时性。我们首次对先进的预取技术和安全缓存系统之间的互动进行了彻底分析。在此基础上，我们提出了两种微架构解决方案，确保在设计安全预取器时能够提供高性能，同时保证安全的缓存系统。第一种解决方案通过非推测性更新缓存层次结构时检测和过滤冗余流量。第二种解决方案确保预取器的及时性，以弥补在提交时触发预取请求的延迟，从而实现既安全又高效的预取器。总体而言，我们的改进是安全的，并且在硬件预取器和安全缓存系统之间提供了协同作用。我们的实验表明，在使用先进的预取器的情况下，我们的过滤器始终能提高像GhostMinion这样的安全缓存系统的性能（对于单核系统提高1.9%，对于多核系统提高19.0%，使用的是性能最好的预取器）。我们还观察到过滤器与我们提出的安全预取器之间的协同效应，进一步提高了性能，单核和多核系统分别提高了6.3%和23.0%（相比于最好的预取器）。我们的改进极为轻量，每个核心的存储开销为0.59 KB。&lt;/p>
+&lt;h2 id="introduction">introduction&lt;/h2>
+&lt;p>瞬态执行攻击以Spectre [28]为代表，很快又出现了其他攻击 [9], [15], [17], [18], [33]，它们利用瞬态指令对缓存状态的影响。瞬态指令是不会提交的推测性指令。推测执行是一种高性能处理器的基本技术，因此为了安全起见，它不能被禁用。为了缓解利用缓存的推测执行攻击，各种提案 [10], [11], [27], [36]–[38], [45], [46], [48] 致力于在性能损失最小的情况下提供安全保障。文献中一般提出了两种缓解技术：基于延迟的技术和不可见推测技术。&lt;/p>
+&lt;p>在基于延迟的方法中，依赖秘密的值的传递会被暂停，直到被认为可以安全地继续为止。判断安全性可能很复杂，需要复杂的机制来准确确定何时可以认为指令是安全的。而在不可见推测中，允许依赖秘密的加载执行，但这些执行的效果被隐藏在缓存层次结构和其他微架构结构之外。在所有的提案中，GhostMinion [11]、推测污染追踪 (STT) [48] 和非推测数据访问 (NDA) [45] 是最严格的，因为它们能够缓解回溯时间攻击，例如推测干扰攻击 [15]。在STT、NDA和GhostMinion之间，GhostMinion 是一种轻量级且高性能的缓解技术。GhostMinion是一种不可见推测技术，通过严格的排序保证通过缓存系统缓解各种推测执行攻击，包括缓存层次、未命中状态保持寄存器（MSHRs）以及硬件预取器 [10]。&lt;/p>
+&lt;p>GhostMinion使用一个小型推测缓存（GM）来存储与推测加载相关的数据，当加载指令提交时，数据会传递到L1D。当相同数据从L1D驱逐时，数据会传递到L2，而从L2驱逐时，数据会传递到LLC。平均而言，与非安全缓存系统相比，GhostMinion会导致大约5%的性能损失。数据预取器通过将缓存未命中转换为命中，在提高缓存性能方面发挥了重要作用。最近的数据预取器进展推动了单线程性能的提升，平均性能提高了3%到5% [13], [16], [31], [32]。过去十年里，两次数据预取冠军赛 [1], [5] 也促进了这一趋势。&lt;/p>
+&lt;p>不幸的是，硬件预取器会在推测加载时训练和触发，即使在安全缓存系统中也可能成为信息泄漏的来源 [10], [11]。利用预取器的推测攻击的工作原理如下：(i) 攻击者预热缓存；对应的缓存有一个预取器；(ii) 受害者加载类似于Spectre攻击的秘密数据；(iii) 受害者生成的推测加载训练并触发硬件预取器；(iv) 预取器根据其地址预测请求数据到缓存；(v) 最后，攻击者探测缓存。GhostMinion通过提交时预取为安全硬件预取器提供了案例：安全预取器应在提交时训练，并且预取只能在提交时发生。这样，预取器将不会推测性地影响缓存和MSHR状态，瞬态指令也无法利用预取器进行信息泄漏。&lt;/p>
+&lt;p>我们表明，数据预取的确可以缓解安全缓存系统的性能损失。尽管数据预取很重要，但尚未对安全预取技术的影响进行详细研究。本文首次分析了广泛的先进硬件预取器与高性能安全缓存系统之间的交互。我们在类似GhostMinion的安全缓存系统上评估了IP-stride [12]（工业界常用的知名预取器）、Bingo [13]、SPP+PPF [16]、IPCP [32]（第3届数据预取冠军赛的冠军 [5]）以及Berti [31]。Berti是先进的L1D预取器（准确率接近90%），能够协调其在缓存层次中的请求。&lt;/p>
+&lt;p>我们发现，预取器与像GhostMinion这样的安全缓存系统之间存在负面交互。研究表明，这些预取器无法实现最佳性能的主要原因有两个，并提出了微架构解决方案以克服这些问题。&lt;/p>
+&lt;p>**我们的观察。**首先，我们分析了所评估的预取器在非安全缓存系统和类似GhostMinion的安全缓存系统上的性能改进，分别针对SPEC CPU 2017和GAP工作负载（详见第VI节的模拟细节）。我们观察到预取技术在安全和非安全缓存系统上都能改善性能，但两者之间的差距较大。性能差距是由于不可见加载引入的额外内存流量导致的内存访问延迟增加。平均而言，与使用硬件预取器的非安全缓存系统相比，GhostMinion会为L1D引入超过1.5倍的额外流量（详见第III节）。&lt;/p>
+&lt;p>接下来，我们分析了在安全缓存系统上实现安全预取器的影响，即在提交时而不是访问时进行训练和预取的影响。图1显示了在安全缓存系统中训练并触发时（第二栏）和提交时（第三栏）的预取器性能改进。我们观察到，与访问时预取相比，在提交时训练/预取会导致所有预取器的一致性能损失（3%-4%）。关键因素是及时性，而不是无法捕获应用程序的访问模式（详见第III节）。&lt;/p>
+&lt;p>对于提交时预取，性能损失的一个主要部分是由于我们称之为“提交延迟”的新类预取请求：在处理器请求数据时尚未启动预取，但如果预取请求在访问时触发，则会启动的未命中。在非安全缓存系统上与访问时预取相比，平均而言，在安全缓存系统上采用提交时预取会导致约10%的性能损失。&lt;/p>
+&lt;p>**我们的贡献。**在本文中，我们分析了导致安全预取器性能低下的原因，并提出了一种低成本但有效的解决方案，以弥补性能损失并充分发挥安全预取的潜力，缩小与非安全缓存系统的性能差距。本文的主要贡献包括：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>我们表明&lt;/strong>，预取器在安全缓存系统上的相对性能下降主要是由于：(i) 安全缓存系统引入的额外内存流量，以及 (ii) 预取的及时性问题（详见第III节）。&lt;/li>
+&lt;li>&lt;strong>我们提出了一种机制&lt;/strong>，用于过滤掉安全缓存系统中执行的多余非推测性更新。我们的过滤器轻量化，存储开销仅为0.12KB（详见第IV节）。&lt;/li>
+&lt;li>&lt;strong>我们提出了一种机制&lt;/strong>，以确保在提交时训练和发出预取请求的预取器的及时性，从而实现一个既安全又及时且高性能的预取器。最终结果是第一个高性能安全预取器，存储开销为0.47KB（详见第V节）。&lt;/li>
+&lt;li>&lt;strong>我们表明&lt;/strong>，在当前最先进的预取器基础上进行的增强，有助于缩小非安全缓存系统与安全缓存系统之间的性能差距。对于SPEC CPU2017和GAP基准测试，我们的增强措施将性能提升了6.3%（其中约30%的改进来自我们的过滤器，其余来自更优的提交时预取器训练）。对于一个4核系统，我们的机制在安全缓存系统中相比当前最先进的提交时预取器，将性能提升了23.0%（详见第VII节）。&lt;/li>
+&lt;/ul>
+&lt;h2 id="background-and-related-work">background and related work&lt;/h2>
+&lt;p>&lt;strong>A. 威胁模型&lt;/strong>
+我们假设瞬态执行攻击者具有以下能力：
+(i) 攻击者能够通过缓存系统发起类似Spectre和推测性干扰[15]的攻击。
+(ii) 攻击者可以通过预测训练和预取利用硬件预取器，从而改变缓存状态，如Muontrap中所述[10]。
+(iii) 攻击者和受害者可以属于同一进程或不同进程。攻击者可以运行任意代码，但无法直接访问机密数据，即攻击者在用户级或内核级的沙箱中运行。
+(iv) 存在基于时序的旁道和隐蔽通道，这些通道涉及硬件数据预取器和缓存[19], [20], [41]，可以通过现有的空间隔离技术进行缓解[22], [35]。&lt;/p>
+&lt;p>&lt;strong>B. 最近的缓解技术&lt;/strong>
+一个独立的表格（表I）总结了近期的缓解技术，并结合了安全性、性能和存储需求的考量。如第I节所述，缓解技术分为两大类：基于延迟的技术[38], [45], [48]和不可见预测技术[10], [11], [37], [46]。
+为了性能评估，我们采用了SPEC CPU2017[43]和GAP[8]基准测试。
+在所有基于延迟的技术中，STT在提供安全保证的同时，性能开销最小。STT的操作前提是：除非指令构成隐蔽通道，否则可以安全地将机密数据转发给依赖的预测加载指令。对于显式隐蔽通道，它会阻止来源寄存器包含预测派生值的LOAD指令。
+一种名为Doppelganger[29]的最新性能增强技术改进了包括STT在内的基于延迟的技术的性能。与存储开销较高的基于延迟的技术相比，不可见预测技术（如GhostMinion）以较低的性能损失和最低的存储开销著称。因此，在本文中，我们选择GhostMinion作为我们的安全缓存系统。&lt;/p>
+&lt;p>&lt;strong>C. GhostMinion安全缓存系统&lt;/strong>
+GhostMinion使用一个小型2KB缓存（称为GM），该缓存与L1D并行访问，存储推测性指令的数据，直到它们提交（或退休）。当推测性指令在GM中产生需求未命中时，它会像传统的缓存层级一样在L1D、L2和LLC中搜索数据。然而，当在L1D、L2或LLC命中时，缓存状态（替换策略优先级位）不会更新。如果在L1D、L2和LLC中都未命中，则响应直接填充到GM中，而绕过L1D、L2和LLC（图2，1）。&lt;/p>
+&lt;p>当提交时，提交指令的数据如果在GM命中，会通过提交时写入被转移到L1D缓存中。如果数据随后从L1D被驱逐，则会被转移到L2缓存中，进一步从L2驱逐会导致其传输到LLC（图2，2a）。在GM未命中的情况下，数据会被重新提取到非推测性缓存层级中（L1至LLC）（图2，2b）。&lt;/p>
+&lt;p>GM既不包含也不排斥其余的缓存层级。在GM中，根据时间顺序，指令被限制查看其他指令的插入或驱逐。时间顺序基于时间戳维护。GhostMinion使用的TimeGuarding确保在多次推测下插入和驱逐是不可见的。为了隐藏在MSHRs中的争用，时间戳元数据在每个缓存级别的MSHRs中传播，允许较年轻的加载被取消并由较老的加载取代（跃迁）。此外，在GhostMinion中，一个块只能处于共享或无效状态，且GM和非推测性缓存的协同状态不会在指令提交之前被更改。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 151;
+flex-basis: 364px"
+>
+&lt;a href="https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/image-20241214160358857.png" data-size="688x453">
+&lt;img src="https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/image-20241214160358857.png"
+width="688"
+height="453"
+srcset="https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/image-20241214160358857_hu7736817408688982627.png 480w, https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/image-20241214160358857_hu7327066464886296600.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="动机">&lt;strong>动机&lt;/strong>&lt;/h2>
+&lt;h3 id="a-安全缓存系统对硬件预取的影响">&lt;strong>A. 安全缓存系统对硬件预取的影响&lt;/strong>&lt;/h3>
+&lt;p>本节分析了为何预取器在像GhostMinion这样的安全缓存系统中表现不佳。
+图3展示了本文评估的预取器在GhostMinion安全缓存系统中和基于访问的预取下L1D访问量的增长。在非安全系统且无预取的情况下，每千指令的平均L1D访问量（APKI）为199，而在GhostMinion中，由于提交请求更新了缓存状态（参见第II-C节），APKI上升到375。使用GhostMinion的Berti预取器时，APKI进一步上升到570。类似的趋势出现在所有预取器中。对于像Bingo和SPP+PPF这样的L2预取器，由于预取请求由L2发出，它们不会访问L1D。APKI的增加导致了额外的流量，从而增加了L1D未命中延迟（见图4）。&lt;/p>
+&lt;p>一个关键的因素是硬件预取器存在的以下趋势，这种趋势使延迟变得更严重：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>L1D的MSHR占用率增加&lt;/strong>：在安全缓存系统中，Berti预取器的平均MSHR占用率增加了10.4%，MSHR满的时间额外增加了8.7%。&lt;/li>
+&lt;li>&lt;strong>无预取时的对比&lt;/strong>：从非安全系统转移到安全系统时，L1D MSHR占用率降低了15.9%，因为需求未命中优先由GM服务。&lt;/li>
+&lt;/ul>
+&lt;p>通过对605.mcf_s-1554B进行详细分析，图5(a)显示，相较于无预取的非安全基线，性能显著下降（如Berti预取器的性能下降超过300%）。图5(b)显示了GhostMinion提交请求、加载请求和预取请求对L1D流量的贡献，图5(c)则显示了L1D未命中延迟的显著增加。&lt;/p>
+&lt;p>进一步分析显示：&lt;/p>
+&lt;ul>
+&lt;li>&lt;strong>无预取的L1D MSHR状态&lt;/strong>：无预取时，从非安全系统转到安全系统，L1D MSHR占用率下降了16.2%，因为需求请求优先由GM服务。&lt;/li>
+&lt;li>&lt;strong>有预取的L1D MSHR状态&lt;/strong>：有预取时，从非安全系统转到安全系统，L1D MSHR占用率增加了10.1%。原因是非安全系统中L1D MSHR仅处理需求和预取请求，而安全系统中还需处理GhostMinion的提交请求，增加了MSHR压力。&lt;/li>
+&lt;/ul>
+&lt;p>此外，无预取时，L1D MSHR几乎从未满，而有预取时，L1D MSHR满的时间从6.3%增加到20%。
+第IV节将提出一种机制以解决硬件预取启用时因额外流量导致的性能损失。&lt;/p>
+&lt;h3 id="b-安全硬件预取的影响">&lt;strong>B. 安全硬件预取的影响&lt;/strong>&lt;/h3>
+&lt;p>正如GhostMinion[11]所描述，基于提交的预取能够防止因预测执行导致的信息泄露。然而，图1表明，将先进预取器移到提交阶段会导致3%-4%的性能损失，相较于基于访问的预取。&lt;/p>
+&lt;p>图6展示了本文工作负载的每千指令需求未命中（MPKI）的平均值。MPKI按预取器工作的缓存级别（L1D或L2C）分类，并对基于访问和基于提交的预取分别进行评估。&lt;/p>
+&lt;p>MPKI被划分为以下四类：&lt;/p>
+&lt;ol>
+&lt;li>&lt;strong>提交延迟预取&lt;/strong>：这是一种新定义的延迟预取请求，仅出现在提交阶段预取器中。当发生缓存需求未命中时，提交阶段预取器尚未触发目标缓存行的预取请求，而访问阶段预取器已触发。&lt;/li>
+&lt;li>&lt;strong>传统延迟预取&lt;/strong>：需求未命中时，MSHR中已有对目标缓存行的预取请求，二者合并。&lt;/li>
+&lt;li>&lt;strong>错失机会&lt;/strong>：需求未命中目标缓存行，该行本可以由访问阶段预取器正确预测，但因提交阶段训练顺序不同而被漏掉。&lt;/li>
+&lt;li>&lt;strong>未覆盖&lt;/strong>：未命中需求未归入前述类别。&lt;/li>
+&lt;/ol>
+&lt;p>观察到一个普遍趋势：将预取器移至提交阶段时，未覆盖的需求未命中数量减少。即使将“错失机会”加入“未覆盖”中，提交阶段预取器的总MPKI通常仍低于访问阶段预取器。&lt;/p>
+&lt;p>然而，与基于访问的预取相比，基于提交的预取性能更差。原因在于预取及时性问题。虽然传统延迟预取请求几乎未增加，但新增的提交延迟类导致了MPKI的总体上升。为弥补基于提交预取的延迟，第V节提出了一种机制以缓解其及时性不足问题。&lt;/p>
+&lt;h2 id="iv-适合预取的安全缓存系统">&lt;strong>IV. 适合预取的安全缓存系统&lt;/strong>&lt;/h2>
+&lt;p>基于不可见预测的安全缓存系统在内存指令不是预测性时（例如在提交时）更新缓存层次结构。对于GhostMinion而言，这意味着在GM中未命中时重新获取缓存行，或者在GM命中时向缓存层次结构的其余部分发送基于提交的写请求（针对已清除的缓存行），如第II-C节所述。这些额外的数据传输的目标是填充缓存层次结构，特别是当数据是由核心预测性请求时未更新的部分，以减少随后的访问中的缓存未命中。无论是重新获取还是写传播都会对内存层次结构的流量产生重要影响。然而，这些额外的流量在内存系统未严重争用时不会显著降低性能，例如在具有预取机制的系统中。然而，预取机制会加剧缓存层次队列和MSHR的压力，从而阻止预取器提升性能（如第III-A节所示）。我们观察到，许多旨在恢复缓存层次结构的请求实际上并不必要，并且会引发严重的争用。例如，触发数据重新获取，即使数据已经由L1D提供，也会占用L1D端口，仅仅是为了更新LRU替换策略。在同一上下文中，基于提交的写请求会在内存层次结构中传播，直到数据已经出现在某个缓存级别。因此，可以避免访问已经包含该缓存行的缓存级别。&lt;/p>
+&lt;p>受到这一观察的启发，我们提出了&lt;strong>安全更新过滤器（SUF）&lt;/strong>。SUF记录当请求数据时，提供该数据的缓存级别。然后，在提交时，SUF会根据提供数据的缓存级别来过滤重新获取操作，或者停止在提交时的写传播，直到提供缓存行的级别之前。如果SUF预测错误，因为在此期间缓存行可能已被驱逐，则随后的获取请求会增加额外的延迟，因为它将从更高的级别提供。得益于SUF的高准确性，缓存访问的次数减少，从而减少了生成的流量。SUF与底层的预取技术无关，以透明的方式工作。&lt;/p>
+&lt;h3 id="识别持有缓存行的缓存级别">&lt;strong>识别持有缓存行的缓存级别&lt;/strong>&lt;/h3>
+&lt;p>SUF使用持有缓存行的较低级别（L1D是最低级别，LLC是缓存的最高级别）来决定是否应使用过滤。通过在处理器请求数据时，将提供缓存行的缓存级别沿缓存层次结构向下传播，可以确定缓存级别。这些信息使用2位来编码，表示数据来自于L1D（或并行访问的GM）、L2C、LLC或DRAM。该2位的命中级别信息与请求数据一起存储在加载队列（LQ）中的内存操作条目中（见图7，第1步）。&lt;/p>
+&lt;h3 id="过滤更新">&lt;strong>过滤更新&lt;/strong>&lt;/h3>
+&lt;p>一旦预测性加载被提交，它会检查GM，以决定是否需要沿着层次结构重新获取缓存行（GM未命中）或在层次结构中向上传播缓存行（GM命中）。SUF检查命中级别字段，并按如下方式操作：&lt;/p>
+&lt;ul>
+&lt;li>如果数据来自L1D（值为00），SUF会丢弃更新（无论是重新获取还是提交时的传播）。&lt;/li>
+&lt;li>否则，重新获取或传播按常规方式进行，使缓存行从GM移动到L1D（见第2步）。&lt;/li>
+&lt;/ul>
+&lt;p>当L1D或L2中的缓存行被驱逐时，决定是否传播写回块是由GhostMinion写回位确定的。在提交时，L1D和L2的GhostMinion写回位会使用命中级别进行评估，并与写回块一起传播。每个L1D中的缓存行也存储了L2写回位，因此它会在写回时传播到L2（见第3步）。最后，在从L2驱逐时，GhostMinion写回位再次用于确定是否传播（见第4步）。&lt;/p>
+&lt;h3 id="适用性">&lt;strong>适用性&lt;/strong>&lt;/h3>
+&lt;p>SUF适用于任何基于不可见预测的安全缓存系统，该系统在提交时更新缓存层次结构。&lt;/p>
+&lt;h3 id="存储开销">&lt;strong>存储开销&lt;/strong>&lt;/h3>
+&lt;p>SUF仅需要额外的0.12 KB存储空间：LQ上占用0.03 KB，L1D上占用0.09 KB。LQ中的128个条目每个都扩展了一个2位的命中级别字段，L1D中的768个条目每个都扩展了一个L2写回位。&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://www.cnblogs.com/Shepherdzhao/p/8253421.html" target="_blank" rel="noopener"
+>CPU Meltdown 和 Spectre漏洞分析&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.freebuf.com/articles/network/161135.html" target="_blank" rel="noopener"
+>理解CPU Spectre漏洞&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Failed_to_connetct_socket</title><link>https://VastCircle.github.io/2024/failed_to_connetct_socket/</link><pubDate>Wed, 11 Dec 2024 21:00:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/failed_to_connetct_socket/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
@@ -254,12 +743,496 @@ loading="lazy"
 &lt;p>private: 只能由该类中的函数、其友元函数访问，不能被其他任何访问，该类的对象也不能访问；&lt;/p>
 &lt;p>protected: 可以被该类中的函数，子类的函数，以及其友元函数访问，不能被该类的对象访问；&lt;/p>
 &lt;p>public: 可以被该类中的函数，子类中的函数，其友元函数访问，也可以由该类的对象访问。&lt;/p>
+&lt;h3 id="声明simobject">声明simobject&lt;/h3>
+&lt;p>SimpleMemobj.py&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">SimpleMemobj&lt;/span>(&lt;span style="color:#e06c75">SimObject&lt;/span>) :
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">...&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>getPort是一个纯虚函数,必须要在C++中实现来定义&lt;/p>
+&lt;h3 id="定义simplememobj类">定义SimpleMemobj类&lt;/h3>
+&lt;p>simple_memobj.hh&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">SimpleMemobj&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#e06c75">SimObject&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">/** constructor
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e"> */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobjParams&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">params&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="定义响应端口类型">定义响应端口类型&lt;/h3>
+&lt;p>simple_memobj.hh&lt;/p>
+&lt;p>CPUSidePort ,从ResponsePort来继承&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">CPUSidePort&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#e06c75">ResponsePort&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">owner&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">CPUSidePort&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">string&lt;/span>&lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">name&lt;/span>, &lt;span style="color:#e06c75">SimpleMemobj&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">owner&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ResponsePort&lt;/span>(&lt;span style="color:#e06c75">name&lt;/span>, &lt;span style="color:#e06c75">owner&lt;/span>), &lt;span style="color:#e06c75">owner&lt;/span>(&lt;span style="color:#e06c75">owner&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> { }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">AddrRangeList&lt;/span> &lt;span style="color:#61afef;font-weight:bold">getAddrRanges&lt;/span>() &lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">protected&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Tick&lt;/span> &lt;span style="color:#e06c75">recvAtomic&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) &lt;span style="color:#c678dd">override&lt;/span> { &lt;span style="color:#e06c75">panic&lt;/span>(&lt;span style="color:#98c379">&amp;#34;recvAtomic unimpl.&amp;#34;&lt;/span>); }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">recvFunctional&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#61afef;font-weight:bold">recvTimingReq&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">recvRespRetry&lt;/span>() &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="定义请求端口类型">定义请求端口类型&lt;/h3>
+&lt;p>simple_memobj.hh&lt;/p>
+&lt;p>MemSidePort 从RequestPort来继承 ,将来自CPU端口的请求转发到内存系统的其余部分&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">MemSidePort&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#e06c75">RequestPort&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">owner&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">MemSidePort&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">string&lt;/span>&lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">name&lt;/span>, &lt;span style="color:#e06c75">SimpleMemobj&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">owner&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">RequestPort&lt;/span>(&lt;span style="color:#e06c75">name&lt;/span>, &lt;span style="color:#e06c75">owner&lt;/span>), &lt;span style="color:#e06c75">owner&lt;/span>(&lt;span style="color:#e06c75">owner&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> { }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">protected&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">recvTimingResp&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">recvReqRetry&lt;/span>() &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">recvRangeChange&lt;/span>() &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="定义simobject接口">定义SimObject接口&lt;/h3>
+&lt;p>simple_memobj.hh&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">SimpleMemobj&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#e06c75">SimObject&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span> &lt;span style="color:#e06c75">declaration&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span> &lt;span style="color:#e06c75">declaration&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">CPUSidePort&lt;/span> &lt;span style="color:#e06c75">instPort&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">CPUSidePort&lt;/span> &lt;span style="color:#e06c75">dataPort&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">MemSidePort&lt;/span> &lt;span style="color:#e06c75">memPort&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobjParams&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">params&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Port&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">getPort&lt;/span>(&lt;span style="color:#c678dd">const&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">string&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span>&lt;span style="color:#e06c75">if_name&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">PortID&lt;/span> &lt;span style="color:#e06c75">idx&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#e06c75">InvalidPortID&lt;/span>) &lt;span style="color:#c678dd">override&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="实现基本的simobject函数">实现基本的SimObject函数&lt;/h3>
+&lt;p>即实现SimpleMemobj,getPort函数 Simple_memobj.cc&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobjParams&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">params&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimObject&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">instPort&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">name&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#98c379">&amp;#34;.inst_port&amp;#34;&lt;/span>, &lt;span style="color:#c678dd">this&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">dataPort&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">name&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#98c379">&amp;#34;.data_port&amp;#34;&lt;/span>, &lt;span style="color:#c678dd">this&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">memPort&lt;/span>(&lt;span style="color:#e06c75">params&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">name&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#98c379">&amp;#34;.mem_side&amp;#34;&lt;/span>, &lt;span style="color:#c678dd">this&lt;/span>), &lt;span style="color:#e06c75">blocked&lt;/span>(&lt;span style="color:#e5c07b">false&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="实现请求和响应端口函数">实现请求和响应端口函数&lt;/h3>
+&lt;p>大多数情况下,每个端口函数只是将信息转发到主内存对象 (SimpleMemobj *owner)&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">AddrRangeList&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">getAddrRanges&lt;/span>() &lt;span style="color:#c678dd">const&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddrRanges&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvFunctional&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">handleFunctional&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">handleFunctional&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">sendFunctional&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">AddrRangeList&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">getAddrRanges&lt;/span>() &lt;span style="color:#c678dd">const&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Sending new ranges&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">getAddrRanges&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvRangeChange&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">sendRangeChange&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">sendRangeChange&lt;/span>()
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">instPort&lt;/span>.&lt;span style="color:#e06c75">sendRangeChange&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">dataPort&lt;/span>.&lt;span style="color:#e06c75">sendRangeChange&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="实现接收请求">实现接收请求&lt;/h3>
+&lt;p>recvTimingReq , 需要检查是否SimpleMemobj可以接受请求 . &lt;code>SimpleMemobj&lt;/code>是一个非常简单的阻塞结构；我们一次只允许一个未完成的请求。因此，如果我们在另一个请求未完成的情况下收到一个请求，&lt;code>SimpleMemobj&lt;/code>将会阻塞第二个请求。&lt;/p>
+&lt;p>CPUSidePort存储端口接口所有的流量控制信息. 需要添加needRetry . a boolean that stores whether we need to send a retry whenever the simplememobj becomes free .&lt;/p>
+&lt;p>to handle the request for the simplememobj ,we first check if the simplememobj is already blocked waiting for a response to another request . if it is blocked ,then we return false to signal the calling request port that we cannot accept the request right now .&lt;strong>Otherwise, we mark the port as blocked and send the packet out of the memory port.&lt;/strong> For this, we can define a &lt;strong>helper function&lt;/strong> in the &lt;code>MemSidePort&lt;/code> object to hide the flow control from the &lt;code>SimpleMemobj&lt;/code> implementation.We will assume the &lt;code>memPort&lt;/code> handles all of the flow control and always return &lt;code>true&lt;/code> from &lt;code>handleRequest&lt;/code> since we were successful in consuming the request.&lt;/p>
+&lt;p>Next, we need to implement the &lt;code>sendPacket&lt;/code> function in the &lt;code>MemSidePort&lt;/code>This function will handle the flow control in case its peer response port cannot accept the request. For this, we need to add a member to the &lt;code>MemSidePort&lt;/code> to store the packet in case it is blocked. It is the responsibility of the sender to store the packet if the receiver cannot receive the request (or response).&lt;/p>
+&lt;p>此函数只是通过&lt;code>sendTimingReq&lt;/code>调用函数来发送数据包&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">panic_if&lt;/span>(&lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Should never try to send if blocked!&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">sendTimingReq&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>)) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="实现接收响应">实现接收响应&lt;/h3>
+&lt;p>当 &lt;code>MemSidePort&lt;/code>收到响应时，我们将响应通过 &lt;code>SimpleMemobj&lt;/code>到相应的&lt;code>CPUSidePort&lt;/code>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvTimingResp&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">handleResponse&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>未完&lt;/p>
+&lt;h3 id="总结">总结&lt;/h3>
+&lt;h4 id="getaddrranges">getAddrRanges()&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// cpuSidePort 调用 SimpleMemobj的方法获取地址范围
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">AddrRangeList&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">getAddrRanges&lt;/span>() &lt;span style="color:#c678dd">const&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddrRanges&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// SimpleMemobj调用memPort的方法获取地址范围
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">AddrRangeList&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">getAddrRanges&lt;/span>() &lt;span style="color:#c678dd">const&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DRPINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Sending new ranges&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">getAddrRanges&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 内存模块的地址范围由其下游端口（memPort）决定，因此需要通过下游端口获取。
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="sendrangechange">sendRangeChange()&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// MemSIdePort在获取地址变化的时候调用SimpleMemobj的方法将地址变化转发出去了
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvRangeChange&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">sendRangeChange&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// SimpleMemobj在接受到地址变化是调用instPort和dataPort(cpuPort)的方法转发地址变化
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">sendRangeChange&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">instPort&lt;/span>.&lt;span style="color:#e06c75">sendRangeChange&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">dataPort&lt;/span>.&lt;span style="color:#e06c75">sendRangeChange&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="recvfunctionalpkt">recvFunctional(pkt)&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 功能性请求
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvFunctional&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">handleFunctional&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">handleFunctional&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">sendFunctional&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="recvtimingreqpkt">recvTimingReq(pkt)&lt;/h4>
+&lt;p>cpu向mem发送请求的整个流程&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 接收时序请求
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 通过owner-&amp;gt;handleRequest(pkt)发送,如果block了,那就发送失败,需要通过上游needretry ,否则就将pkt发送到SimpleMemobj module了
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvTimingReq&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">handleRequest&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>)) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">needRetry&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 如果blocked 就返回false ,否则调用memPort去发送Packet
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">handleRequeset&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">blocked&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Got request for addr %#x&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>, &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddr&lt;/span>());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blocked&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// memSidePort 最终会调用sendTimingReq去发送给下游packet ,如果下游阻塞的话将packet保存到bloacketPacket去
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">panic_if&lt;/span>(&lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Should never try to send if blocked!&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">sendTimingReq&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>)) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// retry是memside内部的活动,将保存的blocketPacket重新发送
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvReqRetry&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">assert&lt;/span>(&lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">blockedPacket&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="sendtimingresppkt">sendTimingResp(pkt)&lt;/h4>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 在 memSidePort端口调用SimpleMemobj的方法去转发packet
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">MemSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvTimingResp&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">owner&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">handleResponse&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 有packet了就没有必要继续阻塞了,那就解除阻塞 ,然后转发到cpuPort去
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">handleResponse&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">assert&lt;/span>(&lt;span style="color:#e06c75">blocked&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Got response for addr %#x&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>, &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddr&lt;/span>());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blocked&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">isInstFetch&lt;/span>()) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">instPort&lt;/span>.&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#c678dd">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">dataPort&lt;/span>.&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 由于已经解除了block,所以可以通知cpu侧端口去retry失败的请求了
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">instPort&lt;/span>.&lt;span style="color:#e06c75">trySendRetry&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">dataPort&lt;/span>.&lt;span style="color:#e06c75">trySendRetry&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// trySendRetry
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">trySendRetry&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 要判断blocketPacket是因为如果blocketPacket不为空代表mem那边还是blocked的
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">needRetry&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">needRetry&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleMemobj&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Sending retry req.&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// sendRetryReq竟然不需要重写
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">sendRetryReq&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 在CPUSidePort端去发送数据给CPU,如果CPU那边block的话,就在后续retry
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">panic_if&lt;/span>(&lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Should never try to send if blocked!&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">sendTimingResp&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>)) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleMemobj&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">CPUSidePort&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">recvRespRetry&lt;/span>() {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">assert&lt;/span>(&lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">blockedPacket&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blockedPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 232;
+flex-basis: 558px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1.png" data-size="1089x468">
+&lt;img src="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1.png"
+width="1089"
+height="468"
+srcset="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1_hu13758661100891426716.png 480w, https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1_hu10750278072586324411.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="创造简单缓存">创造简单缓存&lt;/h2>
+&lt;h3 id="vectorresponseport-和-responseport">VectorResponsePort 和 ResponsePort&lt;/h3>
+&lt;p>&lt;code>ResponsePort&lt;/code> 是一个基本的端口，用于处理响应（通常是从内存或其他外设返回的响应）。这个端口通常用于单一的响应通道，表示一个特定的响应类型。&lt;/p>
+&lt;p>&lt;code>VectorResponsePort&lt;/code> 是 &lt;code>ResponsePort&lt;/code> 的扩展，它允许处理多个响应通道。这意味着它可以同时处理多个请求或多个响应，这在一些复杂的系统设计中非常有用。&lt;/p>
+&lt;h3 id="simple-cache-object">simple cache object&lt;/h3>
+&lt;p>&lt;code>System&lt;/code> parameter, which is a pointer to the main system this cache is connected to. we can get the cache block size from the system object when we are initializing the cache.&lt;/p>
+&lt;h3 id="implementing-the-simplecache">implementing the SimpleCache&lt;/h3>
+&lt;p>There are a couple of changes in the constructor and the key memory object functions&lt;/p>
+&lt;p>we need to add an extra parameter to handleRequest that is the id of the port which the request originated .&lt;/p>
+&lt;p>the new handleRequest does two different things . First , it stores the port if of the request as discussed above . Since the SimpleCache is blocking and only allows a single request outstanding at a time, we only need to save a single port id&lt;/p>
+&lt;p>second , it takes time to access . Therefore , we need to take into account the latency to access the cache tags and the cache data for a request . we added an extra parameter to the cache object for this . and in &lt;strong>handleRequest we now use an event to stall the request for the needed amount of time&lt;/strong> . we schedule a new event for latency cycles in th future .. the clockEdge function returns the tick that the nth cycle in the future occurs on .&lt;/p>
+&lt;p>instead of using an EventWrapper, in the SimpleCache we will use a new class . The reason we cannot use an &lt;code>EventWrapper&lt;/code>, is that we need to pass the packet (&lt;code>pkt&lt;/code>) from &lt;code>handleRequest&lt;/code> to the event handler function.&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// simple_cache.hh
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">AccessEvent&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#c678dd">public&lt;/span> &lt;span style="color:#e06c75">Event&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">SimpleCache&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">cache&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">AccessEvent&lt;/span>(&lt;span style="color:#e06c75">SimpleCache&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">cache&lt;/span>, &lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>) &lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Event&lt;/span>(&lt;span style="color:#e06c75">Default_Pri&lt;/span>, &lt;span style="color:#e06c75">AutoDelete&lt;/span>), &lt;span style="color:#e06c75">cache&lt;/span>(&lt;span style="color:#e06c75">cache&lt;/span>), &lt;span style="color:#e06c75">pkt&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> { }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">process&lt;/span>() &lt;span style="color:#c678dd">override&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">cache&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">accessTiming&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// simple_cache.cc
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleCache&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">handleRequest&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>, &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">port_id&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">blocked&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleCache&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Got request for addr %#x&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>, &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddr&lt;/span>());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blocked&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">waitingPortId&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">port_id&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">schedule&lt;/span>(&lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">AccessEvent&lt;/span>(&lt;span style="color:#c678dd">this&lt;/span>, &lt;span style="color:#e06c75">pkt&lt;/span>), &lt;span style="color:#e06c75">clockEdge&lt;/span>(&lt;span style="color:#e06c75">latency&lt;/span>));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// this function first functionally accesses the cache.This function accessFunctional performs the functional access of the cache and either reads or writes the cache on a hit or returns that the access was a miss.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// If the access is a hit, we simply need to respond to the packet.To respond, you first must call the function makeResponse on the packet.This converts the packet from a request packet to a response packet. Then, we can send the response back to the CPU.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleCache&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">accessTiming&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">hit&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">accessFunctional&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">hit&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">makeResponse&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">sendResponse&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#c678dd">else&lt;/span> {&lt;span style="color:#7f848e">// 如果数据包对齐,并且请求的大小是缓存块的大小,就可以把请求转发到内存,如果数据包小于缓存块,需要创建一个新的数据包来从内存中读取整个缓存块, 无论数据包是读取还是写入,都会向内存发送读取请求.新的数据包的大小为blocksize.然后保存原来的数据包用于恢复,发送新的数据包给内存
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">Addr&lt;/span> &lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddr&lt;/span>(); &lt;span style="color:#7f848e">// 获取请求地址
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">Addr&lt;/span> &lt;span style="color:#e06c75">block_addr&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getBlockAddr&lt;/span>(&lt;span style="color:#e06c75">blockSize&lt;/span>); &lt;span style="color:#7f848e">// 获取数据块地址
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">unsigned&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getSize&lt;/span>(); &lt;span style="color:#7f848e">// 获取请求大小
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// 如果请求的地址与缓存块地址相同且请求的大小等于缓存块大小
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#e06c75">block_addr&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#e06c75">blockSize&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleCache&lt;/span>, &lt;span style="color:#98c379">&amp;#34;forwarding packet&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>); &lt;span style="color:#7f848e">// 将请求转发给内存端口
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleCache&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Upgrading packet to block size&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 检查请求的访问是否会跨越多个缓存行
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">panic_if&lt;/span>(&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">-&lt;/span> &lt;span style="color:#e06c75">block_addr&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">size&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#e06c75">blockSize&lt;/span>,
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#98c379">&amp;#34;Cannot handle accesses that span multiple cache lines&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">assert&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">needsResponse&lt;/span>()); &lt;span style="color:#7f848e">// 确保请求需要响应
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">MemCmd&lt;/span> &lt;span style="color:#e06c75">cmd&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">isWrite&lt;/span>() &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">isRead&lt;/span>()) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">cmd&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">MemCmd&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">ReadReq&lt;/span>; &lt;span style="color:#7f848e">// 如果是写请求或读请求，设置为读请求
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> } &lt;span style="color:#c678dd">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">panic&lt;/span>(&lt;span style="color:#98c379">&amp;#34;Unknown packet type in upgrade size&amp;#34;&lt;/span>); &lt;span style="color:#7f848e">// 如果是其他请求类型，触发 panic
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 创建新的请求包，大小为块大小
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">new_pkt&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">Packet&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">req&lt;/span>, &lt;span style="color:#e06c75">cmd&lt;/span>, &lt;span style="color:#e06c75">blockSize&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">new_pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">allocate&lt;/span>(); &lt;span style="color:#7f848e">// 为新的请求包分配内存
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">outstandingPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>; &lt;span style="color:#7f848e">// 记录当前的请求包，稍后将其恢复
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">new_pkt&lt;/span>); &lt;span style="color:#7f848e">// 将新的请求包发送到内存端口
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// the sendResponse function does the same things as the handleResponse function in the SimpleMemobj except that it uses the waitingPortId to send the packet to the right port.
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleCache&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">sendResponse&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">port&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">waitingPortId&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">blocked&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">waitingPortId&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">cpuPorts&lt;/span>[&lt;span style="color:#e06c75">port&lt;/span>].&lt;span style="color:#e06c75">sendPacket&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#c678dd">auto&lt;/span>&lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">port&lt;/span> : &lt;span style="color:#e06c75">cpuPorts&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">port&lt;/span>.&lt;span style="color:#e06c75">trySendRetry&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleCache&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">handleResponse&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">assert&lt;/span>(&lt;span style="color:#e06c75">blocked&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleCache&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Got response for addr %#x&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>, &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddr&lt;/span>());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">insert&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 如果有outstandingPacket,需要将原始数据包转发给原始请求,如果没有,将pkt中的响应转发给原始请求 如果我们收到的响应数据包是升级数据包，因为原始请求小于缓存行，那么我们需要将新数据复制到未完成数据包中或在写入时写入缓存。然后，我们需要删除在未命中处理逻辑中生成的新数据包。
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// 此时缓存已经更新完成了
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">outstandingPacket&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">accessFunctional&lt;/span>(&lt;span style="color:#e06c75">outstandingPacket&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">outstandingPacket&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">makeResponse&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">delete&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">pkt&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">outstandingPacket&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">outstandingPacket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">nullptr&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#7f848e">// else, pkt contains the data it needs
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">sendResponse&lt;/span>(&lt;span style="color:#e06c75">pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="功能缓存逻辑">功能缓存逻辑&lt;/h3>
+&lt;p>最简单的缓存存储是从地址映射到数据的映射(哈希表),&lt;/p>
+&lt;pre tabindex="0">&lt;code>std::unordered_map&amp;lt;Addr, uint8_t*&amp;gt; cacheStore;
+&lt;/code>&lt;/pre>&lt;h4 id="补充stdunordered_map">补充(std::unordered_map)&lt;/h4>
+&lt;p>unordered_map和map类似,都是存储的key-value的值,可以通过key快速索引到value,但是unordered_map是乱序的&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">unordered_map&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#e06c75">key_type&lt;/span>, &lt;span style="color:#e06c75">value_type&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#e06c75">map_name&lt;/span>;
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">myMap&lt;/span>.&lt;span style="color:#e06c75">erase&lt;/span>(&lt;span style="color:#d19a66">1&lt;/span>); &lt;span style="color:#7f848e">// 删除键为1的元素
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">auto&lt;/span> &lt;span style="color:#e06c75">it&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">myMap&lt;/span>.&lt;span style="color:#e06c75">find&lt;/span>(&lt;span style="color:#d19a66">2&lt;/span>); &lt;span style="color:#7f848e">//查找键值为2的元素
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 如果检查到命中,如果数据包是写入操作,就更新缓存中的数据,使用writeDataToBlock来写入,如果读取操作,需要来更新数据包中的值
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">SimpleCache&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">accessFunctional&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 通过getBlockAddr去获取和blockSize对齐的地址
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">Addr&lt;/span> &lt;span style="color:#e06c75">block_addr&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getBlockAddr&lt;/span>(&lt;span style="color:#e06c75">blockSize&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">auto&lt;/span> &lt;span style="color:#e06c75">it&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">find&lt;/span>(&lt;span style="color:#e06c75">block_addr&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">it&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">end&lt;/span>()) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">isWrite&lt;/span>()) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">writeDataToBlock&lt;/span>(&lt;span style="color:#e06c75">it&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">second&lt;/span>, &lt;span style="color:#e06c75">blockSize&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#61afef;font-weight:bold">if&lt;/span> (&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">isRead&lt;/span>()) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">setDataFromBlock&lt;/span>(&lt;span style="color:#e06c75">it&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">second&lt;/span>, &lt;span style="color:#e06c75">blockSize&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#c678dd">else&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">panic&lt;/span>(&lt;span style="color:#98c379">&amp;#34;Unknown packet type!&amp;#34;&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">true&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h4 id="insert">insert&lt;/h4>
+&lt;p>用于将数据插入缓存&lt;/p>
+&lt;p>第一步是检查缓存当前是否已满。如果缓存中的条目（块）多于 SimObject 参数设置的缓存容量，则我们需要逐出某些条目。以下代码利用 C++ 的哈希表实现逐出随机条目&lt;code>unordered_map&lt;/code>。&lt;/p>
+&lt;p>在驱逐时，我们需要将数据写回到后备内存中，以防数据已被更新。为此，我们创建一个新的&lt;code>Request&lt;/code>-&lt;code>Packet&lt;/code> 对。数据包使用新的内存命令：&lt;code>MemCmd::WritebackDirty&lt;/code>。然后，我们通过内存侧端口 () 发送数据包&lt;code>memPort&lt;/code>并擦除缓存存储映射中的条目。&lt;/p>
+&lt;p>然后，在某个块可能被逐出后，我们将新地址添加到缓存中。为此，我们只需为该块分配空间并向映射添加一个条目。最后，我们将响应数据包中的数据写入新分配的块中。由于我们确保如果数据包小于缓存块，则在缓存未命中逻辑中创建一个新数据包，因此该数据保证为缓存块的大小。&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e06c75">SimpleCache&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">insert&lt;/span>(&lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">size&lt;/span>() &lt;span style="color:#56b6c2">&amp;gt;=&lt;/span> &lt;span style="color:#e06c75">capacity&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// Select random thing to evict. This is a little convoluted since we
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#7f848e">// are using a std::unordered_map. See http://bit.ly/2hrnLP2
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">bucket&lt;/span>, &lt;span style="color:#e06c75">bucket_size&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">do&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">bucket&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">random_mt&lt;/span>.&lt;span style="color:#e06c75">random&lt;/span>(&lt;span style="color:#d19a66">0&lt;/span>, (&lt;span style="color:#e5c07b">int&lt;/span>)&lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">bucket_count&lt;/span>() &lt;span style="color:#56b6c2">-&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> } &lt;span style="color:#c678dd">while&lt;/span> ( (&lt;span style="color:#e06c75">bucket_size&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">bucket_size&lt;/span>(&lt;span style="color:#e06c75">bucket&lt;/span>)) &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> );
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 返回 cacheStore.begin(bucket)迭代器往后移动 random_mt.random步的位置,也是一个迭代器 ,或者说地址
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">auto&lt;/span> &lt;span style="color:#e06c75">block&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">next&lt;/span>(&lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">begin&lt;/span>(&lt;span style="color:#e06c75">bucket&lt;/span>),
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">random_mt&lt;/span>.&lt;span style="color:#e06c75">random&lt;/span>(&lt;span style="color:#d19a66">0&lt;/span>, &lt;span style="color:#e06c75">bucket_size&lt;/span> &lt;span style="color:#56b6c2">-&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>));
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">//创建写回包并将其发送到内存端口 ,一个请求包含地址,大小,flags , id
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">RequestPtr&lt;/span> &lt;span style="color:#e06c75">req&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">Request&lt;/span>(&lt;span style="color:#e06c75">block&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">first&lt;/span>, &lt;span style="color:#e06c75">blockSize&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>, &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">PacketPtr&lt;/span> &lt;span style="color:#e06c75">new_pkt&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">Packet&lt;/span>(&lt;span style="color:#e06c75">req&lt;/span>, &lt;span style="color:#e06c75">MemCmd&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">WritebackDirty&lt;/span>, &lt;span style="color:#e06c75">blockSize&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 将被驱逐快的数据添加都新的包里,block_&amp;gt;second为数据指针,block-&amp;gt;first为地址
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">new_pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">dataDynamic&lt;/span>(&lt;span style="color:#e06c75">block&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">second&lt;/span>); &lt;span style="color:#7f848e">// This will be deleted later
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">DPRINTF&lt;/span>(&lt;span style="color:#e06c75">SimpleCache&lt;/span>, &lt;span style="color:#98c379">&amp;#34;Writing packet back %s&lt;/span>&lt;span style="color:#98c379">\n&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>, &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">print&lt;/span>());
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 发送
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">memPort&lt;/span>.&lt;span style="color:#e06c75">sendTimingReq&lt;/span>(&lt;span style="color:#e06c75">new_pkt&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">cacheStore&lt;/span>.&lt;span style="color:#e06c75">erase&lt;/span>(&lt;span style="color:#e06c75">block&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">first&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 为新的缓存块分配内存
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">uint8_t&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">data&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">uint8_t&lt;/span>[&lt;span style="color:#e06c75">blockSize&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// cacheStore采取的是类似于哈希表的形式,地址作为key,保存数据指针
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">cacheStore&lt;/span>[&lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">getAddr&lt;/span>()] &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">data&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 将请求的数据写入缓存
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">pkt&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">writeDataToBlock&lt;/span>(&lt;span style="color:#e06c75">data&lt;/span>, &lt;span style="color:#e06c75">blockSize&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="总结-1">总结&lt;/h3>
+&lt;p>相比较于SimpleMemobj,&lt;/p>
+&lt;p>recvTimingReq没有改变&lt;/p>
+&lt;p>handleRequest改变,首先,增加了id,可以明确发起请求的端口是什么id ,其次,需要去延时执行一个事件accessTiming,&lt;/p>
+&lt;p>对于accessTiming函数来说,在通过accessFunctional函数获取1.是否hit,2.hit的话写入数据包的值,将req的数据包转为resp,然后就可以直接sendResp ,&lt;/p>
+&lt;p>如果未命中的话,会去内存读一个缓存行大小的数据包,即先sendPacket(没变)-&amp;gt;sendTimingReq(没变)-&amp;gt;recvTimingResp((没变)-&amp;gt;handleResponse&lt;/p>
+&lt;p>对于handleResponse,首先需要去insert(pkt),即选择相应的缓存行去插入,同时需要将排除的缓存行写回内存(再次调用memPort.sendPacket),另外,有一个有意思的点是originalPacket,就是如果req的时候不是对整个block大小请求,就会去新建一个packet包发给memport,然后originalPacket就保存着原来的数据包,所以在handleResponse的时候会去判断originalPacket是否存在,如果存在的话会用originalPacket重新去读一次缓存(accessFunction)获取到对应的数据,然后sendResponse&lt;/p>
+&lt;p>sendResponse有一个改变就是通过id去选择Port了,然后就是SendPacket-&amp;gt;SendTimingReq,中间会由于cpu阻塞进行RecvRespRetry,均没有改变&lt;/p>
+&lt;p>最大的改变其实是handleRequest和handleResponse,本身只控制阻塞和简单的转发,现在控制cache的整个逻辑&lt;/p>
+&lt;p>block在handlereq上的时候转变为true,在sendResponse的时候转化为false&lt;/p>
+&lt;p>blockedPacket在recvRespRetry,recvReqRetry的时候会清空,在sendPacket时会进行赋值,赋值的条件就是后续的操作阻塞了,sendTimingReq或者sendTimingResp ,发起retry就会清空blockedPacket .&lt;/p>
+&lt;p>对于recvRespRetry和recvReqRetry没有任何条件,猜测是由下级或者上级根据某种条件发送的,这个retry就是把已经得到的数据获取,是接受数据的retry&lt;/p>
+&lt;p>还有一个retry,是TrySendRetry,它是希望CPU重新再发送一次请求,因为有一些req可能会直接卡在handleRequest这边,在sendResponse的时候会发起retry ,最终sendRetryReq的条件是 needRetry &amp;amp;&amp;amp; blockedPacket == nullptr&lt;/p>
+&lt;p>needRetry 在 trySendRetry会 变成false , 在recvTimingReq会变成true ,变成true的条件就是handleRequest是block的,还有 ( blocketPacket || needRetry )(why?这个唯一增加的约束是在recvRespRetry那边有blockPacket的时候,本来可以成功,但是现在失败了)&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 232;
+flex-basis: 558px"
+>
+&lt;a href="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1.png" data-size="1089x468">
+&lt;img src="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1.png"
+width="1089"
+height="468"
+srcset="https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1_hu13758661100891426716.png 480w, https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/image-20241214212734143-1734277025888-1_hu10750278072586324411.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;p>&lt;a class="link" href="https://www.cnblogs.com/DswCnblog/p/5629165.html" target="_blank" rel="noopener"
 >lambda函数&lt;/a>&lt;/p>
 &lt;p>&lt;a class="link" href="https://www.cnblogs.com/shiyublog/p/10996062.html" target="_blank" rel="noopener"
 >c++中public,protected,private的区别&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/zhenz0729/article/details/135295268" target="_blank" rel="noopener"
+>gem5学习,主要是看insert&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.runoob.com/cplusplus/cpp-libs-unordered_map.html" target="_blank" rel="noopener"
+>unordered_map&lt;/a>&lt;/p>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Gem5_learning</title><link>https://VastCircle.github.io/2024/gem5_learning/</link><pubDate>Mon, 09 Dec 2024 15:11:13 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_learning/</guid><description>&lt;h2 id="配置">配置&lt;/h2>
@@ -9027,7 +10000,7 @@ alt="具有完整指令窗口停顿的周期的百分比">
 &lt;/a>
 &lt;figcaption>具有完整指令窗口停顿的周期的百分比&lt;/figcaption>
 &lt;/figure>&lt;/p>
-&lt;p>Runahead 的性能优势来自于将指令提取到提取引擎的缓存中，并执行未命中一级或二级缓存的独立加载和存储。&lt;/p>
+&lt;p>Runahead 的性能优势来自于&lt;strong>将指令提取到提取引擎的缓存中，并执行未命中一级或二级缓存的独立加载和存储&lt;/strong>。&lt;/p>
 &lt;h2 id="implementation-of-runahead-execution-in-an-out-of-order-processor">Implementation of runahead execution in an out-of-order processor&lt;/h2>
 &lt;p>在本节中，我们描述了在乱序处理器上实现超前执行的情况，其中&lt;strong>指令在被调度后并在执行之前访问寄存器文件&lt;/strong>。Intel Pentium 4 处理器 [13]、MIPS R10000 微处理器 [30] 和 Compaq Alpha 21264 处理器 [18] 是这种微架构的例子。在其他一些微架构中，例如 Intel Pentium Pro 处理器 [12]，&lt;strong>指令在放入调度器之前访问寄存器文件&lt;/strong>。&lt;/p>
 &lt;p>Frontend RAT(Register Alias Table)用于寄存器重命名，并包含架构寄存器到物理寄存器的推测映射。&lt;/p>
@@ -9062,7 +10035,7 @@ alt="image-20241010195821755">
 &lt;p>先行存储(store)指令不会将其结果写入任何地方??。因此，依赖于有效先行存储的先行加载被视为无效指令并被丢弃。由于寄存器数量有限，因此将&lt;strong>先行存储(store)&lt;strong>的结果&lt;/strong>转发&lt;/strong>到&lt;strong>先行加载(load)&lt;strong>对于高性能至关重要。
 如果存储及其相关加载都在指令窗口中，则此转发是通过当前乱序处理器中已存在的&lt;/strong>store buffer&lt;/strong>来完成的(应该是cache那边的buffer)。
 如果超前运行加载依赖于已经pseudo-retired的超前运行存储（这意味着该存储不再位于store buffer???前面是说的runahead store是不会将结果写入任何地方的），则它应该从某个其他位置获取存储的结果。1是写入data cache (提高复杂度,并且可能会占据其他有效指令的位置),2是弄一个大的fully-associative buffer。&lt;/p>
-&lt;p>使用 &lt;strong>runahead cache&lt;/strong> 来保存伪退休先行存储的结果和 INV 状态 ，提供指令之间的数据和INV状态的通信,被逐出的缓存行不会写入其他地方。为了支持存储和加载之间 INV 位的正确通信，store buff中的每个条目和runahead cache 中的每个字节都有一个相应的 INV 位。&lt;strong>runahead cache 的每个字节还有另一个与其关联的位（STO 位），指示存储是否已写入该字节&lt;/strong>。仅当访问的字节由存储写入（设置了 STO 位）并且访问runahead cache 有效时，对超前运行高速缓存的访问才会导致命中。&lt;/p>
+&lt;p>使用 &lt;strong>runahead cache&lt;/strong> 来保存伪退休先行存储的结果和 INV 状态 ，提供指令之间的数据和INV状态的通信,被逐出的缓存行不会写入其他地方。为了支持存储和加载之间 INV 位的正确通信，store buffer中的每个条目和runahead cache 中的每个字节都有一个相应的 INV 位。&lt;strong>runahead cache 的每个字节还有另一个与其关联的位（STO 位），指示存储是否已写入该字节&lt;/strong>。仅当访问的字节由存储写入（设置了 STO 位）并且访问runahead cache 有效时，对超前运行高速缓存的访问才会导致命中。&lt;/p>
 &lt;p>更新 INV 和 STO的规则:&lt;/p>
 &lt;ol>
 &lt;li>当有效的先行存储完成执行时，它将其数据写入其store buffer entry（就像在普通处理器中一样）并重置该条目的关联 INV 位。同时，它查询数据缓存，如果数据缓存未命中，则向内存层次结构发送预取请求。&lt;/li>
