@@ -1,4 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Wed, 18 Dec 2024 17:03:41 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>SIMD和Vector</title><link>https://VastCircle.github.io/2024/simd/</link><pubDate>Wed, 18 Dec 2024 17:03:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/simd/</guid><description>&lt;h2 id="simd技术简介">SIMD技术简介&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 19 Dec 2024 16:52:19 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>工作负载分析</title><link>https://VastCircle.github.io/2024/%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link><pubDate>Thu, 19 Dec 2024 16:52:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="nas-sys">nas-sys&lt;/h2>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>SIMD和Vector</title><link>https://VastCircle.github.io/2024/simd/</link><pubDate>Wed, 18 Dec 2024 17:03:41 +0800</pubDate><guid>https://VastCircle.github.io/2024/simd/</guid><description>&lt;h2 id="simd技术简介">SIMD技术简介&lt;/h2>
 &lt;p>&lt;strong>传统的通用处理器都是标量处理器，一条指令执行只得到一个数据结果&lt;/strong>。但对于图像、信号处理等应用，存在大量的数据并行性计算操作，这个时候，提高数据的并行性从而提高运算的性能就显得尤为重要。因此，SIMD技术应运而生。&lt;/p>
 &lt;p>&lt;strong>SIMD的英文全称是Single Instruction Multiple Data，即单指令流多数据技术&lt;/strong>，SIMD的概念是相对于SISD（Single Instruction Single Data，单指令流单数据）提出的。&lt;/p>
 &lt;h2 id="向量计算技术简介">&lt;strong>向量计算技术简介&lt;/strong>&lt;/h2>
@@ -99,6 +104,10 @@
 &lt;p>Vector Runahead &lt;strong>延长 Runahead 执行的时间&lt;/strong>，直到依赖链中的&lt;strong>所有加载指令都被发出&lt;/strong>，而不仅仅停在第一个阻塞的 Load Miss,这使得 Vector Runahead 能够预取整个负载链。&lt;/p>
 &lt;p>Vector Runahead 通过将标量指令重新解释为矢量运算来矢量化 runahead 指令流，以便在不同的偏移量处生成许多不同的缓存未命中。等效增加了取指/解码带宽,同时需要非常少的后端资源，&lt;/p>
 &lt;p>Vector Runahead 通过向量展开和流水线发出多轮这些矢量化指令，以更深入地推测并进一步增加有效的提前获取/解码带宽，&lt;/p>
+&lt;h2 id="background-and-motivation">background and Motivation&lt;/h2>
+&lt;h3 id="limitations-of-runahead-techniques">Limitations of Runahead Techniques&lt;/h3>
+&lt;p>标准的 runahead 执行 [25,32,34,57,58] 检查点，并在 fullwindow stall 后释放应用程序的架构状态，并进入 runahead 模式。然后，处理器继续推测性地生成内存访问。当阻塞内存访问返回时，runahead 间隔终止，此时管道被刷新，架构状态将恢复到 runahead 的入口点，并恢复正常执行。runahead 模式期间生成的 prefetches 将未来数据带入处理器高速缓存，从而减少 normal 模式下即将到来的 stall 数量，从而提高性能。&lt;/p>
+&lt;p>（1） PRE 利用可用的后端 （issue queue 和物理 register file） 资源在 runahead 模式下推测性地执行指令，因此在进入和退出 runahead 模式时无需释放和刷新处理器状态。（2） PRE 仅推测性地预执行在全窗口停顿后生成内存访问所需的指令。（3） PRE 包括一种在预试模式下快速回收后端资源的机制。PRE 的性能优势来自于在预跑模式和正常模式之间转换时减少了开销，这使得即使在较短的超速间隔内也能超速运行，并且在超速模式下仅调度负载及其地址生成指令，而不是内存访问的依赖项（只要它们不会导致从属负载），从而减少超速模式期间所需的后端资源量。&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
