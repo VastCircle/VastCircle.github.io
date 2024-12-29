@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Riscv on VastCircle's blog</title><link>https://VastCircle.github.io/categories/riscv/</link><description>Recent content in Riscv on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 22 Dec 2024 15:05:57 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/riscv/index.xml" rel="self" type="application/rss+xml"/><item><title>Rocket_chip_hardware_performance_monitor</title><link>https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/</link><pubDate>Sun, 22 Dec 2024 15:05:57 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/</guid><description>&lt;h2 id="hardware-performance-monitor">Hardware Performance Monitor&lt;/h2>
+&lt;p>the hardware performance monitor includes 29 additional 64-bit event counters,mhpmcounter3-mhpmcounter . The event selector CSRs , mhpmevent3-mhpmevent31, are MXLEN-bit WARL register tghat control which event causes the corresponding counter to increment&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 320; 
+			flex-basis: 769px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944.png" data-size="798x249">
+		&lt;img src="https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944.png"
+			width="798"
+			height="249"
+			srcset="https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944_hu189879034609081359.png 480w, https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944_hu17809269090014267676.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item></channel></rss>

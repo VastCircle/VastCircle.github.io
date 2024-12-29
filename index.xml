@@ -1,5 +1,622 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 19 Dec 2024 16:52:19 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>工作负载分析</title><link>https://VastCircle.github.io/2024/%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link><pubDate>Thu, 19 Dec 2024 16:52:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="nas-sys">nas-sys&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sat, 28 Dec 2024 00:38:28 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Rocketl1l2的交互</title><link>https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/</link><pubDate>Sat, 28 Dec 2024 00:38:28 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/</guid><description>&lt;h2 id="测试程序">测试程序&lt;/h2>
+&lt;p>以下程序基本能使得在后续的store中能够造成cache miss&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> ; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">128&lt;/span> ; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> { &lt;span style="color:#7f848e">// 填8个字节
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> ; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">8&lt;/span> ; &lt;span style="color:#e06c75">j&lt;/span> &lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Table&lt;/span>[(&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">11&lt;/span>) &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 再读一次,
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> ; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">128&lt;/span> ; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Table&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">11&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">i&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="波形分析">波形分析&lt;/h2>
+&lt;p>以地址0x80002140为例&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 532;
+flex-basis: 1278px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114128488.png" data-size="1332x250">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114128488.png"
+width="1332"
+height="250"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114128488_hu3601580593828471783.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114128488_hu14037726226607520216.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>发送了 acquireblock请求 (opcode=6) ,source = 0,param = 1 ,NtoT,权限升了&lt;/p>
+&lt;p>通过d通道来回应相应的block,64Byte opcode = 5 : GrantData param = 0 ,to T&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 630;
+flex-basis: 1513px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114310563.png" data-size="1356x215">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114310563.png"
+width="1356"
+height="215"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114310563_hu13997086999705267755.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228114310563_hu1567939558564258873.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>在访问0x80005140的时候,会把0x80002140踢出去&lt;/p>
+&lt;p>1000 0000 0000 0000 0101 0001 0100 0000&lt;/p>
+&lt;p>1000 0000 0000 0000 0010 0001 0100 0000&lt;/p>
+&lt;p>通过c通道向l2发送相应的写请求 ,opcode 为7 releasedata&lt;/p>
+&lt;p>param 1 TtoN ,权限降了,这样其它核可以有权限去访问这块内存了&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 685;
+flex-basis: 1644px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121110120.png" data-size="1562x228">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121110120.png"
+width="1562"
+height="228"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121110120_hu14812710916025197436.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121110120_hu11769241239069806023.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>cpu重发消息了吗?? 会不会是第一次req是l1写入l2,第二次req是l1读取l2，应该不是&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 248;
+flex-basis: 595px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228130309875.png" data-size="1368x551">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228130309875.png"
+width="1368"
+height="551"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228130309875_hu7833271048380387175.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228130309875_hu17212554382789313116.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>虽然说80005140发送了两次，但是从代码上来看a_bits_address依赖于s2_req_addr,这个 它在第一次store的时候就进行了赋值，所以按理来说即使第二次不发送，也是能够对l2发起read的 ，&lt;/p>
+&lt;p>不过为什么会发送两次&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 408;
+flex-basis: 979px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228152113504.png" data-size="1820x446">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228152113504.png"
+width="1820"
+height="446"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228152113504_hu13616351803496312912.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228152113504_hu12770799884593167265.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="代码">代码&lt;/h2>
+&lt;p>rocket用的是普通的block-cache&lt;/p>
+&lt;p>s_voluntary_writeback&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 1388;
+flex-basis: 3331px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228105139496.png" data-size="1277x92">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228105139496.png"
+width="1277"
+height="92"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228105139496_hu12353709537225022990.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228105139496_hu13176132764453151868.png 1024w"
+loading="lazy"
+alt="image-20241228105139496">
+&lt;/a>
+&lt;figcaption>image-20241228105139496&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>到底什么时候会release ,就是被踢出去的时候&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 820;
+flex-basis: 1969px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228145401426.png" data-size="1707x208">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228145401426.png"
+width="1707"
+height="208"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228145401426_hu18033976610059691788.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228145401426_hu10045938178266076414.png 1024w"
+loading="lazy"
+alt="image-20241228145401426">
+&lt;/a>
+&lt;figcaption>image-20241228145401426&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="tl_out_cvalid">tl_out_c.valid&lt;/h3>
+&lt;p>看下来就是在cached_miss且dirty的时候c_valid会拉高&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// s2_victim_dirty 在出现没有命中的时候会拉高,在出现命中的时候会拉低
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s2_victim_state&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_hit_valid&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s2_hit_state&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Mux1H&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_victim_way&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s2_meta_corrected&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">coh&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_victim_dirty&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s2_shrink_param&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">voluntaryNewCoh&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">s2_victim_state&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">onCacheControl&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">M_FLUSH&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// cache_miss
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s2_want_victimize&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">usingDataScratchpad&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">B&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_valid_cached_miss&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">s2_valid_flush_line&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">s2_valid_data_error&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">s2_flush_valid&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s2_victimize&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">s2_want_victimize&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">s2_cannot_victimize&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_victimize&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 状态变换
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">release_state&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_victim_dirty&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">discard_line&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_voluntary_writeback&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">cacheParams&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">silentDrop&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">release_ack_wait&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">release_queue_empty&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">s2_victim_state&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">isValid&lt;/span>&lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_valid_flush_line&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">s2_flush_valid&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">s2_readwrite&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">s2_hit_valid&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span> &lt;span style="color:#e06c75">s_voluntary_release&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">s_voluntary_write_meta&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">inWriteback&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">release_state&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">isOneOf&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s_voluntary_writeback&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s_probe_rep_dirty&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">dataArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">2&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">inWriteback&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">releaseDataBeat&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">refillCycles&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">dataArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">2&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">dataArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s1_release_data_valid&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">RegNext&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">dataArb&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">in&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">2&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">fire&lt;/span>&lt;span style="color:#56b6c2">())&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s2_release_data_valid&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">RegNext&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s1_release_data_valid&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">releaseRejected&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">tl_out_c&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_release_data_valid&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">cacheParams&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">silentDrop&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">release_state&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">s_voluntary_release&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!(&lt;/span>&lt;span style="color:#e06c75">c_first&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">release_ack_wait&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 665;
+flex-basis: 1596px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121846180.png" data-size="1317x198">
+&lt;img src="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121846180.png"
+width="1317"
+height="198"
+srcset="https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121846180_hu15486588507613234770.png 480w, https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241228121846180_hu11283493783174921404.png 1024w"
+loading="lazy"
+alt="image-20241228121846180">
+&lt;/a>
+&lt;figcaption>image-20241228121846180&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h3 id="t1_out_caddr-and-t1_out_cdata">t1_out_c.addr and t1_out_c.data&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">//address
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">when&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_victimize&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">probe_bits&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">addressToProbe&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_vaddr&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Cat&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_victim_tag&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s2_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">tagLSB&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">idxLSB&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">idxLSB&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">tl_out_c&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">address&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">probe_bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">address&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">//data
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s2_data_decoded&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e06c75">decodeData&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_data&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">s2_data_corrected&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_data_decoded&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">map&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">_&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">corrected&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>&lt;span style="color:#c678dd">:&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">[&lt;/span>&lt;span style="color:#e5c07b">UInt&lt;/span>&lt;span style="color:#56b6c2">]).&lt;/span>&lt;span style="color:#e06c75">asUInt&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">tl_out_c&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">data&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">s2_data_corrected&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="t1_out_avalid">t1_out_a.valid&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// a.valid
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">tl_out_a&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">s2_kill&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_valid_uncached_pending&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_valid_cached_miss&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">!(&lt;/span>&lt;span style="color:#e06c75">release_ack_wait&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">^&lt;/span> &lt;span style="color:#e06c75">release_ack_addr&lt;/span>&lt;span style="color:#56b6c2">)(((&lt;/span>&lt;span style="color:#e06c75">pgIdxBits&lt;/span> &lt;span style="color:#56b6c2">+&lt;/span> &lt;span style="color:#e06c75">pgLevelBits&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e06c75">min&lt;/span> &lt;span style="color:#e06c75">paddrBits&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">-&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">idxLSB&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#d19a66">0.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">cacheParams&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">acquireBeforeRelease&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">release_ack_wait&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">release_queue_empty&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">s2_victim_dirty&lt;/span>&lt;span style="color:#56b6c2">)))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">tl_out_a&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">s2_uncached&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">acquire&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_vaddr&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s2_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">addr&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">s2_grow_param&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">s2_write&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">get&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">s2_req&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">cmd&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e5c07b">M_PWR&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">putpartial&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">s2_read&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">put&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">atomics&lt;/span>&lt;span style="color:#56b6c2">))))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>(s2_valid_cached_miss &amp;amp;&amp;amp;
+! (release_ack_wait &amp;amp;&amp;amp; (s2_req.addr ^ release_ack_addr)(((pgIdxBits + pgLevelBits) min paddrBits) - 1, idxLSB) === 0.U) ## 应该是说不在release&lt;/p>
+&lt;p>cacheParams.acquireBeforeRelease.B 一个配置,在release之前发起请求,看样子是false&lt;/p>
+&lt;p>!release_ack_wait &amp;amp;&amp;amp; release_queue_empty || !s2_victim_dirty ,脏了是要写回的&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Spik_cache的交互</title><link>https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/</link><pubDate>Fri, 27 Dec 2024 17:34:48 +0800</pubDate><guid>https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/</guid><description>&lt;p>spike 的cache 为什么会出现 l2 miss的次数高于l1 ,按理来说只有l1 miss才有机会去读l2&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 376;
+flex-basis: 904px"
+>
+&lt;a href="https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683.png" data-size="671x178">
+&lt;img src="https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683.png"
+width="671"
+height="178"
+srcset="https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683_hu6466349755934550054.png 480w, https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683_hu14082263635862480712.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#e5c07b">cache_sim_t&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#61afef;font-weight:bold">access&lt;/span>(&lt;span style="color:#e5c07b">uint64_t&lt;/span> &lt;span style="color:#e06c75">addr&lt;/span>, &lt;span style="color:#e5c07b">size_t&lt;/span> &lt;span style="color:#e06c75">bytes&lt;/span>, &lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#e06c75">store&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// access次数的统计
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">store&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">write_accesses&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#e06c75">read_accesses&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> (&lt;span style="color:#e06c75">store&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">bytes_written&lt;/span> : &lt;span style="color:#e06c75">bytes_read&lt;/span>) &lt;span style="color:#56b6c2">+=&lt;/span> &lt;span style="color:#e06c75">bytes&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 检查是否命中
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">uint64_t&lt;/span>&lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">hit_way&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">check_tag&lt;/span>(&lt;span style="color:#e06c75">addr&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#61afef;font-weight:bold">likely&lt;/span>(&lt;span style="color:#e06c75">hit_way&lt;/span> &lt;span style="color:#56b6c2">!=&lt;/span> &lt;span style="color:#e5c07b">NULL&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">store&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">hit_way&lt;/span> &lt;span style="color:#56b6c2">|=&lt;/span> &lt;span style="color:#e06c75">DIRTY&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 未命中
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">store&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">write_misses&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#e06c75">read_misses&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">log&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">cerr&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">name&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#98c379">&amp;#34; &amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> (&lt;span style="color:#e06c75">store&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#98c379">&amp;#34;write&amp;#34;&lt;/span> &lt;span style="color:#56b6c2">:&lt;/span> &lt;span style="color:#98c379">&amp;#34;read&amp;#34;&lt;/span>) &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#98c379">&amp;#34; miss 0x&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">hex&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#e06c75">endl&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// victim 是需要进行替换的tag ,为0说明cache没有满
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">uint64_t&lt;/span> &lt;span style="color:#e06c75">victim&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#61afef;font-weight:bold">victimize&lt;/span>(&lt;span style="color:#e06c75">addr&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// dirty &amp;amp;&amp;amp; valid
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> ((&lt;span style="color:#e06c75">victim&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> (&lt;span style="color:#e06c75">VALID&lt;/span> &lt;span style="color:#56b6c2">|&lt;/span> &lt;span style="color:#e06c75">DIRTY&lt;/span>)) &lt;span style="color:#56b6c2">==&lt;/span> (&lt;span style="color:#e06c75">VALID&lt;/span> &lt;span style="color:#56b6c2">|&lt;/span> &lt;span style="color:#e06c75">DIRTY&lt;/span>))
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 把替换的block写入l2
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e5c07b">uint64_t&lt;/span> &lt;span style="color:#e06c75">dirty_addr&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">victim&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">~&lt;/span>(&lt;span style="color:#e06c75">VALID&lt;/span> &lt;span style="color:#56b6c2">|&lt;/span> &lt;span style="color:#e06c75">DIRTY&lt;/span>)) &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#e06c75">idx_shift&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// 如果有l2的话
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">miss_handler&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">miss_handler&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#61afef;font-weight:bold">access&lt;/span>(&lt;span style="color:#e06c75">dirty_addr&lt;/span>, &lt;span style="color:#e06c75">linesz&lt;/span>, &lt;span style="color:#e5c07b">true&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">writebacks&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// read
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">miss_handler&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">miss_handler&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#61afef;font-weight:bold">access&lt;/span>(&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">~&lt;/span>(&lt;span style="color:#e06c75">linesz&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>), &lt;span style="color:#e06c75">linesz&lt;/span>, &lt;span style="color:#e5c07b">false&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">store&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#61afef;font-weight:bold">check_tag&lt;/span>(&lt;span style="color:#e06c75">addr&lt;/span>) &lt;span style="color:#56b6c2">|=&lt;/span> &lt;span style="color:#e06c75">DIRTY&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 这种存放的方式应该类似于哈希表,是有键值对的
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// idx_shift应该和block的大小有关,即前面几位是一个block
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e5c07b">uint64_t&lt;/span> &lt;span style="color:#e5c07b">fa_cache_sim_t&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#61afef;font-weight:bold">victimize&lt;/span>(&lt;span style="color:#e5c07b">uint64_t&lt;/span> &lt;span style="color:#e06c75">addr&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">uint64_t&lt;/span> &lt;span style="color:#e06c75">old_tag&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">tags&lt;/span>.&lt;span style="color:#61afef;font-weight:bold">size&lt;/span>() &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#e06c75">ways&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">auto&lt;/span> &lt;span style="color:#e06c75">it&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">tags&lt;/span>.&lt;span style="color:#61afef;font-weight:bold">begin&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">std&lt;/span>&lt;span style="color:#56b6c2">::&lt;/span>&lt;span style="color:#61afef;font-weight:bold">advance&lt;/span>(&lt;span style="color:#e06c75">it&lt;/span>, &lt;span style="color:#e06c75">lfsr&lt;/span>.&lt;span style="color:#61afef;font-weight:bold">next&lt;/span>() &lt;span style="color:#56b6c2">%&lt;/span> &lt;span style="color:#e06c75">ways&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">old_tag&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">it&lt;/span>&lt;span style="color:#56b6c2">-&amp;gt;&lt;/span>&lt;span style="color:#e06c75">second&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">tags&lt;/span>.&lt;span style="color:#61afef;font-weight:bold">erase&lt;/span>(&lt;span style="color:#e06c75">it&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">tags&lt;/span>[&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">idx_shift&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">addr&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">idx_shift&lt;/span>) &lt;span style="color:#56b6c2">|&lt;/span> &lt;span style="color:#e06c75">VALID&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">old_tag&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>D$ read miss + D$ write miss + I$ write miss = L2 $ read access&lt;/p>
+&lt;p>L2 $write access = D$ write miss 中 dirty 的一部分&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://github.com/plctlab/PLCT-Open-Reports/blob/master/slides/20200617-Spike%20%E4%BB%A3%E7%A0%81%E6%A1%86%E6%9E%B6%E5%8F%8A%E5%85%B7%E4%BD%93%E5%AE%9E%E7%8E%B0%E5%88%86%E6%9E%90-wangmeng.pdf" target="_blank" rel="noopener"
+>TLCT-Open-Reports&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>服务器配置</title><link>https://VastCircle.github.io/2024/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/</link><pubDate>Wed, 25 Dec 2024 01:25:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/</guid><description>&lt;h2 id="vim">vim&lt;/h2>
+&lt;p>安装插件 vim-plug&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/junegunn/vim-plug" target="_blank" rel="noopener"
+>https://github.com/junegunn/vim-plug&lt;/a>&lt;/p>
+&lt;p>安装主题&lt;/p>
+&lt;p>&lt;a class="link" href="https://github.com/kabbamine/yowish.vim?tab=readme-ov-file" target="_blank" rel="noopener"
+>https://github.com/kabbamine/yowish.vim?tab=readme-ov-file&lt;/a>&lt;/p>
+&lt;h2 id="zsh安装">zsh安装&lt;/h2>
+&lt;p>&lt;a class="link" href="https://patzer0.com/archives/ubuntu-install-font-for-user-or-system" target="_blank" rel="noopener"
+>安装字体&lt;/a>&lt;/p>
+&lt;h2 id="chipyard-安装">chipyard 安装&lt;/h2>
+&lt;h3 id="问题">问题&lt;/h3>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>wzy123wzy&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.kwchang0831.dev/dev-env/ubuntu/oh-my-zsh" target="_blank" rel="noopener"
+>wzsh安装&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>chipyard and Firesim</title><link>https://VastCircle.github.io/2024/firesim/</link><pubDate>Tue, 24 Dec 2024 21:35:28 +0800</pubDate><guid>https://VastCircle.github.io/2024/firesim/</guid><description>&lt;h2 id="问题">问题&lt;/h2>
+&lt;h3 id="1运行firesim-runworkload-时报错">1.运行firesim runworkload 时报错&lt;/h3>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 352;
+flex-basis: 845px"
+>
+&lt;a href="https://VastCircle.github.io/2024/firesim/image-20241224213818951.png" data-size="1420x403">
+&lt;img src="https://VastCircle.github.io/2024/firesim/image-20241224213818951.png"
+width="1420"
+height="403"
+srcset="https://VastCircle.github.io/2024/firesim/image-20241224213818951_hu16838008880615851633.png 480w, https://VastCircle.github.io/2024/firesim/image-20241224213818951_hu15872417008841820697.png 1024w"
+loading="lazy"
+alt="image-20241224213818951">
+&lt;/a>
+&lt;figcaption>image-20241224213818951&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>该问题未解决&lt;/p>
+&lt;h3 id="int-fpga_pci_check_file_idchar-uint-16_t-asserttemp_id--id-failed">int fpga_pci_check_file_id(char *,uint 16_t): Assert(temp_id == id) failed&lt;/h3>
+&lt;p>这会导致仿真一开始就停止了&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 779;
+flex-basis: 1870px"
+>
+&lt;a href="https://VastCircle.github.io/2024/firesim/image-20241226164901385.png" data-size="1465x188">
+&lt;img src="https://VastCircle.github.io/2024/firesim/image-20241226164901385.png"
+width="1465"
+height="188"
+srcset="https://VastCircle.github.io/2024/firesim/image-20241226164901385_hu6340866643082896206.png 480w, https://VastCircle.github.io/2024/firesim/image-20241226164901385_hu13690025600239813682.png 1024w"
+loading="lazy"
+alt="image-20241226164901385">
+&lt;/a>
+&lt;figcaption>image-20241226164901385&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>从仿真截图上大致能看出问题,因为我本身是使用了81端口,但是现在它在仿真时还是使用21端口,这必然会出错&lt;/p>
+&lt;p>修改run_farm_deploy_managers.py可以强制将bus设置为81 ,这样能够解决问题&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 780;
+flex-basis: 1874px"
+>
+&lt;a href="https://VastCircle.github.io/2024/firesim/image-20241226173219152.png" data-size="1312x168">
+&lt;img src="https://VastCircle.github.io/2024/firesim/image-20241226173219152.png"
+width="1312"
+height="168"
+srcset="https://VastCircle.github.io/2024/firesim/image-20241226173219152_hu8852092959460164909.png 480w, https://VastCircle.github.io/2024/firesim/image-20241226173219152_hu10936162801737639873.png 1024w"
+loading="lazy"
+alt="image-20241226173219152">
+&lt;/a>
+&lt;figcaption>image-20241226173219152&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;h2 id="即使加入的withprintfsynthesis仍然无法打印log">即使加入的withPrintfSynthesis仍然无法打印log&lt;/h2>
+&lt;p>仔细观察firesim infrasetup 发现它所构建的还是没有synthesis printf的软件设施&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 549;
+flex-basis: 1318px"
+>
+&lt;a href="https://VastCircle.github.io/2024/firesim/image-20241226222829943.png" data-size="1088x198">
+&lt;img src="https://VastCircle.github.io/2024/firesim/image-20241226222829943.png"
+width="1088"
+height="198"
+srcset="https://VastCircle.github.io/2024/firesim/image-20241226222829943_hu5484888761284436681.png 480w, https://VastCircle.github.io/2024/firesim/image-20241226222829943_hu16998589749758927085.png 1024w"
+loading="lazy"
+alt="image-20241226222829943">
+&lt;/a>
+&lt;figcaption>image-20241226222829943&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>发现是没有设置指定的bitstream ,更改命令为&lt;/p>
+&lt;p>firesim infrasetup &amp;ndash;hwdbconfigfile built-hwdb-entries/alveo_u280_firesim_rocket_singlecore_no_nic即可&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Rocket_chip_hardware_performance_monitor</title><link>https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/</link><pubDate>Sun, 22 Dec 2024 15:05:57 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/</guid><description>&lt;h2 id="hardware-performance-monitor">Hardware Performance Monitor&lt;/h2>
+&lt;p>the hardware performance monitor includes 29 additional 64-bit event counters,mhpmcounter3-mhpmcounter . The event selector CSRs , mhpmevent3-mhpmevent31, are MXLEN-bit WARL register tghat control which event causes the corresponding counter to increment&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 320;
+flex-basis: 769px"
+>
+&lt;a href="https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944.png" data-size="798x249">
+&lt;img src="https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944.png"
+width="798"
+height="249"
+srcset="https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944_hu189879034609081359.png 480w, https://VastCircle.github.io/2024/rocket_chip_hardware_performance_monitor/image-20241222151014944_hu17809269090014267676.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>mcycle：保存自过去任意时间以来CPU执行的周期数，是一个64-bit的CSR寄存器，当使用的是32-bit系统时，可以通过mcycle &amp;amp; mcycleh读取完整的64-bit数据。
+minstret：记录自过去任意时间以来CPU退出的指令数，是一个64-bit的CSR寄存器，当使用的是32-bit系统时，可以通过minstret &amp;amp; minstreth读取完整的64-bit数据。
+mhpmevent3–mhpmevent31：硬件性能监控的事件选择CSR寄存器，是一个32-bit的CSR寄存器。
+mhpmcounter3– mhpmcounter31：额外29个事件触发CSR计数器，当选择监控的事件发生时，此计数器会自动加一，指令集中规定是64-bit的CSR寄存器，当使用的是32-bit系统时，可以通过mhpmcounterX &amp;amp; mhpmcounterXh读取完整的64-bit数据。&lt;/p>
+&lt;h2 id="rocket-chip-中-的event">rocket-chip 中 的event&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e06c75">csr&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">counters&lt;/span> &lt;span style="color:#e06c75">foreach&lt;/span> &lt;span style="color:#56b6c2">{&lt;/span> &lt;span style="color:#e06c75">c&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">c&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">inc&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e5c07b">RegNext&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">perfEvents&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">evaluate&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">c&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">eventSel&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span> &lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">perfEvents&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">EventSets&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">EventSet&lt;/span>&lt;span style="color:#56b6c2">((&lt;/span>&lt;span style="color:#e06c75">mask&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">hits&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e5c07b">Mux&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">wb_xcpt&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">mask&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span> &lt;span style="color:#e06c75">wb_valid&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">pipelineIDToWB&lt;/span>&lt;span style="color:#56b6c2">((&lt;/span>&lt;span style="color:#e06c75">mask&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">hits&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">orR&lt;/span>&lt;span style="color:#56b6c2">)),&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;exception&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e5c07b">false&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;load&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_cmd&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e5c07b">M_XRD&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;store&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_cmd&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e5c07b">M_XWR&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;amo&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">usingAtomics&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">B&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">isAMO&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_cmd&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem_cmd&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">isOneOf&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e5c07b">M_XLR&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">M_XSC&lt;/span>&lt;span style="color:#56b6c2">))),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;system&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">csr&lt;/span> &lt;span style="color:#56b6c2">=/=&lt;/span> &lt;span style="color:#e5c07b">CSR&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">N&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;arith&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wxd&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!(&lt;/span>&lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">jal&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">jalr&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mul&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">csr&lt;/span> &lt;span style="color:#56b6c2">=/=&lt;/span> &lt;span style="color:#e5c07b">CSR&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">N&lt;/span>&lt;span style="color:#56b6c2">)),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;branch&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">branch&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;jal&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">jal&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;jalr&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">jalr&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">usingMulDiv&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;mul&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">pipelinedMul&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mul&lt;/span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">alu_fn&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">aluFn&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">FN_DIV&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">=/=&lt;/span> &lt;span style="color:#e06c75">aluFn&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">FN_DIV&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;div&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">pipelinedMul&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">alu_fn&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">aluFn&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">FN_DIV&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">===&lt;/span> &lt;span style="color:#e06c75">aluFn&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e5c07b">FN_DIV&lt;/span>&lt;span style="color:#56b6c2">)))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">usingFPU&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp load&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ldst&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wen&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp store&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ldst&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">wen&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp add&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fma&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">swap23&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp mul&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fma&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">swap23&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ren3&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp mul-add&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fma&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ren3&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp div/sqrt&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">sqrt&lt;/span>&lt;span style="color:#56b6c2">)),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp other&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!(&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ldst&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fma&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fpu&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dec&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">sqrt&lt;/span>&lt;span style="color:#56b6c2">))))),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">EventSet&lt;/span>&lt;span style="color:#56b6c2">((&lt;/span>&lt;span style="color:#e06c75">mask&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">hits&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">mask&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">hits&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">orR&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;load-use interlock&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ex_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">ex_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_mem_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_wb_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">wb_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;long-latency interlock&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_sboard_hazard&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;csr interlock&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ex_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">ex_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">csr&lt;/span> &lt;span style="color:#56b6c2">=/=&lt;/span> &lt;span style="color:#e5c07b">CSR&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">N&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_mem_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">csr&lt;/span> &lt;span style="color:#56b6c2">=/=&lt;/span> &lt;span style="color:#e5c07b">CSR&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">N&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_wb_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">wb_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">csr&lt;/span> &lt;span style="color:#56b6c2">=/=&lt;/span> &lt;span style="color:#e5c07b">CSR&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">N&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;I$ blocked&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">icache_blocked&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;D$ blocked&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mem&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">dcache_blocked&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;branch misprediction&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">take_pc_mem&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">mem_direction_misprediction&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;control-flow target misprediction&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">take_pc_mem&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">mem_misprediction&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">mem_cfi&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">mem_direction_misprediction&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">!&lt;/span>&lt;span style="color:#e06c75">icache_blocked&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;flush&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">wb_reg_flush_pipe&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;replay&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">replay_wb&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">usingMulDiv&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;mul/div interlock&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ex_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">ex_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mul&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">ex_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_mem_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">mul&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_wb_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">wb_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">div&lt;/span>&lt;span style="color:#56b6c2">)))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">++&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">if&lt;/span> &lt;span style="color:#56b6c2">(!&lt;/span>&lt;span style="color:#e06c75">usingFPU&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">else&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;fp interlock&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">id_ex_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">ex_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_mem_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">mem_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_wb_hazard&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">wb_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">||&lt;/span> &lt;span style="color:#e06c75">id_ctrl&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">fp&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&amp;amp;&lt;/span> &lt;span style="color:#e06c75">id_stall_fpu&lt;/span>&lt;span style="color:#56b6c2">)))),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">EventSet&lt;/span>&lt;span style="color:#56b6c2">((&lt;/span>&lt;span style="color:#e06c75">mask&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e06c75">hits&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">mask&lt;/span> &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">hits&lt;/span>&lt;span style="color:#56b6c2">).&lt;/span>&lt;span style="color:#e06c75">orR&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#e5c07b">Seq&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;I$ miss&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">imem&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">perf&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">acquire&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;D$ miss&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dmem&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">perf&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">acquire&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;D$ release&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dmem&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">perf&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">release&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;ITLB miss&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">imem&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">perf&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tlbMiss&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;DTLB miss&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">dmem&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">perf&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">tlbMiss&lt;/span>&lt;span style="color:#56b6c2">),&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#98c379">&amp;#34;L2 TLB miss&amp;#34;&lt;/span>&lt;span style="color:#56b6c2">,&lt;/span> &lt;span style="color:#56b6c2">()&lt;/span> &lt;span style="color:#c678dd">=&amp;gt;&lt;/span> &lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">ptw&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">perf&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">l2miss&lt;/span>&lt;span style="color:#56b6c2">)))))&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/a_weiming/article/details/105547789" target="_blank" rel="noopener"
+>Rocket-chip-Hardware-performance-monitor&lt;/a>&lt;/p>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>工作负载分析</title><link>https://VastCircle.github.io/2024/%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</link><pubDate>Thu, 19 Dec 2024 16:52:19 +0800</pubDate><guid>https://VastCircle.github.io/2024/%E5%B7%A5%E4%BD%9C%E8%B4%9F%E8%BD%BD%E5%88%86%E6%9E%90/</guid><description>&lt;h2 id="nas-sys">nas-sys&lt;/h2>
+&lt;h2 id="randacc-no">randacc-no&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">static&lt;/span> &lt;span style="color:#e5c07b">void&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#61afef;font-weight:bold">RandomAccessUpdate&lt;/span>(&lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#e06c75">TableSize&lt;/span>, &lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">Table&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#d19a66">128&lt;/span>]; &lt;span style="color:#7f848e">/* Current random numbers */&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#7f848e">// ran[j]保存生成的一些伪随机数
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#d19a66">128&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">HPCC_starts&lt;/span> ((&lt;span style="color:#e06c75">NUPDATE&lt;/span>&lt;span style="color:#56b6c2">/&lt;/span>&lt;span style="color:#d19a66">128&lt;/span>) &lt;span style="color:#56b6c2">*&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#e06c75">NUPDATE&lt;/span>&lt;span style="color:#56b6c2">/&lt;/span>&lt;span style="color:#d19a66">128&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#d19a66">128&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>) &lt;span style="color:#56b6c2">^&lt;/span> ((&lt;span style="color:#e06c75">s64Int&lt;/span>) &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">POLY&lt;/span> : &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Table&lt;/span>[&lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> (&lt;span style="color:#e06c75">TableSize&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>)] &lt;span style="color:#56b6c2">^=&lt;/span> &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 伪随机数生成
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#61afef;font-weight:bold">HPCC_starts&lt;/span>(&lt;span style="color:#e06c75">s64Int&lt;/span> &lt;span style="color:#e06c75">n&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span>, &lt;span style="color:#e06c75">j&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#e06c75">m2&lt;/span>[&lt;span style="color:#d19a66">64&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">u64Int&lt;/span> &lt;span style="color:#e06c75">temp&lt;/span>, &lt;span style="color:#e06c75">ran&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">while&lt;/span> (&lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>) &lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">+=&lt;/span> &lt;span style="color:#e06c75">PERIOD&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">while&lt;/span> (&lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#e06c75">PERIOD&lt;/span>) &lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">-=&lt;/span> &lt;span style="color:#e06c75">PERIOD&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> (&lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">==&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>) &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#d19a66">0x1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0x1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#d19a66">64&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">m2&lt;/span>[&lt;span style="color:#e06c75">i&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">temp&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>) &lt;span style="color:#56b6c2">^&lt;/span> ((&lt;span style="color:#e06c75">s64Int&lt;/span>) &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">POLY&lt;/span> : &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>) &lt;span style="color:#56b6c2">^&lt;/span> ((&lt;span style="color:#e06c75">s64Int&lt;/span>) &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">POLY&lt;/span> : &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">62&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">--&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> ((&lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">i&lt;/span>) &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">break&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ran&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0x2&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">while&lt;/span> (&lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#d19a66">64&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> ((&lt;span style="color:#e06c75">ran&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">j&lt;/span>) &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">temp&lt;/span> &lt;span style="color:#56b6c2">^=&lt;/span> &lt;span style="color:#e06c75">m2&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ran&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">temp&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">-=&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">if&lt;/span> ((&lt;span style="color:#e06c75">n&lt;/span> &lt;span style="color:#56b6c2">&amp;gt;&amp;gt;&lt;/span> &lt;span style="color:#e06c75">i&lt;/span>) &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>)
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ran&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">ran&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>) &lt;span style="color:#56b6c2">^&lt;/span> ((&lt;span style="color:#e06c75">s64Int&lt;/span>) &lt;span style="color:#e06c75">ran&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">POLY&lt;/span> : &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">ran&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h3 id="随机访存">随机访存&lt;/h3>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#e06c75">NUPDATE&lt;/span>&lt;span style="color:#56b6c2">/&lt;/span>&lt;span style="color:#d19a66">128&lt;/span>; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#d19a66">0&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#d19a66">128&lt;/span>; &lt;span style="color:#e06c75">j&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">=&lt;/span> (&lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;lt;&amp;lt;&lt;/span> &lt;span style="color:#d19a66">1&lt;/span>) &lt;span style="color:#56b6c2">^&lt;/span> ((&lt;span style="color:#e06c75">s64Int&lt;/span>) &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">POLY&lt;/span> : &lt;span style="color:#d19a66">0&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Table&lt;/span>[&lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>] &lt;span style="color:#56b6c2">&amp;amp;&lt;/span> (&lt;span style="color:#e06c75">TableSize&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#d19a66">1&lt;/span>)] &lt;span style="color:#56b6c2">^=&lt;/span> &lt;span style="color:#e06c75">ran&lt;/span>[&lt;span style="color:#e06c75">j&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> }
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;p>load ran[j] store ran[j] store Table&lt;/p>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly"> 103b6: a85d j 1046c &amp;lt;RandomAccessUpdate+0x11a&amp;gt;
+103b8: fe042223 sw zero,-28(s0) ## 3ffffffad8
+103bc: a859 j 10452 &amp;lt;RandomAccessUpdate+0x100&amp;gt;
+103be: fe442783 lw a5,-28(s0) ## 3ffffffad4 127-0
+103c2: 078e slli a5,a5,0x3
+103c4: 17c1 addi a5,a5,-16
+103c6: 97a2 add a5,a5,s0
+##### 103c8: bf07b783 ld a5,-1040(a5) 步进 3ffffff6d0 -&amp;gt; 3ffffffac8 step = 8 ran[j]
+103cc: 00179713 slli a4,a5,0x1
+103d0: fe442783 lw a5,-28(s0) ## 3ffffffad4 0:7f
+103d4: 078e slli a5,a5,0x3
+103d6: 17c1 addi a5,a5,-16
+103d8: 97a2 add a5,a5,s0
+##### 103da: bf07b783 ld a5,-1040(a5) 步进 3ffffff6d0 -&amp;gt; 3ffffffac8 step = 8 ran[j]
+103de: 0007d463 bgez a5,103e6 &amp;lt;RandomAccessUpdate+0x94&amp;gt;
+103e2: 479d li a5,7
+103e4: a011 j 103e8 &amp;lt;RandomAccessUpdate+0x96&amp;gt;
+103e6: 4781 li a5,0
+103e8: 8f3d xor a4,a4,a5 ## (ran[j] &amp;lt;&amp;lt; 1) ^ ((s64Int) ran[j] &amp;lt; 0 ? POLY : 0)
+103ea: fe442783 lw a5,-28(s0) ## 3ffffffad4 0:7f
+103ee: 078e slli a5,a5,0x3
+103f0: 17c1 addi a5,a5,-16
+103f2: 97a2 add a5,a5,s0
+## 103f4: bee7b823 sd a4,-1040(a5) 步进 3ffffff6d0 -&amp;gt; 3ffffffac8 step = 8 ran[j] =
+103f8: fe442783 lw a5,-28(s0) ## 3ffffffad4 0:7f
+103fc: 078e slli a5,a5,0x3
+103fe: 17c1 addi a5,a5,-16
+10400: 97a2 add a5,a5,s0
+## 10402: bf07b703 ld a4,-1040(a5) 步进 3ffffff6d0 -&amp;gt; 3ffffffac8 step = 8 ran[j]
+10406: bd843783 ld a5,-1064(s0) ## 3fffff6c8
+1040a: 17fd addi a5,a5,-1
+1040c: 8ff9 and a5,a5,a4
+1040e: 078e slli a5,a5,0x3
+10410: bd043703 ld a4,-1072(s0) ## 3ffffff6c0
+10414: 97ba add a5,a5,a4
+10416: 6394 ld a3,0(a5) ## random Table[?]
+10418: fe442783 lw a5,-28(s0) ## 3fffffad4 0:7f
+1041c: 078e slli a5,a5,0x3
+1041e: 17c1 addi a5,a5,-16
+10420: 97a2 add a5,a5,s0
+## 10422: bf07b703 ld a4,-1040(a5) 步进 3ffffff6d0 -&amp;gt; 3ffffffac8 step = 8 ran[j]
+10426: fe442783 lw a5,-28(s0) ## 3ffffffad4 0:7f
+1042a: 078e slli a5,a5,0x3
+1042c: 17c1 addi a5,a5,-16
+1042e: 97a2 add a5,a5,s0
+## 10430: bf07b603 ld a2,-1040(a5) ## 步进 3ffffff6d0 -&amp;gt; 3ffffffac8 step = 8 ran[j]
+10434: bd843783 ld a5,-1064(s0) ## 3ffffff6c8 不变
+10438: 17fd addi a5,a5,-1
+1043a: 8ff1 and a5,a5,a2
+1043c: 078e slli a5,a5,0x3
+1043e: bd043603 ld a2,-1072(s0) ## 3ffffff6c0 不变
+10442: 97b2 add a5,a5,a2
+10444: 8f35 xor a4,a4,a3 ## Table[?] ^ ran[j]
+10446: e398 sd a4,0(a5) ## Table[?] =
+10448: fe442783 lw a5,-28(s0) ## ## 3fffffad4 0:7f
+1044c: 2785 addiw a5,a5,1
+1044e: fef42223 sw a5,-28(s0) ## 3ffffffad4 j : 0-127
+10452: fe442783 lw a5,-28(s0) ## 3ffffffad4 , j : 0:7f
+10456: 0007871b sext.w a4,a5
+1045a: 07f00793 li a5,127
+## cmp 1045e: f6e7d0e3 bge a5,a4,103be &amp;lt;RandomAccessUpdate+0x6c&amp;gt;
+10462: fe843783 ld a5,-24(s0)
+10466: 0785 addi a5,a5,1
+10468: fef43423 sd a5,-24(s0)
+1046c: bd843783 ld a5,-1064(s0) ## 不变的 , 3ffffff6c8
+10470: 078a slli a5,a5,0x2
+10472: 839d srli a5,a5,0x7
+10474: fe843703 ld a4,-24(s0) ## 不变的 ,3ffffffad8
+## cmp 10478: f4f760e3 bltu a4,a5,103b8 &amp;lt;RandomAccessUpdate+0x66&amp;gt; i 0:NUODATE/128
+&lt;/code>&lt;/pre>&lt;p>103b6 跳转 -&amp;gt; 1046c 顺序-&amp;gt; 10478 跳转-&amp;gt; 103b8 顺序-&amp;gt; 103bc 跳转-&amp;gt; 10452 顺序-&amp;gt; (&lt;font color='red'>1045e 跳转-&amp;gt; 103be 顺序-&amp;gt; 1045e 跳转-&amp;gt;103be&lt;/font>) 顺序-&amp;gt;10478 跳转-&amp;gt;103b8&lt;/p>
+&lt;h3 id="o2优化">O2优化&lt;/h3>
+&lt;pre tabindex="0">&lt;code class="language-assembly" data-lang="assembly"> 10330: fff48593 addi a1,s1,-1
+10334: 4501 li a0,0
+10336: 870a mv a4,sp
+10338: 631c ld a5,0(a4) ## stride load 0x3ffffff6e0 : 0x3ffffffad8 step = 8
+1033a: 00179693 slli a3,a5,0x1 ## dependent
+1033e: 0007d463 bgez a5,10346 &amp;lt;RandomAccessUpdate+0x60&amp;gt; ## dependent
+10342: 0076c693 xori a3,a3,7 ## dependent
+10346: 00d5f7b3 and a5,a1,a3 ## dependent
+1034a: 078e slli a5,a5,0x3 ## dependent
+1034c: 97ce add a5,a5,s3 ## dependent
+1034e: 6390 ld a2,0(a5) ## dependent load
+10350: e314 sd a3,0(a4)
+10352: 0721 addi a4,a4,8
+10354: 8eb1 xor a3,a3,a2
+10356: e394 sd a3,0(a5)
+10358: fee410e3 bne s0,a4,10338 &amp;lt;RandomAccessUpdate+0x52&amp;gt;
+1035c: 0505 addi a0,a0,1
+1035e: fca91ce3 bne s2,a0,10336 &amp;lt;RandomAccessUpdate+0x50&amp;gt;
+&lt;/code>&lt;/pre>&lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
@@ -96,18 +713,68 @@
 &lt;h3 id="版权信息">版权信息&lt;/h3>
 &lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
 >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Vector_runahead</title><link>https://VastCircle.github.io/2024/vector_runahead/</link><pubDate>Tue, 17 Dec 2024 14:50:55 +0800</pubDate><guid>https://VastCircle.github.io/2024/vector_runahead/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
-&lt;p>内存墙对许多现代工作负载的性能造成了重大限制。这些应用程序具有复杂的依赖间接内存访问链，即使是最先进的微架构预取器也无法获取。结果是，当前无序超标量处理器的大部分时间都处于停滞状态。但是，为了实现高内存级别的并行性，标准的提前执行会在缓存未命中之前跳过。在现代工作负载中，这意味着它只预取每个依赖链中的第一个缺少缓存的负载。我们认为，这不是一个根本的限制。如果 runahead 是在 cache 未命中时停止以生成依赖链负载，那么如果它可以同时在多个 cache 上停止，则可以重新获得性能。&lt;/p>
+&lt;p>内存墙对许多现代工作负载的性能造成了重大限制。这些应用程序具有复杂的依赖间接内存访问链，即使是最先进的微架构预取器也无法获取。结果是，当前无序超标量处理器的大部分时间都处于停滞状态。但是，为了实现高内存级别的并行性，标准的提前执行会在缓存未命中之前跳过。在现代工作负载中，这意味着它只预取每个依赖链中的第一个缺少缓存的load 。我们认为，这不是一个根本的限制。如果 runahead 是在 cache 未命中时停止以生成依赖链load ，那么如果它可以同时在多个 cache 上停止，则可以重新获得性能。&lt;/p>
 &lt;h2 id="introduction">introduction&lt;/h2>
-&lt;p>1.Runahead执行可以预取独立的Load Miss,但无法处理由相关负载未命中链构成的复杂间接访问模式 (间接加载链:一个加载指令的地址依赖于另一个加载指令的结果),Runahead 执行无法解决数据之间的&lt;strong>依赖关系&lt;/strong>，它仅能处理&lt;strong>无依赖的独立加载&lt;/strong>。&lt;/p>
+&lt;p>1.Runahead执行可以预取独立的Load Miss,但无法处理由相关load 未命中链构成的复杂间接访问模式 (间接加载链:一个加载指令的地址依赖于另一个加载指令的结果),Runahead 执行无法解决数据之间的&lt;strong>依赖关系&lt;/strong>，它仅能处理&lt;strong>无依赖的独立加载&lt;/strong>。&lt;/p>
 &lt;p>2.Runahead执行仍然要经过正常的流水线前端,受限于处理器前端的Fetch/Decode/Rename宽度,如果未来指令流中存在大量 &lt;strong>非 Load 指令&lt;/strong>（如算术运算、分支指令等），它们会占据前端处理带宽，导致处理器在进入 Runahead 模式后生成新的 &lt;strong>Load Miss&lt;/strong> 的速率非常低。&lt;/p>
 &lt;p>3.Runahead执行的推测深度受限于处理器后端的资源 .包括物理寄存器数量,指令队列插槽 .虽然指令的执行结果不会被提交，但它们仍然占用后端资源（如物理寄存器和调度队列）。一旦这些资源耗尽，Runahead 执行就会停止，无法继续生成新的内存请求。&lt;/p>
-&lt;p>Vector Runahead &lt;strong>延长 Runahead 执行的时间&lt;/strong>，直到依赖链中的&lt;strong>所有加载指令都被发出&lt;/strong>，而不仅仅停在第一个阻塞的 Load Miss,这使得 Vector Runahead 能够预取整个负载链。&lt;/p>
+&lt;p>Vector Runahead &lt;strong>延长 Runahead 执行的时间&lt;/strong>，直到依赖链中的&lt;strong>所有加载指令都被发出&lt;/strong>，而不仅仅停在第一个阻塞的 Load Miss,这使得 Vector Runahead 能够预取整个load 链。&lt;/p>
 &lt;p>Vector Runahead 通过将标量指令重新解释为矢量运算来矢量化 runahead 指令流，以便在不同的偏移量处生成许多不同的缓存未命中。等效增加了取指/解码带宽,同时需要非常少的后端资源，&lt;/p>
 &lt;p>Vector Runahead 通过向量展开和流水线发出多轮这些矢量化指令，以更深入地推测并进一步增加有效的提前获取/解码带宽，&lt;/p>
 &lt;h2 id="background-and-motivation">background and Motivation&lt;/h2>
-&lt;h3 id="limitations-of-runahead-techniques">Limitations of Runahead Techniques&lt;/h3>
+&lt;h3 id="blimitations-of-runahead-techniques">B.Limitations of Runahead Techniques&lt;/h3>
 &lt;p>标准的 runahead 执行 [25,32,34,57,58] 检查点，并在 fullwindow stall 后释放应用程序的架构状态，并进入 runahead 模式。然后，处理器继续推测性地生成内存访问。当阻塞内存访问返回时，runahead 间隔终止，此时管道被刷新，架构状态将恢复到 runahead 的入口点，并恢复正常执行。runahead 模式期间生成的 prefetches 将未来数据带入处理器高速缓存，从而减少 normal 模式下即将到来的 stall 数量，从而提高性能。&lt;/p>
-&lt;p>（1） PRE 利用可用的后端 （issue queue 和物理 register file） 资源在 runahead 模式下推测性地执行指令，因此在进入和退出 runahead 模式时无需释放和刷新处理器状态。（2） PRE 仅推测性地预执行在全窗口停顿后生成内存访问所需的指令。（3） PRE 包括一种在预试模式下快速回收后端资源的机制。PRE 的性能优势来自于在预跑模式和正常模式之间转换时减少了开销，这使得即使在较短的超速间隔内也能超速运行，并且在超速模式下仅调度负载及其地址生成指令，而不是内存访问的依赖项（只要它们不会导致从属负载），从而减少超速模式期间所需的后端资源量。&lt;/p>
+&lt;p>（1） PRE 利用可用的后端 （issue queue 和物理 register file） 资源在 runahead 模式下推测性地执行指令，因此在进入和退出 runahead 模式时无需释放和刷新处理器状态。（2） PRE 仅推测性地预执行在全窗口停顿后生成内存访问所需的指令。（3） PRE 包括一种在预试模式下快速回收后端资源的机制。PRE 的性能优势来自于在预跑模式和正常模式之间转换时减少了开销，这使得即使在较短的超速间隔内也能超速运行，并且在超速模式下仅调度load 及其地址生成指令，而不是内存访问的依赖项（只要它们不会导致从属load ），从而减少超速模式期间所需的后端资源量。&lt;/p>
+&lt;p>PRE无法预取大部分简介访问.超出超前运行间隔范围的访问很快就会使得核心停止运行&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 505;
+flex-basis: 1213px"
+>
+&lt;a href="https://VastCircle.github.io/2024/vector_runahead/image-20241223140211426.png" data-size="273x54">
+&lt;img src="https://VastCircle.github.io/2024/vector_runahead/image-20241223140211426.png"
+width="273"
+height="54"
+srcset="https://VastCircle.github.io/2024/vector_runahead/image-20241223140211426_hu12103333356195733819.png 480w, https://VastCircle.github.io/2024/vector_runahead/image-20241223140211426_hu1261487102928176054.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>PRE可以预取A,但是无法预取B,因为B依赖于A,&lt;/p>
+&lt;p>硬件跨步预取可以从 A 预取数组元素，从而使 PRE 在超前运行模式下能够从 B 预取数组元素。不幸的是，数据值在超前运行模式下无法预取，因为它们依赖于 B。&lt;/p>
+&lt;p>Vector Runahead 在超前运行模式期间沿着内存依赖链对内存访问进行矢量化。对 A 的多个访问并行发生，然后是对 B 的并行访问，然后是并行数据值读取。&lt;/p>
+&lt;h3 id="c-vector-runahead-execution-for-dependent-loads">C. Vector Runahead Execution for Dependent Loads&lt;/h3>
+&lt;p>如果检测到后续指令依赖于预取指令的话,就无法去执行依赖预取指令的指令,所以PRE无法去执行第一级间接寻址,硬件步幅预取器能够预取对于数组A的跨步访问,所以在后续执行到A指令的时候是缓存命中的,所有可以去预取数组B&lt;/p>
+&lt;p>首先，PRE 无法预取依赖load 链上的所有load ，因为链中下一次访问所需的数据不可用&lt;/p>
+&lt;p>Vector Runahead 更改了 runahead 模式的终止条件，即，一旦阻塞load 未命中从主内存返回，Vector Runahead 就不会返回正常模式，而是继续 runahead 模式**，直到相关load 链上的所有load 都已发出。**&lt;/p>
+&lt;p>Vector Runahead 在 runahead 模式下对动态指令流进行矢量化，这实际上相当于以更快的速率向前运行。当 vector-runahead 模式启动时，对数组 A 的多次访问被矢量化，即，相同的内存操作被推测性地在多个 induction-variable offset 并行发出。&lt;/p>
+&lt;p>我们矢量化与可用矢量宽度一样多的副本，在本例中为 8。依赖于数组 A 中的值的指令也被矢量化，包括对数组 B 和依赖数据值的访问.在 runahead 模式下对 dependent instruction stream 进行矢量化，同时保持 runahead 模式直到发出最后一个 dependent load，从而可以推测性地预取整个 dependent loads 链。&lt;/p>
+&lt;p>矢量化 runahead 指令流的效果是，在发出下一批依赖内存访问之前，同时从循环的多个迭代中发出相同的内存操作，依此类推。与原始指令流相比，这种对内存访问的有效重新排序使 Vector Runahead 能够首先对 A 发出一批访问，然后对 B 发出一批访问，最后对依赖数据值发出一批访问。（1） 它大大增加了 runahead 模式下的有效获取/解码带宽，即我们一次获取/解码多个循环迭代，以及 （2） 它需要非常少的后端硬件资源，即 vector-runahead 模式下的向量指令对应于原始代码中来自多个循环迭代的多个标量指令， 同时仅占用一个issue queue槽。&lt;/p>
+&lt;p>请注意，Vector Runahead 不要求原始代码是可矢量化的，也不需要验证矢量化指令是否保留了原始序列的确切行为——它只在 runahead 模式下对指令流进行矢量化，通过允许许多缓存未命中一次符合预取条件来提高受 memorylatency 限制的代码的性能。&lt;/p>
+&lt;h2 id="vector-runahead">Vector Runahead&lt;/h2>
+&lt;p>stride Detector 用于查找代码中的常规访问模式，这些模式可用作“归纳变量”，以生成代码的推测矢量化副本。. Once we enter vector-runahead mode (Section III-C), instructions dependent on this vectorized stride pattern are tracked by a &lt;strong>taint vector&lt;/strong> (Section III-D), and vectorized themselves (Section III-E): address-calculating arithmetic operations are converted into vector-unit operations, and the dependent loads themselves into vector gathers.假定分支在每个矢量化副本中匹配，掩码用于处理其他情况（第 III-F 节）。为了进一步将内存级并行性提高到比单个向量负载支持的更高水平，我们设计了向量展开和流水线技术（第 III-G 节）来同时发出许多未来的负载。由于这导致旧标量指令和新矢量指令之间存在一对多的关系，因此在前端引入了矢量寄存器分配表 （VRAT） 用于寄存器分配（第 III-H 节），在后端引入了寄存器释放队列 （RDQ）（第 III-I 节）。一旦我们完成了每次展开的迭代，Vector-runahead 模式就终止了（第 III-J 节），其中每次迭代都会执行所有依赖于矢量化步幅负载的载荷。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 447;
+flex-basis: 1074px"
+>
+&lt;a href="https://VastCircle.github.io/2024/vector_runahead/image-20241223143442077.png" data-size="1321x295">
+&lt;img src="https://VastCircle.github.io/2024/vector_runahead/image-20241223143442077.png"
+width="1321"
+height="295"
+srcset="https://VastCircle.github.io/2024/vector_runahead/image-20241223143442077_hu9890093979236076169.png 480w, https://VastCircle.github.io/2024/vector_runahead/image-20241223143442077_hu12246041980701418868.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="detecting-striding-loads">Detecting Striding Loads&lt;/h3>
+&lt;p>为了检测代码中的序列，我们可以从中生成归纳变量以矢量化未来的内存访问，我们使用一个简单的参考预测表 [19,62]，该表在每个加载指令执行后更新。它由加载 PC 编制索引，每个条目维护四个字段：（1） 最后访问的内存地址;（2） 最后一次观察到的负载步幅;（3） 一个 2 位饱和计数器，用于指示置信度;（4） 指令链中来自跨步负载的最终从属负载的终止符或 PC。&lt;/p>
+&lt;p>由此，一旦我们进入 vector-runahead 模式，我们就可以生成新指令流，以根据跨步加载、计算和其他中间内存访问生成未来的间接内存访问。前 3 个字段 （1） 到 （3） 是参考预测表 [19] 的标准字段。最后一个字段 （ 4） 是新的，在一轮 vector runahead 期间填充，它允许我们在 vector-runahead 模式下完成所有有用的工作后提前终止（第 III-J 节）。&lt;/p>
+&lt;h3 id="entering-vector-runahead">Entering Vector Runahead&lt;/h3>
+&lt;p>当加载指令阻塞 ROB 头部后，满足以下两个条件之一时，内核进入超前运行模式： **(1) ROB 已充满指令；或 (2) 问题队列已满至其满容量的 80%。**除了为从分支错误预测中恢复而存储的检查点之外，Vector Runahead 通过为前端 RAT 的每个条目存储一个检查点来对 PC 和前端寄存器分配表 (RAT) 设置检查点。这标志着进入超前运行模式。当我们返回正常模式时，处理器状态将恢复到该检查点。&lt;/p>
+&lt;p>进入超前运行模式后，处理器继续获取、解码并执行未来的指令。我们访问每个加载指令的步幅检测器。在我们达到跨步负载之前，或者如果不存在这样的跨步负载，Vector Runahead 的执行与 PRE [64] 类似，但不使用其完全关联的停顿切片表，Vector Runahead 消除了这种需要，以避免损害没有此类模式的工作负载，并捕获 Vector Runahead 稍后使用的任何标量依赖关系。同样，这种模式的行为类似于传统的超前执行[57]，只是具有主动寄存器回收和高效的检查点[64]。当我们解码跨步负载（置信度 = 3）时，开始进入向量运行模式。我们对跨步负载进行矢量化，然后是依赖于它的指令序列。当检测到相同跨步负载的另一个动态实例或依赖链完成时，该过程终止（第 III-J 节）。我们将两个动态跨步加载实例之间的依赖指令称为间接链&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cache on VastCircle's blog</title><link>https://VastCircle.github.io/categories/cache/</link><description>Recent content in Cache on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 27 Dec 2024 17:34:48 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/cache/index.xml" rel="self" type="application/rss+xml"/><item><title>Spik_cache的交互</title><link>https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/</link><pubDate>Fri, 27 Dec 2024 17:34:48 +0800</pubDate><guid>https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/</guid><description>&lt;p>spike 的cache 为什么会出现 l2 miss的次数高于l1 ,按理来说只有l1 miss才有机会去读l2&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 376; 
+			flex-basis: 904px"
+	>
+	&lt;a href="https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683.png" data-size="671x178">
+		&lt;img src="https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683.png"
+			width="671"
+			height="178"
+			srcset="https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683_hu6466349755934550054.png 480w, https://VastCircle.github.io/2024/spik_cache%E7%9A%84%E4%BA%A4%E4%BA%92/image-20241227174225683_hu14082263635862480712.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item></channel></rss>
