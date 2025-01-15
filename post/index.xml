@@ -1,4 +1,63 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 28 Dec 2024 00:38:28 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Rocketl1l2的交互</title><link>https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/</link><pubDate>Sat, 28 Dec 2024 00:38:28 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/</guid><description>&lt;h2 id="测试程序">测试程序&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 14 Jan 2025 17:19:27 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 375; 
+			flex-basis: 900px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853.png" data-size="1028x274">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853.png"
+			width="1028"
+			height="274"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853_hu6670905778379539498.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853_hu6764138659097728431.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>译码阶段是香山CPU流水线后端的第一站，第一个阶段。它的输入来自于前端的指令缓冲器ibuffer ,从Ibuffer读出时由其将来自IFU的指令加预译码信息一起组装在一个CtrlFlow对象中，又由于流水线后端的宽度是6,所有译码阶段的输入就是6个CtrlFlow对象，译码阶段的输出即译码结果去往Rename中，是一排CfCtrl对象，CfCtrl就是CtrlFlow + CtrlSignals, 译码产生的结果就在CtrlSignals中，连同CtrlFlow一起往下游送。&lt;/p></description></item><item><title>香山源代码剖析——PMA和PMP</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90pma%E5%92%8Cpmp/</link><pubDate>Sun, 12 Jan 2025 23:49:47 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90pma%E5%92%8Cpmp/</guid><description>&lt;p>PMP : 物理存储保护（Physical Memory Protection) module ,它将所有的访问权限都集中起来&lt;/p>
+&lt;p>PMA:物理存储属性（Physical Memory Attributes),PMP实施存储空间保护的依据&lt;/p></description></item><item><title>香山源代码剖析——香山SOC的顶层</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E9%A6%99%E5%B1%B1soc%E7%9A%84%E9%A1%B6%E5%B1%82/</link><pubDate>Sun, 12 Jan 2025 23:26:10 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E9%A6%99%E5%B1%B1soc%E7%9A%84%E9%A1%B6%E5%B1%82/</guid><description>&lt;p>// top.scala里包含香山的头文件&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+ >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Chisel_diplomacy框架</title><link>https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/</link><pubDate>Fri, 10 Jan 2025 14:14:12 +0800</pubDate><guid>https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/</guid><description>&lt;p>Diplomacy将模块的Port抽象为节点(Node),然后进行协商，自动找到最优的线宽，以减少复用模块时需要修改的线宽代码&lt;/p>
+&lt;h2 id="原理">原理&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 206; 
+			flex-basis: 496px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550.png" data-size="858x415">
+		&lt;img src="https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550.png"
+			width="858"
+			height="415"
+			srcset="https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550_hu13342639607822788397.png 480w, https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550_hu10756195594024898727.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>笔记</title><link>https://VastCircle.github.io/2025/%E7%AC%94%E8%AE%B0/</link><pubDate>Wed, 08 Jan 2025 15:51:40 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E7%AC%94%E8%AE%B0/</guid><description>&lt;p>大语言模型加速器&lt;/p>
+&lt;p>llm for chip design&lt;/p>
+&lt;p>全加操作&lt;/p>
+&lt;p>内存利用率&lt;/p>
+&lt;p>稀疏&lt;/p>
+&lt;p>稀疏度要很高才可以打平这个帐&lt;/p>
+&lt;p>a55&lt;/p>
+&lt;p>协处理器&lt;/p>
+&lt;p>共享share的l1&lt;/p>
+&lt;p>smt提供一个核&lt;/p>
+&lt;p>希望某一些数据不要被踢走&lt;/p></description></item><item><title>香山源代码剖析——存储子系统与Tilelink</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%AD%98%E5%82%A8%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%B8%8Etilelink/</link><pubDate>Tue, 07 Jan 2025 23:02:49 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%AD%98%E5%82%A8%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%B8%8Etilelink/</guid><description>&lt;h2 id="简介">简介&lt;/h2>
+&lt;p>根据操作的目的和作用，可以把 Link 上的操作分成三大类：&lt;/p>
+&lt;p>A 类， A 表示 Access 。凡用来从存储器读写数据的操作都属于 A 类，具体有 Get 、 Put 、 Atomic 等。&lt;/p></description></item><item><title>香山源代码剖析-参数协调与Diplomacy</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90-%E5%8F%82%E6%95%B0%E5%8D%8F%E8%B0%83%E4%B8%8Ediplomacy/</link><pubDate>Tue, 07 Jan 2025 20:20:37 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90-%E5%8F%82%E6%95%B0%E5%8D%8F%E8%B0%83%E4%B8%8Ediplomacy/</guid><description>&lt;h2 id="简述">简述&lt;/h2>
+&lt;p>在Diplomacy的术语中，模块称为“节点”。Diplomacy还把不同模块的按其输入输出抽象成不同类型的节点。 输入端和输出端数量相等的模块抽象成MixedAdapterNode或者AdapterNode,只有输入没有输出的节点抽象为SinkNode.只有输出没有输入的节点抽象为SouceNode&lt;/p></description></item><item><title>Neovim配置</title><link>https://VastCircle.github.io/2025/neovim%E9%85%8D%E7%BD%AE/</link><pubDate>Sat, 04 Jan 2025 14:11:15 +0800</pubDate><guid>https://VastCircle.github.io/2025/neovim%E9%85%8D%E7%BD%AE/</guid><description>&lt;h2 id="安装nvim">安装nvim&lt;/h2>
+&lt;h2 id="安装kitty-终端">安装kitty 终端&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="安装wezterm-终端">安装wezterm 终端&lt;/h2>
+&lt;p>&lt;a class="link" href="https://wezfurlong.org/wezterm/install/linux.html#pre-built-deb-packages" target="_blank" rel="noopener"
+ >https://wezfurlong.org/wezterm/install/linux.html#pre-built-deb-packages&lt;/a>&lt;/p></description></item><item><title>Rocketl1l2的交互</title><link>https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/</link><pubDate>Sat, 28 Dec 2024 00:38:28 +0800</pubDate><guid>https://VastCircle.github.io/2024/rocketl1l2%E7%9A%84%E4%BA%A4%E4%BA%92/</guid><description>&lt;h2 id="测试程序">测试程序&lt;/h2>
 &lt;p>以下程序基本能使得在后续的store中能够造成cache miss&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c" data-lang="c">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">for&lt;/span> (&lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span> ; &lt;span style="color:#e06c75">i&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#d19a66">128&lt;/span> ; &lt;span style="color:#e06c75">i&lt;/span>&lt;span style="color:#56b6c2">++&lt;/span>) { 
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> { &lt;span style="color:#7f848e">// 填8个字节 

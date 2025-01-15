@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>香山源代码 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81/</link><description>Recent content in 香山源代码 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 14 Jan 2025 17:19:27 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml"/><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 375; 
+			flex-basis: 900px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853.png" data-size="1028x274">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853.png"
+			width="1028"
+			height="274"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853_hu6670905778379539498.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853_hu6764138659097728431.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>译码阶段是香山CPU流水线后端的第一站，第一个阶段。它的输入来自于前端的指令缓冲器ibuffer ,从Ibuffer读出时由其将来自IFU的指令加预译码信息一起组装在一个CtrlFlow对象中，又由于流水线后端的宽度是6,所有译码阶段的输入就是6个CtrlFlow对象，译码阶段的输出即译码结果去往Rename中，是一排CfCtrl对象，CfCtrl就是CtrlFlow + CtrlSignals, 译码产生的结果就在CtrlSignals中，连同CtrlFlow一起往下游送。&lt;/p></description></item></channel></rss>

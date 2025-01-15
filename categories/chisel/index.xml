@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Chisel on VastCircle's blog</title><link>https://VastCircle.github.io/categories/chisel/</link><description>Recent content in Chisel on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 10 Jan 2025 14:14:12 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/chisel/index.xml" rel="self" type="application/rss+xml"/><item><title>Chisel_diplomacy框架</title><link>https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/</link><pubDate>Fri, 10 Jan 2025 14:14:12 +0800</pubDate><guid>https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/</guid><description>&lt;p>Diplomacy将模块的Port抽象为节点(Node),然后进行协商，自动找到最优的线宽，以减少复用模块时需要修改的线宽代码&lt;/p>
+&lt;h2 id="原理">原理&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 206; 
+			flex-basis: 496px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550.png" data-size="858x415">
+		&lt;img src="https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550.png"
+			width="858"
+			height="415"
+			srcset="https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550_hu13342639607822788397.png 480w, https://VastCircle.github.io/2025/chisel_diplomacy%E6%A1%86%E6%9E%B6/image-20250110144009550_hu10756195594024898727.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item></channel></rss>
