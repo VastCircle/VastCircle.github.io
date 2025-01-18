@@ -1,4 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 14 Jan 2025 17:19:27 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 18 Jan 2025 12:22:33 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>香山源代码剖析——指令的执行</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/</link><pubDate>Sat, 18 Jan 2025 12:22:33 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/</guid><description>&lt;h2 id="来自b站">来自b站&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 192; 
+			flex-basis: 462px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118122646890.png" data-size="1321x686">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118122646890.png"
+			width="1321"
+			height="686"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118122646890_hu5824373967140874702.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118122646890_hu13443897433867832410.png 1024w"
+			loading="lazy"
+			alt="image-20250118122646890">
+	&lt;/a>
+	
+	&lt;figcaption>image-20250118122646890&lt;/figcaption>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山源代码剖析——执行结果的回写和commit</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</link><pubDate>Thu, 16 Jan 2025 00:17:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+ >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
 	
 		class="gallery-image" 
 		style="
