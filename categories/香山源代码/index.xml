@@ -1,8 +1,40 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>香山源代码 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81/</link><description>Recent content in 香山源代码 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 16 Jan 2025 00:17:27 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml"/><item><title>香山源代码剖析——执行结果的回写和commit</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</link><pubDate>Thu, 16 Jan 2025 00:17:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</guid><description>&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>香山源代码 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81/</link><description>Recent content in 香山源代码 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 25 Jan 2025 15:13:03 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81/index.xml" rel="self" type="application/rss+xml"/><item><title>香山源代码剖析——分支预测单元</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83/</link><pubDate>Sat, 25 Jan 2025 15:13:03 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83/</guid><description>&lt;h2 id="b站学习">b站学习&lt;/h2>
+&lt;p>分支预测块&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 193; 
+			flex-basis: 465px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83/image-20250125181359394.png" data-size="1020x526">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83/image-20250125181359394.png"
+			width="1020"
+			height="526"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83/image-20250125181359394_hu13373882800903922538.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%88%86%E6%94%AF%E9%A2%84%E6%B5%8B%E5%8D%95%E5%85%83/image-20250125181359394_hu2780647712471053194.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山源代码剖析——执行结果的回写和commit</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</link><pubDate>Thu, 16 Jan 2025 00:17:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</guid><description>&lt;h2 id="rob">ROB&lt;/h2>
+&lt;h3 id="来自香山视频">来自香山视频&lt;/h3>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 183; 
+			flex-basis: 440px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749.png" data-size="1600x872">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749.png"
+			width="1600"
+			height="872"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749_hu16240116585783215136.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749_hu2374164839472895496.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
 	
 		class="gallery-image" 
 		style="
@@ -21,11 +53,14 @@
 &lt;/figure>&lt;/p>
 &lt;p>译码阶段是香山CPU流水线后端的第一站，第一个阶段。它的输入来自于前端的指令缓冲器ibuffer ,从Ibuffer读出时由其将来自IFU的指令加预译码信息一起组装在一个CtrlFlow对象中，又由于流水线后端的宽度是6,所有译码阶段的输入就是6个CtrlFlow对象，译码阶段的输出即译码结果去往Rename中，是一排CfCtrl对象，CfCtrl就是CtrlFlow + CtrlSignals, 译码产生的结果就在CtrlSignals中，连同CtrlFlow一起往下游送。&lt;/p></description></item><item><title>香山源代码剖析——PMA和PMP</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90pma%E5%92%8Cpmp/</link><pubDate>Sun, 12 Jan 2025 23:49:47 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90pma%E5%92%8Cpmp/</guid><description>&lt;p>PMP : 物理存储保护（Physical Memory Protection) module ,它将所有的访问权限都集中起来&lt;/p>
 &lt;p>PMA:物理存储属性（Physical Memory Attributes),PMP实施存储空间保护的依据&lt;/p></description></item><item><title>香山源代码剖析——香山SOC的顶层</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E9%A6%99%E5%B1%B1soc%E7%9A%84%E9%A1%B6%E5%B1%82/</link><pubDate>Sun, 12 Jan 2025 23:26:10 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E9%A6%99%E5%B1%B1soc%E7%9A%84%E9%A1%B6%E5%B1%82/</guid><description>&lt;p>// top.scala里包含香山的头文件&lt;/p>
-&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>香山源代码剖析——存储子系统与Tilelink</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%AD%98%E5%82%A8%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%B8%8Etilelink/</link><pubDate>Tue, 07 Jan 2025 23:02:49 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%AD%98%E5%82%A8%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%B8%8Etilelink/</guid><description>&lt;h2 id="简介">简介&lt;/h2>
+&lt;p>// 有一个XSCore.scala文件&lt;/p>
+&lt;h2 id="xstop和xscore">XSTop和XSCore&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">XSCore&lt;/span>&lt;span style="color:#56b6c2">()(&lt;/span>&lt;span style="color:#c678dd">implicit&lt;/span> &lt;span style="color:#e06c75">p&lt;/span>&lt;span style="color:#c678dd">:&lt;/span> &lt;span style="color:#e5c07b">config.Parameters&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">extends&lt;/span> &lt;span style="color:#e5c07b">XSCoreBase&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">with&lt;/span> &lt;span style="color:#e5c07b">HasXSDts&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">lazy&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">module&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">XSCoreImp&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">this&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>香山源代码剖析——存储子系统与Tilelink</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%AD%98%E5%82%A8%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%B8%8Etilelink/</link><pubDate>Tue, 07 Jan 2025 23:02:49 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E5%AD%98%E5%82%A8%E5%AD%90%E7%B3%BB%E7%BB%9F%E4%B8%8Etilelink/</guid><description>&lt;h2 id="简介">简介&lt;/h2>
 &lt;p>根据操作的目的和作用，可以把 Link 上的操作分成三大类：&lt;/p>
 &lt;p>A 类， A 表示 Access 。凡用来从存储器读写数据的操作都属于 A 类，具体有 Get 、 Put 、 Atomic 等。&lt;/p></description></item><item><title>香山源代码剖析-参数协调与Diplomacy</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90-%E5%8F%82%E6%95%B0%E5%8D%8F%E8%B0%83%E4%B8%8Ediplomacy/</link><pubDate>Tue, 07 Jan 2025 20:20:37 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90-%E5%8F%82%E6%95%B0%E5%8D%8F%E8%B0%83%E4%B8%8Ediplomacy/</guid><description>&lt;h2 id="简述">简述&lt;/h2>
 &lt;p>在Diplomacy的术语中，模块称为“节点”。Diplomacy还把不同模块的按其输入输出抽象成不同类型的节点。 输入端和输出端数量相等的模块抽象成MixedAdapterNode或者AdapterNode,只有输入没有输出的节点抽象为SinkNode.只有输出没有输入的节点抽象为SouceNode&lt;/p></description></item></channel></rss>
