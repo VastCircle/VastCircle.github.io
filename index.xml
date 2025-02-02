@@ -1,4 +1,392 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 30 Jan 2025 23:55:06 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Scala_var</title><link>https://VastCircle.github.io/2025/scala_var/</link><pubDate>Thu, 30 Jan 2025 23:55:06 +0800</pubDate><guid>https://VastCircle.github.io/2025/scala_var/</guid><description>&lt;p>在boom的代码中看到挺多var的使用，来记录一下&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>VastCircle's blog</title><link>https://VastCircle.github.io/</link><description>Recent content on VastCircle's blog</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 02 Feb 2025 22:53:52 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Gaze_into_the_Pattern__for_Hardware_Prefetching</title><link>https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/</link><pubDate>Sun, 02 Feb 2025 22:53:52 +0800</pubDate><guid>https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
+&lt;p>硬件预取（Hardware prefetching）是隐藏长数据访问延迟最常用的技术之一。为了解决硬件预取面临的挑战，架构师提出在空间区域（spatial region）的粒度上检测并利用空间局部性。当一个新的区域被激活时，他们尝试基于系统级环境特征（如触发指令或数据地址）查找类似的先前访问区域，以进行足迹预测。然而，我们发现这种基于上下文的预测无法捕捉访问模式的本质特征，导致灵活性和实用性受限，并使预取性能次优。在本文中，我们受到存储访问的时间特性的启发，注意到空间足迹内部的时间相关性是空间模式的关键特征。为此，我们提出了一种简单高效的硬件空间预取器——Gaze，它巧妙地利用足迹内部的时间相关性来高效表征空间模式。同时，我们发现利用由空间流（spatial streaming）生成的空间足迹时，存在一个独特但未解决的挑战，即这些足迹表现出极高的访问密度。因此，我们进一步为 Gaze 设计了一个专门的两阶段方法，以缓解传统方案中常见的过度预取（over-prefetching）问题。我们进行了全面且多样化的实验，结果表明 Gaze 能够在更广泛的场景中有效提升性能。具体而言，与最新的低成本方案 PMP 和 vBerti 相比，Gaze 在单核环境下分别提升 5.7% 和 5.4%，在八核环境下分别提升 11.4% 和 8.8%。&lt;/p>
+&lt;h2 id="introduction">introduction&lt;/h2>
+&lt;p>在过去的几十年里，主存的容量经历了指数级增长；然而，主存与CPU之间的延迟差距（即“存储墙”）并未得到显著改善[36]、[57]、[89]。此外，随着大数据[53]和深度学习[54]等内存密集型应用的激增，这种性能差距正变得越来越严重。&lt;/p>
+&lt;p>硬件预取是一种广泛使用且被深入研究的方法，旨在弥合这一差距[27]、[36]。通过推测并在CPU明确请求之前主动将数据块预取到缓存，数据预取可以隐藏长数据访问延迟，并缓解存储子系统的压力[59]。硬件预取器通过观察内存请求来提取内存访问模式。当检测到模式可能重复时，它们会尝试预取未来可能访问的数据[27]。因此，准确刻画程序行为对预取性能至关重要。然而，在实际应用中，多样化的访问行为以及乱序调度等干扰因素，使得在保持硬件简洁性的同时实现高效预取变得极具挑战性。&lt;/p>
+&lt;p>为了解决这些挑战，架构师提出了检测和利用空间局部性的方法[13]、[17]–[19]、[21]、[22]、[29]、[48]、[51]、[52]、[58]、[65]、[67]、[70]、[75]、[78]、[79]、[83]。一种有效的策略是利用存储区域（如4KB物理页）粒度上的空间模式[13]、[17]、[19]、[22]、[29]、[48]、[52]、[78]、[79]、[83]。存储区域的空间模式通常表示为其空间足迹的位向量[22]。基于空间模式的预取器通过跟踪多个活动内存区域来学习空间模式，并利用这些模式预测新激活区域的可能足迹。已有大量研究表明，空间足迹预测可以有效减少强制性缺失（compulsory misses）[13]、[22]、[27]、[48]、[52]，并适用于相似循环[48]、重复数据布局[13]、[27]、[47]、[78]，以及数据结构遍历[13]、[78]。此外，它还可以在乱序调度环境下保持稳健性[17]。&lt;/p>
+&lt;p>为了准确识别相似区域进行足迹预测，许多研究人员提出使用系统级环境特征（如触发指令或数据地址）来表征空间模式[52]。这是因为当系统在访问新区域时表现出相似特征时，模式很可能会再次出现。例如，在PC+地址（PC+Address）方案中，相同指令访问相同地址意味着可能会重现相同的足迹[13]。尽管这种基于上下文的表征方法在微架构技术（如分支预测[74]、值预测[55]和缓存替换策略[41]）中被广泛使用，但在空间模式预测中并不如预期那样高效。&lt;/p>
+&lt;p>图1绘制了几种空间模式预取表征方案的性能表现（详细方法见§IV-A）。“-opt”表示最近文献中的优化版本。横轴显示了来自CloudSuite[30]的scale-out服务器工作负载，其中包含大量不规则访问。纵轴则呈现了SPEC17[11]的实验结果。结合PC和数据地址进行精细化表征的预取器确实能实现较高加速比，但需要大量硬件资源。而采用较粗粒度表征的方法虽然更具硬件友好性，但在复杂工作负载中会产生大量误预测。此外，即使是优化方案也未能完全解决这些问题，严重限制了灵活性和实用性。&lt;/p>
+&lt;p>在本文中，我们重新思考如何从本质上刻画空间模式。由于访问行为本身通常表现出时间相关性[84]，因此由这些行为生成的空间模式也应具有类似的特性。受此启发，我们观察到，当空间模式重复出现时，其内部的时间相关性往往也会以相似方式重现。也就是说，足迹内部的访问顺序在表征空间模式方面起着至关重要的作用。&lt;/p>
+&lt;p>基于这一观察，我们提出了一种名为Gaze2的空间预取器，该预取器创新性地利用足迹内部的时间相关性来高效刻画空间模式。然而，充分利用这一时间特性在实际中并不可行。相反，我们的研究表明，仅关注前几个初始访问即可实现高效预测。因此，Gaze 选择利用足迹内部的一小部分时间相关性，以保持简洁性。此外，传统基于空间模式的预取器使用位向量表示足迹，未能捕捉访问顺序的任何时间信息。与其引入额外的元数据，Gaze 直接将时间信息无缝融入经验搜索过程，从而增强了硬件设计的简洁性和兼容性。&lt;/p>
+&lt;p>此外，我们发现由空间流（spatial streaming）生成的足迹通常表现出极高的访问密度。如果误用此模式，可能导致严重的过度预取（over-prefetching），因为它可能指示预取几乎整个区域。然而，过于保守的策略又可能错失大量预取机会。为了解决这一独特挑战，我们进一步为Gaze设计了一种专门的两阶段策略，以在整个区域的需求和过度激进性之间动态平衡预取力度。&lt;/p>
+&lt;p>我们使用涵盖各种真实应用的基准测试对Gaze进行评估。实验包括单核、多核和带宽受限环境等多个场景。通过与七种最先进的预取器进行广泛对比，我们表明Gaze可以在更广泛的场景下有效提升性能。具体而言，在整个单核评估集中，Gaze 相比 PMP 和 vBerti [65] 分别提升了 5.7% 和 5.4%；在八核仿真中，分别提升了 11.4% 和 8.8%。此外，Gaze 的存储开销几乎与 PMP 相同，比 Bingo [13] 低 31 倍。同时，其面积和能耗开销远低于 PMP 和 vBerti。&lt;/p>
+&lt;p>本论文的主要贡献如下：&lt;/p>
+&lt;ul>
+&lt;li>我们指出基于空间模式的预取器的薄弱环节在于其基于环境上下文的模式表征方法，这极大限制了其灵活性和实用性。&lt;/li>
+&lt;li>通过利用足迹内部的时间相关性来表征空间模式，所提出的 Gaze 可以更准确地预测即将访问的足迹。此外，Gaze 将这一时间信息直接集成到经验搜索过程中，从而保持了硬件的简洁性。&lt;/li>
+&lt;li>我们进一步针对空间流优化 Gaze，提出了一种两阶段策略，以在整个区域需求和过度激进性之间取得平衡。&lt;/li>
+&lt;li>我们评估了 Gaze 以及七种最新的预取器，覆盖了来自 SPEC06、SPEC17、Ligra、PARSEC 和 CloudSuite 基准测试套件的 201 条不同的真实应用轨迹。实验结果表明，Gaze 能够在各种场景下有效提升性能。&lt;/li>
+&lt;/ul>
+&lt;h2 id="ii-相关工作与研究动机">&lt;strong>II. 相关工作与研究动机&lt;/strong>&lt;/h2>
+&lt;h3 id="a-近期基于空间模式的机制">&lt;strong>A. 近期基于空间模式的机制&lt;/strong>&lt;/h3>
+&lt;p>基于空间模式的预取通过直接记录某一区域的足迹来学习该区域的空间模式，并尝试找到其他相似区域以利用所学的经验进行预取 [22], [52]。这一潜力已被许多前期工作所证明 [13], [17], [19], [22], [29], [48], [52], [78], [79], [83]。&lt;/p>
+&lt;p>空间足迹预测器（SFP）[52]首次示范了基于空间模式的预取的常见结构和逻辑。SFP提议使用程序计数器（PC）以及一些数据地址的位来表征模式，从而提高预取准确性，并使预取器能够消除强制缺失。空间模式预测 [22] 在SFP的基础上进行了改进，使用了更大的区域大小和缓存行大小。&lt;/p>
+&lt;p>&lt;strong>细粒度空间预取&lt;/strong>通常通过几个环境上下文来表征模式，如激活的指令和数据地址。空间内存流（SMS）[78]提议使用PC+偏移量（Offset3）。SMS还使用一个过滤表（FT）来过滤掉单一比特的空间足迹。批量内存访问预测与流式传输 [83] 进一步减少了SMS的能量消耗。&lt;/p>
+&lt;p>长触发事件（PC+地址）携带（PC+偏移量）。受TAGE [74] 分支预测器的启发，Bingo首次尝试使用较长的触发事件来找到精确匹配。如果没有找到匹配，则使用较短的事件来找到近似匹配。因此，与SMS相比，Bingo通过更多的失配覆盖了相似的准确度（由精确匹配维持）。&lt;/p>
+&lt;p>结合触发指令和数据地址，能够准确捕获模式开始时的上下文特征。因此，匹配区域的预测通常会获得很高的准确性。然而，由于微小的上下文差异，相似的模式通常与不同的事件相关联，导致严重的数据冗余 [13], [48]。因此，为了实现可观的覆盖率，需要大量的存储开销和较长的学习周期 [17], [48]，这使得预取器不切实际。SMS和Bingo在实现最佳性能时都需要超过100KB的存储 [13], [78]。&lt;/p>
+&lt;p>**粗粒度空间预取。**到目前为止，几项最近的研究尝试采用更简化的方式。它们选择更适合硬件的粗粒度事件，并采用各种方法来缓解由此带来的低准确度。粗粒度方法仅通过触发指令或数据地址的几位来表征模式。&lt;/p>
+&lt;p>双重空间模式预取器（DSPatch）[17]在指令粒度上表征空间模式（即使用PC）。同时，它为每个PC保持两个最新的模式，并且可以通过预取同时/任一模式中出现的数据块来进一步提高准确性/覆盖率。&lt;/p>
+&lt;p>模式合并预取器（PMP）[48]通过仅使用偏移量进一步简化了表征，确保在短时间内几乎总能找到匹配。这几乎消除了由于执行新指令或访问未见过的地址而丢失预取机会的可能性。此外，对于每个偏移量，PMP合并了最近的32个模式，意味着它们的共同特征得以保留和利用。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 165;
+flex-basis: 398px"
+>
+&lt;a href="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233714536.png" data-size="574x346">
+&lt;img src="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233714536.png"
+width="574"
+height="346"
+srcset="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233714536_hu847725272767874917.png 480w, https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233714536_hu161907399799803115.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="b-现有局限性与研究动机">&lt;strong>B. 现有局限性与研究动机&lt;/strong>&lt;/h3>
+&lt;p>传统的基于上下文的方法在捕获关键访问特征时存在重大局限性。如图 1 所示，低成本方案难以适用于复杂工作负载，而引入更多的环境上下文信息又会导致难以接受的硬件成本。尽管已有研究提出了基于带宽利用率的动态调整 [17]、模式合并 [48] 和长短事件联合关联 [13] 来缓解这一问题，但这些方法的缺陷仍然未能彻底解决，严重限制了基于空间模式的预取的灵活性和实用性。因此，我们的研究进一步探索模式本身，以开发更高效的表征方法。&lt;/p>
+&lt;p>内存访问通常表现出时间局部性，即已访问的数据在短时间内可能会被再次访问 [27]。时间相关性（Temporal Correlation）类似于时间局部性，指的是一组地址倾向于按相同的顺序被重复访问 [84]。它被广泛应用于识别指针追踪和图处理等不规则模式 [12], [40], [49], [66], [79], [85], [87], [88]。由于空间模式是由内存访问产生的，它们自身也应该表现出类似的时间特性。这意味着，模式复现可能与内部访问的顺序一致。&lt;/p>
+&lt;p>图 2 上半部分展示了从 fotonik3d_s 负载中提取的几个空间区域的详细访问足迹。其中：&lt;/p>
+&lt;ul>
+&lt;li>Region A 和 Region C 具有相同的空间足迹和访问顺序，即它们的被访问块是对齐的，且访问顺序相同。&lt;/li>
+&lt;li>Region A 和 Region B 之间的空间足迹和访问顺序差异较大，因此它们属于不同模式。&lt;/li>
+&lt;/ul>
+&lt;p>由于足迹内部的时间相关性是由访问行为本身决定的，利用这一特性进行精细粒度模式表征可能是一个可行的方向。&lt;/p>
+&lt;p>假设我们观察图 2 所示的场景：&lt;/p>
+&lt;ul>
+&lt;li>t0 时刻（见下半部分），Region A、B 和 C 先前的模式已被学习，而 Region D 此刻刚刚被激活。四个区域的触发访问（红色标记）是对齐的，因此它们在定义上是相似的。然而，Region A、B 和 C 之间的模式存在冲突，因此难以确定 Region D 的最佳预取模式。&lt;/li>
+&lt;li>仅依赖触发偏移量是不够的，而引入附加的上下文信息（如 PC 或完整地址）会导致不可接受的元数据开销。&lt;/li>
+&lt;li>t2 时刻，在额外观察了两次内存访问之后，Region B 和 Region D 之间的相似性变得明显。因此，在 t2 时刻，我们可以做出高置信度的预测。&lt;/li>
+&lt;/ul>
+&lt;p>这种方法能够在不大幅增加元数据开销的情况下，实现细粒度模式表征。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 137;
+flex-basis: 330px"
+>
+&lt;a href="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232304939.png" data-size="676x491">
+&lt;img src="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232304939.png"
+width="676"
+height="491"
+srcset="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232304939_hu1848116493838343710.png 480w, https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232304939_hu2640066683923030370.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>然而，这一思想并不能直接应用于基于空间模式的预取，主要原因有两点：
+➊ 它与传统的硬件设计不兼容；
+➋ 它引入了额外的复杂性。&lt;/p>
+&lt;p>第一个挑战在于，传统方法是基于触发访问（trigger access）进行预测的，而要获取时间相关性，需要额外的观察。
+第二个挑战在于，存储和利用时间信息的成本较高。&lt;/p>
+&lt;p>因此，为了保持方法的简单性和高效性，我们需要进行精心设计，否则其效果可能还不如现有的细粒度方法。&lt;/p>
+&lt;h2 id="iii-gaze空间预取器">III. Gaze空间预取器&lt;/h2>
+&lt;p>我们提出了Gaze，据我们所知，它是第一个利用足迹内部时间相关性来高效表征空间模式的空间预取器。为了平衡硬件复杂度和性能，Gaze利用区域的前两个访问信息（§III-B）。这种简化使得Gaze能够将时间特征提取无缝集成到现有硬件设计中，而无需额外的元数据存储。同时，Gaze引入了一种专用的双阶段方法，以减轻在常规方案中，当利用由空间流生成的高密度足迹时，常常出现的过度预取问题（§III-C）。Gaze被设计并主要评估为L1D预取器。然而，它也可以放置在L2C，与现有的商业L1D预取器IP-stride一起工作。&lt;/p>
+&lt;h3 id="a-设计概述">A. 设计概述&lt;/h3>
+&lt;p>图3展示了Gaze的设计。中间的子图（图3b）显示了设计概览，而左侧子图（图3a）和右侧子图（图3c）分别展示了详细的学习和预取过程。图3b突出了关键创新，包括使用来自前两个访问的时间信息（细节在§III-B中讨论）以及专用的激进性控制路径（§III-C）。&lt;/p>
+&lt;p>如图3b所示，Gaze在缓存加载时进行训练。与传统的基于空间模式的预取器[13]，[48]，[78]类似，Gaze由三个主要组件组成：过滤表（FT）、累积表（AT）和模式历史模块（PHM）。FT用于过滤掉单比特空间模式，表示在跟踪期间区域内只有一个块被需求。AT用于跟踪所有活动区域。PHM用于学习访问模式，并基于学习到的经验发出预取。任何新激活的区域首先会在FT中记录，并且只有在到达第二次不同的加载访问后，才会被AT跟踪。Gaze还采用了一个预取缓冲区（PB），高效存储预取地址，因为单个位向量通常包含多个具有相同起始地址（即区域编号）的请求。此外，PB还帮助平滑预取的发出。&lt;/p>
+&lt;p>访问流程。加载到达时，Gaze首先检查AT，以查看所访问的区域是否正在跟踪（➊），如果是，Gaze将更新相应的足迹。否则，Gaze会查找FT（➋）。如果找到该区域，表示它曾经激活过，Gaze将开始在AT中跟踪它（➌）。与以前的提案不同，Gaze还会将触发偏移、第二个偏移以及触发PC发送到PHM进行预取（➍）。这是因为Gaze选择结合前两个访问之间的时间相关性，这在此时可用。如果需要更多访问，则该步骤将被延迟。传统方法[13]，[17]，[48]，[78]通过触发访问而不是第二次访问唤醒预取过程。在接收到这些信息后，PHM决定是否触发该区域的预取。如果触发，则相应的预取模式将被发送到PB，准备预取（➎）。对于每个正在跟踪的区域，一旦它被停用（例如，其中一个缓存块被从缓存中驱逐，或者其相关的跟踪条目因不活动而被LRU策略从AT中驱逐），累积结束，并将位向量发送到PHM（➏）进行模式学习。&lt;/p>
+&lt;p>AT中的每个条目用于跟踪一个活动区域，我们引入了两个额外的6位字段来存储该区域最后两个访问的偏移，这些偏移与新访问一起，将共同计算最后两个步长。AT根据这两个步长（➐）决定是否执行基于区域的步长预取（作为备份预取）和激进性提升。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 250;
+flex-basis: 600px"
+>
+&lt;a href="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232532491.png" data-size="1524x609">
+&lt;img src="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232532491.png"
+width="1524"
+height="609"
+srcset="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232532491_hu3768191653677687458.png 480w, https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202232532491_hu8193013107137162743.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h3 id="b-模式表征">B. 模式表征&lt;/h3>
+&lt;p>为了识别足迹内部特征，Gaze需要等待几个初始访问。因此，最关键的设计选择是用于提取时间相关性的访问次数。这要求Gaze在强干扰（如乱序调度）存在的情况下，保持并观察所有最近激活的区域，通过它们最近访问的块来区分空间模式。此外，这也意味着会错失一些预取机会。因此，等待过多的访问会带来负面影响。为了在性能和成本之间找到良好的平衡，我们首先探讨了使用的时间信息量与加速、准确性和覆盖率等效率之间的关系。当两个区域的初始访问在空间足迹和时间顺序上对齐时，我们认为它们是相似的。图4展示了将所需对齐的初始访问次数从一个扩展到最多四个的效果。结果是整个评估集的平均值。我们依次连接这些访问的偏移量来形成索引事件。当仅使用触发偏移时，模式历史表（PHT）的大小为64，因为在一个4KB区域内有64个不同的偏移且没有包含指令信息。然而，当考虑更多的访问时，完整的PHT变得不切实际且低效。因此，在这些情况下，为了简化，我们使用了256条入口的全关联历史表，其消耗不到3KB。如图4所示，如果我们要求前四个需求块在空间和时间上都必须对齐，预取准确性从56%提高到90%，这表明访问行为的成功表征。然而，预取机会显著丧失，导致IPC和覆盖率下降。当我们选择仅使用前两个访问时，达到了理想的平衡，这在IPC上提供了3%的提升，在准确性上提供了35%的提升，同时覆盖率的减少几乎可以忽略不计。当使用的偏移数量再次增加时，准确性的边际提升是以IPC和覆盖率的显著下降为代价的。&lt;/p>
+&lt;p>基于这一见解，我们决定利用前两个访问之间的时间相关性来表征空间模式。这一选择带来了三个主要优势。首先，与传统的依赖多样化程序上下文的细粒度方法相比，这种方法显著减少了存储开销。其次，它平衡了性能、准确性和覆盖率，确保及时的预取并最小化乱序调度带来的干扰。第三，它可以无缝集成到近期的硬件设计中。Gaze利用现有逻辑来捕捉前两个偏移，并以不增加额外元数据开销的方式存储模式，保持简洁性和兼容性。具体而言，最近的方法使用FT来使仅访问一次的区域无效，这使我们能够在FT将有效区域发送到AT时获取这两个偏移（图3b中的➋）。此外，我们将第一个偏移作为索引，第二个偏移作为标签来存储模式，在表查找过程中本质上验证它们的顺序。&lt;/p>
+&lt;p>此外，为了保持高准确性，Gaze采用了严格的匹配机制，当只有一个访问匹配而另一个不匹配时，防止唤醒预取。这与Bingo [13]、TAGE [74]和Domino [12]中采用的机制略有不同，这些机制即使在部分匹配的情况下也能进行预测。我们限制这种能力，主要是因为前两个访问之间的时间相关性是一个关键特征。然而，当候选区域未能找到匹配时，尽管其即将到来的模式可能很容易跟随，我们可能会错失预取机会。为了弥补这一点，我们通过备用预取器增强了跟踪结构。具体细节将在与我们专用的双阶段激进性控制一起在§III-C中进一步讨论。&lt;/p>
+&lt;h3 id="c-向空间流式处理的增强">C. 向空间流式处理的增强&lt;/h3>
+&lt;p>空间流式处理指的是长期的空间跨越访问现象 [27]。尽管过去几十年对空间流式处理进行了广泛的研究 [37]–[39]，[50]，[71]，[91]，我们仍然观察到在利用其空间足迹时存在一个独特的未解决挑战。具体来说，我们发现，由空间流式处理生成的足迹通常表现出极高的访问密度，尤其是当跨越为1时，这意味着在用于预取时，几乎会为候选区域中的所有块发出推测性预取。显然，空间流式处理可以从这种高激进性中大大受益。然而，实际上，各种访问模式往往以交错的方式表现出来，如果过度使用这种高密度的足迹，产生的大量无效预取可能会导致显著的缓存污染和外部带宽瓶颈。例如，图5提供了Ligra中基于BFS的图处理算法的伪代码。该算法分配一个临时空间，称为Frontier，用于存储当前级别中将被处理的稀疏分布的顶点。因此，遍历Frontier（在函数BFS_forward中）会产生同时包含不规则访问和空间流式处理的访问模式。&lt;/p>
+&lt;p>为了解决这个挑战，像许多之前的方法 [38]，[71]，[91]，我们使用基于PC的机制。具体来说，我们部署了一个密集PC表（DPCT）来记录最近的密集PC，一个密集计数器（DC）来跟踪最近密集足迹的频率。我们使用这两个结构进行双重检查，并采用两阶段方法来逐步增加预取激进性。&lt;/p>
+&lt;p>&lt;strong>学习阶段&lt;/strong>。空间流式处理检测如图3a上部所示。当我们跟踪完一个区域，其初始两个访问的块是块0和块1（即图中的r）时，我们检查它是否是高度密集的，即它的所有块是否都已被访问。如果是，我们将其触发指令记录到DPCT中，并增加DC。否则，我们减少DC，其中较大的值促使快速减少。&lt;/p>
+&lt;p>**预取阶段。**我们采用两阶段方法来调整预取的激进性，尝试将此密集模式应用于候选区域。在第一阶段，对于候选区域，我们检测其展示空间流式处理的信心级别，并相应地分配初始预取激进性。在第二阶段，我们根据随后的访问动态调整预取的激进性，逐步增加激进性。&lt;/p>
+&lt;p>阶段1。如图3c上部所示，当为可能被空间流式处理完全需求的区域p发出预取时，如果触发指令最近被标记为密集PC或DC已饱和，我们分配适中的激进性：将前16个块预取到L1D，将剩余的块预取到L2C。我们经验性地将具有较高激进性的初始块数设置为16（即区域的四分之一），以避免错失预取机会，同时不至于过于激进。否则，如果DC饱和度为一半，表示p成为密集区域的概率较低，我们只将前16个块预取到L2C。如果触发指令未被标记或DC不够大，我们则不进行预取。同时，在将该区域插入AT时，我们设置stride_flag标记。这使得AT在该区域后续展示流式处理行为时，能够预取其余块。&lt;/p>
+&lt;p>阶段2。AT将跟踪所有标记的区域。对于每个区域，我们计算最后三个访问的两个跨越。如果这两个跨越都等于1，我们将若干后续块提升到L1D（见图3c上部）。图3b下部显示了PB如何合并提升模式和原始预取模式。这种基于跨越的方法还可以作为当我们的严格匹配机制（见§III-B）未能预测时的备选预测器。如图3c下部所示，如果未找到匹配，则在跟踪时也会设置该区域的stride_flag。一般来说，对于标记的区域，一旦最后两个跨越匹配，就会激活基于区域的跨越预取。&lt;/p>
+&lt;p>我们基于区域的跨越预取与其他基于跨越的机制之间的差异如下。首先，它具有双重目的：促进激进性并捕捉潜在的错失机会（图3b中的➐）。其次，它利用现有结构，例如AT，并在区域级别操作，而不是全局或每个PC视图，这避免了需要新的跟踪结构。因此，为了保持简洁性，不处理诸如多个跨越之类的复杂场景。&lt;/p>
+&lt;h3 id="d-模式历史模块">D. 模式历史模块&lt;/h3>
+&lt;p>如图3b所示，除了负责处理§III-C中提到的大规模空间流式处理的DPCT和DC（简化表示为案例1）之外，PHM还包括一个模式历史表（PHT），用于处理典型场景（简化表示为案例2）。如前所述，如果一个区域的前两个访问是空间相邻并且发生在区域的开头，那么DPCT和DC将学习到该模式。否则，将使用PHT来学习该模式。同样，对于候选区域的足迹预测，PHM根据其前两个访问的块来调用相应的结构。此外，PHT会将所有块预取到L1D中。&lt;/p>
+&lt;h3 id="e-硬件开销">E. 硬件开销&lt;/h3>
+&lt;p>**存储开销。**Gaze将区域大小设置为4KB（与典型的物理页面相同）。表I展示了每个组件的详细划分以及总存储开销。FT和AT都有64个条目，允许同时跟踪64个页面。PB使用32个条目存储最多32个页面的预取模式，每个偏移量有四个状态：不预取、预取到L1D、L2C和LLC（未使用）。PHT采用4路组相联方式。DPCT包含8个条目。我们忽略了DC的开销，因为它只占用3个比特。最后，Gaze的总硬件开销为4.46KB（比Bingo [13]低31倍，比PMP [48]少0.54KB，比Berti [65]多1.91KB）。&lt;/p>
+&lt;p>**面积和能量开销。**我们使用CACTI [60]、[86]的22nm配置来估算Gaze（PHT和DPCT）和PMP（OPT和PPT）的模式历史模块所消耗的面积和访问能量。与PMP相比，Gaze消耗的面积约为29%（0.0034 mm² vs. 0.0117 mm²）。这是因为Gaze中的每一行仅需要64b来存储一个比特向量，而PMP则需要320b（或160b）来存储一个计数器向量（粗计数器向量）。此外，Gaze的模式历史模块的读写访问消耗的能量不到PMP的46%。Gaze的每个表可以在一个CPU周期内被访问。与Berti相比，Gaze的面积和能量消耗要低得多，因为Berti将每个L1D行扩展12个比特来容纳获取延迟。这种扩展导致其面积和访问能量比Gaze的PHM增加超过10倍。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 119;
+flex-basis: 286px"
+>
+&lt;a href="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233209992.png" data-size="775x649">
+&lt;img src="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233209992.png"
+width="775"
+height="649"
+srcset="https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233209992_hu2893704833838414597.png 480w, https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/image-20250202233209992_hu931932273048753573.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>香山邀请报告——乱序访存单元</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/</link><pubDate>Sun, 02 Feb 2025 16:33:38 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/</guid><description>&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 176;
+flex-basis: 423px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083.png" data-size="1493x847">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083.png"
+width="1493"
+height="847"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083_hu16096562521547637820.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083_hu15276950146423262980.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 178;
+flex-basis: 427px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441.png" data-size="1512x848">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441.png"
+width="1512"
+height="848"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441_hu13947805208678613789.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441_hu17233388361454517806.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>在dispatch 的时候派遣指令到store IQ上 ，ROB标记为可提交状态 ，这样这两条指令就从ROB中消失了，然后是store Queue把数据写入dcache里面&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 174;
+flex-basis: 418px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163531650.png" data-size="1497x859">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163531650.png"
+width="1497"
+height="859"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163531650_hu11039817599042503125.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163531650_hu1006697153214912653.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 179;
+flex-basis: 430px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163912498.png" data-size="1514x845">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163912498.png"
+width="1514"
+height="845"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163912498_hu9810269103573604617.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163912498_hu15606427366186388619.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 180;
+flex-basis: 433px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163958439.png" data-size="1507x835">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163958439.png"
+width="1507"
+height="835"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163958439_hu7967667703324754418.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163958439_hu17144837342833055989.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 176;
+flex-basis: 423px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164205297.png" data-size="1526x864">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164205297.png"
+width="1526"
+height="864"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164205297_hu3140084469094265692.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164205297_hu9288210543314322316.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>store 指令和 load指令的物理地址一致， 但是load提前store发出了&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 425px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164251227.png" data-size="1504x849">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164251227.png"
+width="1504"
+height="849"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164251227_hu5368998875106347682.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164251227_hu17994514107920271286.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 426px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164416519.png" data-size="1502x845">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164416519.png"
+width="1502"
+height="845"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164416519_hu729754360532570029.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164416519_hu16590525597712564157.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>只要能够检测到load是提前store发射的，那重新执行一遍load就可以了&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 178;
+flex-basis: 428px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164457981.png" data-size="1510x845">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164457981.png"
+width="1510"
+height="845"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164457981_hu5404912640682722173.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164457981_hu7639580842802584941.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 173;
+flex-basis: 417px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164726826.png" data-size="1493x859">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164726826.png"
+width="1493"
+height="859"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164726826_hu12481863714948691679.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164726826_hu17176233437495449635.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>store检测load queue里有没有新的load,然后直接重新执行load&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 179;
+flex-basis: 430px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164822721.png" data-size="1532x854">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164822721.png"
+width="1532"
+height="854"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164822721_hu14690753122810572095.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164822721_hu11009427543997621002.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 181;
+flex-basis: 434px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164927725.png" data-size="1533x846">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164927725.png"
+width="1533"
+height="846"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164927725_hu6242463307140550872.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202164927725_hu7681989900008378525.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 180;
+flex-basis: 432px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165005376.png" data-size="1521x845">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165005376.png"
+width="1521"
+height="845"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165005376_hu591236048669367220.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165005376_hu12865579345199252393.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 181;
+flex-basis: 434px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165044008.png" data-size="1533x846">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165044008.png"
+width="1533"
+height="846"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165044008_hu17981539999471374569.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165044008_hu2638282792278761015.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>dcache需要写的时候是抢不到读口的&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 426px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165054308.png" data-size="1534x864">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165054308.png"
+width="1534"
+height="864"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165054308_hu3064015050491201462.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165054308_hu15178806058819727933.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 177;
+flex-basis: 427px"
+>
+&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165218431.png" data-size="1518x853">
+&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165218431.png"
+width="1518"
+height="853"
+srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165218431_hu670186608214654268.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202165218431_hu1917810855572871378.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;h2 id="附录">附录&lt;/h2>
+&lt;h3 id="参考文献">参考文献&lt;/h3>
+&lt;h3 id="版权信息">版权信息&lt;/h3>
+&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
+>vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>Scala_var</title><link>https://VastCircle.github.io/2025/scala_var/</link><pubDate>Thu, 30 Jan 2025 23:55:06 +0800</pubDate><guid>https://VastCircle.github.io/2025/scala_var/</guid><description>&lt;p>在boom的代码中看到挺多var的使用，来记录一下&lt;/p>
 &lt;p>var类型:在处理过程中可以多次重写&lt;/p>
 &lt;p>val类型:在处理过程中只能分配一次&lt;/p>
 &lt;p>例如，在表搜索中，考虑存储为 ID 和值对的类似散列的结构，并搜索与&lt;a class="link" href="http://d.hatena.ne.jp/keyword/%A5%CF%A5%C3%A5%B7%A5%E5%C3%CD" target="_blank" rel="noopener"
@@ -1583,6 +1971,28 @@ loading="lazy"
 &lt;li>实现高低两个优先级的发射尝试。&lt;/li>
 &lt;/ul>
 &lt;p>插一嘴，这个extend真的很聪明，这样不仅是io,所有的变量都可以用&lt;/p>
+&lt;h2 id="execution-units">execution-units&lt;/h2>
+&lt;p>构建执行单元组。&lt;/p>
+&lt;p>将同类（都是非FPU或FPU）的执行单元放在一个“collection”类ExecutionUnits中。根据参数配置执行单元，检查执行单元中功能单元的完备性，完善调试输出信息以及定义执行单元组总的一些参数。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 205;
+flex-basis: 494px"
+>
+&lt;a href="https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/exeunits.jpg" data-size="1542x749">
+&lt;img src="https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/exeunits.jpg"
+width="1542"
+height="749"
+srcset="https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/exeunits_hu12543991107599071511.jpg 480w, https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/exeunits_hu15556773232262826418.jpg 1024w"
+loading="lazy"
+alt="exeunits">
+&lt;/a>
+&lt;figcaption>exeunits&lt;/figcaption>
+&lt;/figure>&lt;/p>
+&lt;p>其中，灰色方框就是执行单元，而灰色方框连接的线上的就是功能单元。虚线表示继承关系（如FunctionalUnit抽象类由BoomModule类继承），而导图主体表示可选的包含关系（比如ALUExeUnit类中可以包含ALUUnit类、RoCCShim类等中的若干类，注意有些功能单元组合是不被允许的）。&lt;/p>
+&lt;p>可以看出，不少的功能单元最后都包含有Rocket的功能单元（加粗的类），但需要注意的是，这功能单元是适用在Rocket这种顺序流水线上的，而在BOOM中，由于使用乱序流水线，被发射的指令有可能在中途被kill掉，那些功能单元不能兼容这种场景。 因此为了复用Rocket的功能单元，BOOM在这些FunctionalUnit抽象类中将Rocket上的功能单元包装起来（增加相关逻辑和端口等），以适应需要。&lt;/p>
+&lt;p>一个ExecitionUnits有多个exe_units&lt;/p>
 &lt;h2 id="execution-unit">execution-unit&lt;/h2>
 &lt;p>在BOOM中，一个执行单元(Execution Unit)连接到一个发射端口上，接收一个发射的指令（即三发射的BOOM需要有三个执行单元），其内部拥有一个或多个功能单元(Functional Unit)。 比如一个执行单元可能仅包括一个整数ALU，也可能是整数ALU、整数乘法的组合。本文件中，先定义了一个抽象的执行单元类ExecutionUnit，然后派生出两个子类ALUExeUnit和FPUExeUnit，其中可含有的功能单元不同，而且含有什么样的功能单元可由构造时传入的参数决定。执行单元的示意图如下：&lt;/p>
 &lt;p>&lt;figure
@@ -1602,6 +2012,11 @@ loading="lazy"
 &lt;/figure>&lt;/p>
 &lt;p>发射窗口调度微指令到一个特定的执行流水线上&lt;/p>
 &lt;p>一个给定的指令流水线可能包含多个功能单元；有一个或多个读写端口&lt;/p>
+&lt;p>其中包括 ALUExeUnit, FPUExeUnit&lt;/p>
+&lt;h2 id="functional-unit">functional-unit&lt;/h2>
+&lt;p>里面主要是有一些常见的功能单元 ， 包括ALUUnit(也可以用作jmpUnit)， MemAddrCalcUnit , FPUint , DivUnit , PipelinedMulUnit ,&lt;/p>
+&lt;p>ALUUnit内部用的就是rocket的alu ,ALUUnit里比较重要的应该是分支预测器的一些更新，它是需要去选择下一个pc是跳转pc还是pc+4的，一些分支的简单比较之类的，eq,&amp;gt;=之类的不是通过alu进行的，是另外的比较器来做的 ，地址的话应该是alu来计算的&lt;/p>
+&lt;p>MemAddrAclcUnit:内存地址计算单元类，传入base和imm以计算地址，然后把要储存的数据传递给LSU。&lt;/p>
 &lt;h2 id="func-unit-decode">func-unit-decode&lt;/h2>
 &lt;p>—— 功能单元译码。&lt;/p>
 &lt;p>从指令的发射阶段（ISS）接收valid信号和微指令uop，通过译码表得到读寄存器的控制信号（RRdCrtlSigs），根据此控制信号修改微指令uop中的成员，并将修改后的uop连同valid信号一并发送到读寄存器（RRD）阶段。&lt;/p>
@@ -1614,6 +2029,45 @@ loading="lazy"
 &lt;p>工作流程：从指令发射（ISS）阶段接受valid信号和微指令uop信息，以及读寄存器的地址（ISS阶段末）；在读寄存器（RDD）阶段的开始通过func-unit-decode中定义的译码器得到功能单元译码、考虑分支后的微指令uop；RDD阶段，从连接的寄存器堆读取数据；在RDD阶段末，用从ALU过来的旁路信息更新数据，最终传给执行（EXE）阶段。&lt;/p>
 &lt;p>当前实现的寄存器堆静态地为所有已发射指令提供需要的所有寄存器读取端口。例如，如果发射端口#0对应于一个整数ALU，发射端口#1对应于内存单元，那么前两个寄存器读取端口将静态地为ALU服务，下两个寄存器读取端口将为内存单元服务，总共四个读取端口。&lt;/p>
 &lt;p>未来的设计可以通过提供更少的寄存器读取端口和使用动态调度来仲裁(arbitrate)这些端口来提高区域效率。这尤其有用，因为大多数指令只需要一个操作数。然而，它确实增加了设计的额外复杂性，这通常表现为需要额外的流水线级来仲裁或者检测结构冲突。它还需要能够终止已发射的微指令，并在以后的周期中从发射队列重新发射它们。&lt;/p>
+&lt;h2 id="core">core&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// BOOM has the following (conceptual) stages:
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// if0 - Instruction Fetch 0 (next-pc select)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// if1 - Instruction Fetch 1 (I$ access)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// if2 - Instruction Fetch 2 (instruction return)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// if3 - Instruction Fetch 3 (enqueue to fetch buffer)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// if4 - Instruction Fetch 4 (redirect from bpd)
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// dec - Decode
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// ren - Rename1
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// dis - Rename2/Dispatch
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// iss - Issue
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// rrd - Register Read
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// exe - Execute
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// mem - Memory
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// sxt - Sign-extend
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// wb - Writeback
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// com - Commit
+&lt;/span>&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;h2 id="rob">rob&lt;/h2>
+&lt;p>&lt;strong>重排序缓存器(Reorder Buffer, ROB)跟踪在流水线中运行的微指令的状态。ROB的作用就是给程序员一种“他的程序是按顺序执行的”的错觉。指令在被译码和重命名后，将被派遣到ROB和发射队列&lt;/strong>并被标记为繁忙。指令完成执行后将告知ROB并且被重新标记为不繁忙。一旦ROB的“头”不再繁忙，就代表这条指令被提交了，它的体系结构状态现在是可见的。如果有一个异常发生，并且引发异常的指令在ROB的头部，流水线将被清除，并且在异常指令可见后不会出现任何体系结构的更改，然后ROB会重定向PC到相应的异常处理程序。&lt;/p>
+&lt;p>&lt;figure
+class="gallery-image"
+style="
+flex-grow: 201;
+flex-basis: 484px"
+>
+&lt;a href="https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/image-20250201162824549.png" data-size="787x390">
+&lt;img src="https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/image-20250201162824549.png"
+width="787"
+height="390"
+srcset="https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/image-20250201162824549_hu18354511116937898555.png 480w, https://VastCircle.github.io/2025/boom%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BBexu/image-20250201162824549_hu3513717282467462623.png 1024w"
+loading="lazy"
+>
+&lt;/a>
+&lt;/figure>&lt;/p>
+&lt;p>上图是一个三发射双宽度(two-wide)BOOM的ROB。派遣的微指令将被写在ROB的底部（或尾部，tail），而提交的微指令将在顶部，即ROB头部提交，然后更新重命名阶段的相关信息。完成执行的微指令（等待写回的微指令，wb uops）会清除他们的繁忙位。注意：派遣的微指令组会同时被写进同一个ROB的行，在内存中连续存放，使得可以用一个PC代表整个行。&lt;/p>
+&lt;p>ROB在概念上是一个循环的缓冲区，顺序地追踪所有运行中的指令。最老（最先进入流水线）的指令将由commit head指向，最新的指令将在rob tail处插入。&lt;/p>
+&lt;p>为了方便超标量派遣和提交，ROB被实现为一个有W栏(bank)的循环缓冲区，其中W是机器派遣和提交的宽度。（如上图中W=2）,这个就和香山的有些区别 ，香山应该是直接放连续的rob&lt;/p>
+&lt;p>派遣时，最多w条指令将从取指包裹（或取指数据包，Fetch Packet，见下面引用部分）被写到一个ROB的行中，其中每条指令都会被写到不同的栏（列）中。由于一个取指包裹中的指令组在内存中都是连续存放的，可以用一个PC来联系一个取指包裹（包裹内指令的位置提供了它自己PC的低位）。这也意味着分支将在ROB中留下气泡（空指令占的位置），这使得向ROB添加更多指令的开销变小，因为本来很大的开销被每个ROB行平摊了。&lt;/p>
+&lt;p>取指包裹(Fetch Packet)：前端返回的一个包，其中包含一组连续的指令，带有一个掩码，表示哪些指令有效，以及与指令提取和分支预测相关的其他元数据。Fetch PC将指向取指包裹中的第一条有效指令，因为它是前端用来获取取指包裹的PC。&lt;/p>
 &lt;h2 id="附录">附录&lt;/h2>
 &lt;h3 id="参考文献">参考文献&lt;/h3>
 &lt;h3 id="版权信息">版权信息&lt;/h3>

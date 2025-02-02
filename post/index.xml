@@ -1,4 +1,38 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 30 Jan 2025 23:55:06 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Scala_var</title><link>https://VastCircle.github.io/2025/scala_var/</link><pubDate>Thu, 30 Jan 2025 23:55:06 +0800</pubDate><guid>https://VastCircle.github.io/2025/scala_var/</guid><description>&lt;p>在boom的代码中看到挺多var的使用，来记录一下&lt;/p>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sun, 02 Feb 2025 22:53:52 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Gaze_into_the_Pattern__for_Hardware_Prefetching</title><link>https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/</link><pubDate>Sun, 02 Feb 2025 22:53:52 +0800</pubDate><guid>https://VastCircle.github.io/2025/gaze_into_the_pattern__for_hardware_prefetching/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
+&lt;p>硬件预取（Hardware prefetching）是隐藏长数据访问延迟最常用的技术之一。为了解决硬件预取面临的挑战，架构师提出在空间区域（spatial region）的粒度上检测并利用空间局部性。当一个新的区域被激活时，他们尝试基于系统级环境特征（如触发指令或数据地址）查找类似的先前访问区域，以进行足迹预测。然而，我们发现这种基于上下文的预测无法捕捉访问模式的本质特征，导致灵活性和实用性受限，并使预取性能次优。在本文中，我们受到存储访问的时间特性的启发，注意到空间足迹内部的时间相关性是空间模式的关键特征。为此，我们提出了一种简单高效的硬件空间预取器——Gaze，它巧妙地利用足迹内部的时间相关性来高效表征空间模式。同时，我们发现利用由空间流（spatial streaming）生成的空间足迹时，存在一个独特但未解决的挑战，即这些足迹表现出极高的访问密度。因此，我们进一步为 Gaze 设计了一个专门的两阶段方法，以缓解传统方案中常见的过度预取（over-prefetching）问题。我们进行了全面且多样化的实验，结果表明 Gaze 能够在更广泛的场景中有效提升性能。具体而言，与最新的低成本方案 PMP 和 vBerti 相比，Gaze 在单核环境下分别提升 5.7% 和 5.4%，在八核环境下分别提升 11.4% 和 8.8%。&lt;/p></description></item><item><title>香山邀请报告——乱序访存单元</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/</link><pubDate>Sun, 02 Feb 2025 16:33:38 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 176; 
+			flex-basis: 423px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083.png" data-size="1493x847">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083.png"
+			width="1493"
+			height="847"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083_hu16096562521547637820.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163412083_hu15276950146423262980.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 178; 
+			flex-basis: 427px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441.png" data-size="1512x848">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441.png"
+			width="1512"
+			height="848"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441_hu13947805208678613789.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E4%B9%B1%E5%BA%8F%E8%AE%BF%E5%AD%98%E5%8D%95%E5%85%83/image-20250202163458441_hu17233388361454517806.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>Scala_var</title><link>https://VastCircle.github.io/2025/scala_var/</link><pubDate>Thu, 30 Jan 2025 23:55:06 +0800</pubDate><guid>https://VastCircle.github.io/2025/scala_var/</guid><description>&lt;p>在boom的代码中看到挺多var的使用，来记录一下&lt;/p>
 &lt;p>var类型:在处理过程中可以多次重写&lt;/p>
 &lt;p>val类型:在处理过程中只能分配一次&lt;/p>
 &lt;p>例如，在表搜索中，考虑存储为 ID 和值对的类似散列的结构，并搜索与&lt;a class="link" href="http://d.hatena.ne.jp/keyword/%A5%CF%A5%C3%A5%B7%A5%E5%C3%CD" target="_blank" rel="noopener"
