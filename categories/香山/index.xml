@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>香山 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1/</link><description>Recent content in 香山 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 18 Jan 2025 22:20:27 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E9%A6%99%E5%B1%B1/index.xml" rel="self" type="application/rss+xml"/><item><title>香山邀请报告——缓存基础和香山缓存</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/</link><pubDate>Sat, 18 Jan 2025 22:20:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 188; 
+			flex-basis: 452px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118225744967.png" data-size="1294x687">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118225744967.png"
+			width="1294"
+			height="687"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118225744967_hu17796226399376657198.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118225744967_hu8348936626104533362.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 176; 
+			flex-basis: 424px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118230002923.png" data-size="1309x740">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118230002923.png"
+			width="1309"
+			height="740"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118230002923_hu9798892846660929321.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E7%BC%93%E5%AD%98%E5%9F%BA%E7%A1%80%E5%92%8C%E9%A6%99%E5%B1%B1%E7%BC%93%E5%AD%98/image-20250118230002923_hu6109206764932188994.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山邀请报告——处理器的性能测算基础</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/</link><pubDate>Sat, 18 Jan 2025 20:40:58 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 190; 
+			flex-basis: 456px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204201260.png" data-size="1448x762">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204201260.png"
+			width="1448"
+			height="762"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204201260_hu7806315297422038694.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204201260_hu15255998948895200954.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 224; 
+			flex-basis: 539px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204919400.png" data-size="1388x618">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204919400.png"
+			width="1388"
+			height="618"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204919400_hu13040004070214174965.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%A4%84%E7%90%86%E5%99%A8%E7%9A%84%E6%80%A7%E8%83%BD%E6%B5%8B%E7%AE%97%E5%9F%BA%E7%A1%80/image-20250118204919400_hu9682467326500832916.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山邀请报告——向量扩展的设计和实现</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0/</link><pubDate>Sat, 18 Jan 2025 17:07:03 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0/</guid><description>&lt;h2 id="香山ppt">香山ppt&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 175; 
+			flex-basis: 420px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0/image-20250118170720617.png" data-size="1069x610">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0/image-20250118170720617.png"
+			width="1069"
+			height="610"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0/image-20250118170720617_hu12962601924616772917.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%8A%A5%E5%91%8A%E5%90%91%E9%87%8F%E6%89%A9%E5%B1%95%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%92%8C%E5%AE%9E%E7%8E%B0/image-20250118170720617_hu8514861846678028089.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山源代码剖析——指令的执行</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/</link><pubDate>Sat, 18 Jan 2025 12:22:33 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/</guid><description>&lt;h2 id="来自b站">来自b站&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 190; 
+			flex-basis: 457px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118125745389.png" data-size="1248x654">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118125745389.png"
+			width="1248"
+			height="654"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118125745389_hu6455103444142149985.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E6%89%A7%E8%A1%8C/image-20250118125745389_hu13408301655024333974.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山源代码剖析——执行结果的回写和commit</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</link><pubDate>Thu, 16 Jan 2025 00:17:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/</guid><description>&lt;h2 id="rob">ROB&lt;/h2>
+&lt;h3 id="来自香山视频">来自香山视频&lt;/h3>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 183; 
+			flex-basis: 440px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749.png" data-size="1600x872">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749.png"
+			width="1600"
+			height="872"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749_hu16240116585783215136.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E7%9A%84%E5%9B%9E%E5%86%99%E5%92%8Ccommit/image-20250121232917749_hu2374164839472895496.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>香山源代码剖析——指令的译码和派发</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</link><pubDate>Tue, 14 Jan 2025 17:19:27 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 375; 
+			flex-basis: 900px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853.png" data-size="1028x274">
+		&lt;img src="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853.png"
+			width="1028"
+			height="274"
+			srcset="https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853_hu6670905778379539498.png 480w, https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E6%8C%87%E4%BB%A4%E7%9A%84%E8%AF%91%E7%A0%81%E5%92%8C%E6%B4%BE%E5%8F%91/image-20250114181936853_hu6764138659097728431.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>译码阶段是香山CPU流水线后端的第一站，第一个阶段。它的输入来自于前端的指令缓冲器ibuffer ,从Ibuffer读出时由其将来自IFU的指令加预译码信息一起组装在一个CtrlFlow对象中，又由于流水线后端的宽度是6,所有译码阶段的输入就是6个CtrlFlow对象，译码阶段的输出即译码结果去往Rename中，是一排CfCtrl对象，CfCtrl就是CtrlFlow + CtrlSignals, 译码产生的结果就在CtrlSignals中，连同CtrlFlow一起往下游送。&lt;/p></description></item><item><title>香山源代码剖析——PMA和PMP</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90pma%E5%92%8Cpmp/</link><pubDate>Sun, 12 Jan 2025 23:49:47 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90pma%E5%92%8Cpmp/</guid><description>&lt;p>PMP : 物理存储保护（Physical Memory Protection) module ,它将所有的访问权限都集中起来&lt;/p>
+&lt;p>PMA:物理存储属性（Physical Memory Attributes),PMP实施存储空间保护的依据&lt;/p></description></item><item><title>香山源代码剖析——香山SOC的顶层</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E9%A6%99%E5%B1%B1soc%E7%9A%84%E9%A1%B6%E5%B1%82/</link><pubDate>Sun, 12 Jan 2025 23:26:10 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E6%BA%90%E4%BB%A3%E7%A0%81%E5%89%96%E6%9E%90%E9%A6%99%E5%B1%B1soc%E7%9A%84%E9%A1%B6%E5%B1%82/</guid><description>&lt;p>// top.scala里包含香山的头文件&lt;/p>
+&lt;p>// 有一个XSCore.scala文件&lt;/p>
+&lt;h2 id="xstop和xscore">XSTop和XSCore&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">XSCore&lt;/span>&lt;span style="color:#56b6c2">()(&lt;/span>&lt;span style="color:#c678dd">implicit&lt;/span> &lt;span style="color:#e06c75">p&lt;/span>&lt;span style="color:#c678dd">:&lt;/span> &lt;span style="color:#e5c07b">config.Parameters&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span> &lt;span style="color:#c678dd">extends&lt;/span> &lt;span style="color:#e5c07b">XSCoreBase&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">with&lt;/span> &lt;span style="color:#e5c07b">HasXSDts&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">lazy&lt;/span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">module&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e5c07b">XSCoreImp&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#c678dd">this&lt;/span>&lt;span style="color:#56b6c2">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#56b6c2">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item></channel></rss>
