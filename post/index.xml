@@ -1,4 +1,191 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 17 Feb 2025 22:54:00 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>Boom Lsu</title><link>https://VastCircle.github.io/2025/boom-lsu/</link><pubDate>Mon, 17 Feb 2025 22:54:00 +0800</pubDate><guid>https://VastCircle.github.io/2025/boom-lsu/</guid><description>&lt;h2 id="lsu">lsu&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 20 Mar 2025 14:06:30 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>加速器debug_linuboot</title><link>https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/</link><pubDate>Thu, 20 Mar 2025 14:06:30 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 426; 
+			flex-basis: 1023px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894.png" data-size="806x189">
+		&lt;img src="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894.png"
+			width="806"
+			height="189"
+			srcset="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894_hu14336320418883444527.png 480w, https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894_hu13212996480659793648.png 1024w"
+			loading="lazy"
+			alt="image-20250320140942894">
+	&lt;/a>
+	
+	&lt;figcaption>image-20250320140942894&lt;/figcaption>
+	
+&lt;/figure>&lt;/p>
+&lt;p>函数 free_area_init&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 87; 
+			flex-basis: 210px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231.png" data-size="928x1056">
+		&lt;img src="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231.png"
+			width="928"
+			height="1056"
+			srcset="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231_hu18122165086033145151.png 480w, https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231_hu16096835837496059074.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>Gem5创建一个新的cpu_model</title><link>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</link><pubDate>Thu, 20 Mar 2025 10:22:53 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</guid><description>&lt;ol>
+&lt;li>复制相应的基础文件到新的目录&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>cp -r minor derminor
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>替换所有的minor 为 dvrminor&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">for&lt;/span> file in *; &lt;span style="color:#c678dd">do&lt;/span> perl -pe s/minor/devminor/g &lt;span style="color:#e06c75">$file&lt;/span> &amp;gt; &lt;span style="color:#e06c75">$file&lt;/span>.tmp; mv &lt;span style="color:#e06c75">$file&lt;/span>.tmp &lt;span style="color:#e06c75">$file&lt;/span>; &lt;span style="color:#c678dd">done&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>C++_template</title><link>https://VastCircle.github.io/2025/c-_template/</link><pubDate>Wed, 19 Mar 2025 17:10:31 +0800</pubDate><guid>https://VastCircle.github.io/2025/c-_template/</guid><description>&lt;h2 id="函数模板">函数模板&lt;/h2>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-c++" data-lang="c++">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">typename&lt;/span> &lt;span style="color:#e06c75">type&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#e06c75">ret&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#e06c75">type&lt;/span> &lt;span style="color:#e06c75">func&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#e06c75">name&lt;/span>(&lt;span style="color:#e06c75">parameter&lt;/span> &lt;span style="color:#e06c75">list&lt;/span>){}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">typename&lt;/span> &lt;span style="color:#e06c75">T&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">inline&lt;/span> &lt;span style="color:#e06c75">T&lt;/span> &lt;span style="color:#c678dd">const&lt;/span>&lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">Max&lt;/span> (&lt;span style="color:#e06c75">T&lt;/span> &lt;span style="color:#c678dd">const&lt;/span>&lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">a&lt;/span>, &lt;span style="color:#e06c75">T&lt;/span> &lt;span style="color:#c678dd">const&lt;/span>&lt;span style="color:#56b6c2">&amp;amp;&lt;/span> &lt;span style="color:#e06c75">b&lt;/span>) 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>{ 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">return&lt;/span> &lt;span style="color:#e06c75">a&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span> &lt;span style="color:#e06c75">b&lt;/span> &lt;span style="color:#56b6c2">?&lt;/span> &lt;span style="color:#e06c75">b&lt;/span>:&lt;span style="color:#e06c75">a&lt;/span>; 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">type&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">class&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#e06c75">name&lt;/span> { }
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">T&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">Stack&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Stack&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">~&lt;/span>&lt;span style="color:#e06c75">Stack&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">void&lt;/span> &lt;span style="color:#61afef;font-weight:bold">push&lt;/span>(&lt;span style="color:#e06c75">T&lt;/span> &lt;span style="color:#e06c75">t&lt;/span>);
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">T&lt;/span> &lt;span style="color:#61afef;font-weight:bold">pop&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">bool&lt;/span> &lt;span style="color:#61afef;font-weight:bold">isEmpty&lt;/span>();
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">private&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">T&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>&lt;span style="color:#e06c75">m_pT&lt;/span>; 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">m_maxSize&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e5c07b">int&lt;/span> &lt;span style="color:#e06c75">m_size&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>};
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">T&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#e06c75">Stack&lt;/span>&lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#e06c75">T&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;::&lt;/span>&lt;span style="color:#e06c75">Stack&lt;/span>(){
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">m_maxSize&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">100&lt;/span>; 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">m_size&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#d19a66">0&lt;/span>;
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">m_pT&lt;/span> &lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#c678dd">new&lt;/span> &lt;span style="color:#e06c75">T&lt;/span>[&lt;span style="color:#e06c75">m_maxSize&lt;/span>];
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>}
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>分享会</title><link>https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/</link><pubDate>Sun, 16 Mar 2025 15:06:36 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 170; 
+			flex-basis: 410px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150656469.png" data-size="2242x1312">
+		&lt;img src="https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150656469.png"
+			width="2242"
+			height="1312"
+			srcset="https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150656469_hu17525153068124373435.png 480w, https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150656469_hu9032128450483383564.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 165; 
+			flex-basis: 396px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150912572.png" data-size="2204x1335">
+		&lt;img src="https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150912572.png"
+			width="2204"
+			height="1335"
+			srcset="https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150912572_hu1556888256665566364.png 480w, https://VastCircle.github.io/2025/%E5%88%86%E4%BA%AB%E4%BC%9A/image-20250316150912572_hu7506789102682151952.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>C++虚函数</title><link>https://VastCircle.github.io/2025/c-%E8%99%9A%E5%87%BD%E6%95%B0/</link><pubDate>Thu, 13 Mar 2025 17:16:58 +0800</pubDate><guid>https://VastCircle.github.io/2025/c-%E8%99%9A%E5%87%BD%E6%95%B0/</guid><description>&lt;p>C++多态(polymorphism)是通过虚函数来实现的，虚函数允许子类重新定义成员函数，而子类重新定义父类的做法称为覆盖(override)，或者称为重写。&lt;/p></description></item><item><title>Understand安装及使用</title><link>https://VastCircle.github.io/2025/understand%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/</link><pubDate>Wed, 12 Mar 2025 15:49:05 +0800</pubDate><guid>https://VastCircle.github.io/2025/understand%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid><description>&lt;h2 id="安装">安装&lt;/h2>
+&lt;p>借助了链接1的方法和链接2的文件&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.macxin.com/archives/10419.html" target="_blank" rel="noopener"
+ >https://www.macxin.com/archives/10419.html&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://bbs.kanxue.com/thread-285118.htm" target="_blank" rel="noopener"
+ >https://bbs.kanxue.com/thread-285118.htm&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://krakenfiles.com/view/XPjC9amGSm/file.html" target="_blank" rel="noopener"
+ >https://krakenfiles.com/view/XPjC9amGSm/file.html&lt;/a>&lt;/p>
+&lt;p>具体来说就是设置host + 解压 + 破解&lt;/p></description></item><item><title>Gem5_minor_learning</title><link>https://VastCircle.github.io/2025/gem5_minor_learning/</link><pubDate>Tue, 11 Mar 2025 21:20:03 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5_minor_learning/</guid><description>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>MinorCPU
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- Pipeline - container &lt;span style="color:#c678dd">for&lt;/span> the pipeline, owns the cyclic &lt;span style="color:#98c379">&amp;#39;tick&amp;#39;&lt;/span> event mechanism and the idling &lt;span style="color:#56b6c2">(&lt;/span>cycle skipping&lt;span style="color:#56b6c2">)&lt;/span> mechanism.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Fetch1 - instruction fetch unit responsible &lt;span style="color:#c678dd">for&lt;/span> fetching cache lines &lt;span style="color:#56b6c2">(&lt;/span>or parts of lines from the I-cache interface&lt;span style="color:#56b6c2">)&lt;/span>.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- --- Fetch1::IcachePort - interface to the I-cache from Fetch1.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Fetch2 - line to instruction decomposition.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Decode - instruction to micro-op decomposition.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Execute - instruction execution and data memory interface.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- --- LSQ - load store queue &lt;span style="color:#c678dd">for&lt;/span> memory ref. instructions.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- --- LSQ::DcachePort - interface to the D-ache from Execute.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>Vscode_task_json_and_launch_json</title><link>https://VastCircle.github.io/2025/vscode_task_json_and_launch_json/</link><pubDate>Mon, 10 Mar 2025 22:18:16 +0800</pubDate><guid>https://VastCircle.github.io/2025/vscode_task_json_and_launch_json/</guid><description>&lt;blockquote>
+&lt;p>launch.json文件是VSCode启动程序的配置文件，着重关注以下几个参数：&lt;/p>
+&lt;p>program：代表要运行的二进制文件（也就是你的C代码编译出来的程序）所在路径
+miDebuggerPath：代表调试器（GDB）所在路径
+preLaunchTask：在运行program前要做的前置任务，比如编译，task.json就是用于定义前置任务
+tasks.json是前置任务的配置文件，有几个重要参数：&lt;/p></description></item><item><title>Gem5_o3_learning</title><link>https://VastCircle.github.io/2025/gem5_o3_learning/</link><pubDate>Mon, 10 Mar 2025 21:38:17 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5_o3_learning/</guid><description>&lt;p>阅读gem5 o3 cpu 的相关代码&lt;/p>
+&lt;h2 id="gem5-的启动流程">gem5 的启动流程&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 117; 
+			flex-basis: 280px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240.png" data-size="1214x1037">
+		&lt;img src="https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240.png"
+			width="1214"
+			height="1037"
+			srcset="https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240_hu18044602024549881621.png 480w, https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240_hu15724206339638623331.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>A_scalable_multi_path_microarchitecture_for_efficient_GPU_Control_Flow</title><link>https://VastCircle.github.io/2025/a_scalable_multi_path_microarchitecture_for_efficient_gpu_control_flow/</link><pubDate>Sun, 09 Mar 2025 20:39:08 +0800</pubDate><guid>https://VastCircle.github.io/2025/a_scalable_multi_path_microarchitecture_for_efficient_gpu_control_flow/</guid><description>&lt;h2 id="mp_ipdom--来自知乎">MP_IPDOM （来自知乎）&lt;/h2>
+&lt;p>本文的MP_IPDOM机制在先前DWS和DPS研究的基础上，通过将SIMT Stack解耦成Warp Split Table和Warp Reconvergence Table，用前者用于tracking分化的可以并行执行的控制流，用后者用于tracking并行执行的控制流何时重新汇聚。该机制弥补了DWS和DPS不能对嵌套分化的路径并行执行的缺点：对嵌套分支路径执行并行的支持意味着更多数量的warp splits可以同时执行，根据论文实验数据显示，如果将该数量从2增大至4或者更大，可以同时运行的标量线程的数量还会有一定程度的增加。（注：无论怎样增加Fraction of running scalar threads也没有达到100%是因为T分支路径执行时间和NT分支路径耗费的执行时间不相等所致，总有一个warp split的线程需要在IPDOM处stall以实现分化线程的重汇聚。）&lt;/p></description></item><item><title>MEEK代码阅读</title><link>https://VastCircle.github.io/2025/meek%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/</link><pubDate>Sat, 08 Mar 2025 21:51:42 +0800</pubDate><guid>https://VastCircle.github.io/2025/meek%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB/</guid><description>&lt;p>一个大核，两个小核&lt;/p>
+&lt;h2 id="core">core&lt;/h2>
+&lt;p>jum_unit 的返回的一些信号会接入到rob&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-scala" data-lang="scala">&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">val&lt;/span> &lt;span style="color:#e06c75">gh_effective_jalr_target_reg&lt;/span> &lt;span style="color:#c678dd">=&lt;/span> &lt;span style="color:#e5c07b">RegInit&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#d19a66">0.&lt;/span>&lt;span style="color:#e06c75">U&lt;/span>&lt;span style="color:#56b6c2">(&lt;/span>&lt;span style="color:#e06c75">xLen&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">W&lt;/span>&lt;span style="color:#56b6c2">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">gh_effective_jalr_target_reg&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">jmp_unit&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">brinfo&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">jalr_target&lt;/span> &lt;span style="color:#7f848e">// 跳转目标
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">rob&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">gh_effective_rob_idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">jmp_unit&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">iresp&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">uop&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">rob_idx&lt;/span> &lt;span style="color:#7f848e">// rob 
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">rob&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">gh_effective_valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">jmp_unit&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">iresp&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#7f848e">// 是否有效
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">rob&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">gh_effective_jalr_target&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">gh_effective_jalr_target_reg&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>论文分享——3.2</title><link>https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/</link><pubDate>Sun, 02 Mar 2025 15:06:54 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/</guid><description>&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 212; 
+			flex-basis: 508px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617.png" data-size="2356x1111">
+		&lt;img src="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617.png"
+			width="2356"
+			height="1111"
+			srcset="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617_hu16800427905387639098.png 480w, https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617_hu16455503131100045588.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 181; 
+			flex-basis: 435px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091.png" data-size="2332x1284">
+		&lt;img src="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091.png"
+			width="2332"
+			height="1284"
+			srcset="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091_hu7394960301871068545.png 480w, https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091_hu14115954022698455156.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>Boom Lsu</title><link>https://VastCircle.github.io/2025/boom-lsu/</link><pubDate>Mon, 17 Feb 2025 22:54:00 +0800</pubDate><guid>https://VastCircle.github.io/2025/boom-lsu/</guid><description>&lt;h2 id="lsu">lsu&lt;/h2>
 &lt;p>&lt;figure 
 	
 		class="gallery-image" 

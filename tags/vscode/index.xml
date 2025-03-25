@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Vscode on VastCircle's blog</title><link>https://VastCircle.github.io/tags/vscode/</link><description>Recent content in Vscode on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 10 Mar 2025 22:18:16 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/tags/vscode/index.xml" rel="self" type="application/rss+xml"/><item><title>Vscode_task_json_and_launch_json</title><link>https://VastCircle.github.io/2025/vscode_task_json_and_launch_json/</link><pubDate>Mon, 10 Mar 2025 22:18:16 +0800</pubDate><guid>https://VastCircle.github.io/2025/vscode_task_json_and_launch_json/</guid><description>&lt;blockquote>
+&lt;p>launch.json文件是VSCode启动程序的配置文件，着重关注以下几个参数：&lt;/p>
+&lt;p>program：代表要运行的二进制文件（也就是你的C代码编译出来的程序）所在路径
+miDebuggerPath：代表调试器（GDB）所在路径
+preLaunchTask：在运行program前要做的前置任务，比如编译，task.json就是用于定义前置任务
+tasks.json是前置任务的配置文件，有几个重要参数：&lt;/p></description></item></channel></rss>

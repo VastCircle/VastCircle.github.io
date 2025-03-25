@@ -1,4 +1,17 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>环境配置 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link><description>Recent content in 环境配置 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Tue, 24 Dec 2024 21:35:28 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.xml" rel="self" type="application/rss+xml"/><item><title>chipyard and Firesim</title><link>https://VastCircle.github.io/2024/firesim/</link><pubDate>Tue, 24 Dec 2024 21:35:28 +0800</pubDate><guid>https://VastCircle.github.io/2024/firesim/</guid><description>&lt;h2 id="问题">问题&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>环境配置 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link><description>Recent content in 环境配置 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 12 Mar 2025 15:49:05 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.xml" rel="self" type="application/rss+xml"/><item><title>Understand安装及使用</title><link>https://VastCircle.github.io/2025/understand%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/</link><pubDate>Wed, 12 Mar 2025 15:49:05 +0800</pubDate><guid>https://VastCircle.github.io/2025/understand%E5%AE%89%E8%A3%85%E5%8F%8A%E4%BD%BF%E7%94%A8/</guid><description>&lt;h2 id="安装">安装&lt;/h2>
+&lt;p>借助了链接1的方法和链接2的文件&lt;/p>
+&lt;p>&lt;a class="link" href="https://www.macxin.com/archives/10419.html" target="_blank" rel="noopener"
+ >https://www.macxin.com/archives/10419.html&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://bbs.kanxue.com/thread-285118.htm" target="_blank" rel="noopener"
+ >https://bbs.kanxue.com/thread-285118.htm&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://krakenfiles.com/view/XPjC9amGSm/file.html" target="_blank" rel="noopener"
+ >https://krakenfiles.com/view/XPjC9amGSm/file.html&lt;/a>&lt;/p>
+&lt;p>具体来说就是设置host + 解压 + 破解&lt;/p></description></item><item><title>Vscode_task_json_and_launch_json</title><link>https://VastCircle.github.io/2025/vscode_task_json_and_launch_json/</link><pubDate>Mon, 10 Mar 2025 22:18:16 +0800</pubDate><guid>https://VastCircle.github.io/2025/vscode_task_json_and_launch_json/</guid><description>&lt;blockquote>
+&lt;p>launch.json文件是VSCode启动程序的配置文件，着重关注以下几个参数：&lt;/p>
+&lt;p>program：代表要运行的二进制文件（也就是你的C代码编译出来的程序）所在路径
+miDebuggerPath：代表调试器（GDB）所在路径
+preLaunchTask：在运行program前要做的前置任务，比如编译，task.json就是用于定义前置任务
+tasks.json是前置任务的配置文件，有几个重要参数：&lt;/p></description></item><item><title>chipyard and Firesim</title><link>https://VastCircle.github.io/2024/firesim/</link><pubDate>Tue, 24 Dec 2024 21:35:28 +0800</pubDate><guid>https://VastCircle.github.io/2024/firesim/</guid><description>&lt;h2 id="问题">问题&lt;/h2>
 &lt;h3 id="1运行firesim-runworkload-时报错">1.运行firesim runworkload 时报错&lt;/h3>
 &lt;p>&lt;figure 
 	

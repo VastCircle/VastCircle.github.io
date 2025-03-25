@@ -1,4 +1,39 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gem5 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/gem5/</link><description>Recent content in Gem5 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Wed, 11 Dec 2024 20:52:34 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/gem5/index.xml" rel="self" type="application/rss+xml"/><item><title>Gem5_修改扩展</title><link>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</link><pubDate>Wed, 11 Dec 2024 20:52:34 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</guid><description>&lt;h2 id="create-a-simple-simobject">create a simple simobject&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Gem5 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/gem5/</link><description>Recent content in Gem5 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 20 Mar 2025 10:22:53 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/gem5/index.xml" rel="self" type="application/rss+xml"/><item><title>Gem5创建一个新的cpu_model</title><link>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</link><pubDate>Thu, 20 Mar 2025 10:22:53 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</guid><description>&lt;ol>
+&lt;li>复制相应的基础文件到新的目录&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>cp -r minor derminor
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/div>&lt;ol start="2">
+&lt;li>替换所有的minor 为 dvrminor&lt;/li>
+&lt;/ol>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">for&lt;/span> file in *; &lt;span style="color:#c678dd">do&lt;/span> perl -pe s/minor/devminor/g &lt;span style="color:#e06c75">$file&lt;/span> &amp;gt; &lt;span style="color:#e06c75">$file&lt;/span>.tmp; mv &lt;span style="color:#e06c75">$file&lt;/span>.tmp &lt;span style="color:#e06c75">$file&lt;/span>; &lt;span style="color:#c678dd">done&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>Gem5_minor_learning</title><link>https://VastCircle.github.io/2025/gem5_minor_learning/</link><pubDate>Tue, 11 Mar 2025 21:20:03 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5_minor_learning/</guid><description>&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-sh" data-lang="sh">&lt;span style="display:flex;">&lt;span>MinorCPU
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- Pipeline - container &lt;span style="color:#c678dd">for&lt;/span> the pipeline, owns the cyclic &lt;span style="color:#98c379">&amp;#39;tick&amp;#39;&lt;/span> event mechanism and the idling &lt;span style="color:#56b6c2">(&lt;/span>cycle skipping&lt;span style="color:#56b6c2">)&lt;/span> mechanism.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Fetch1 - instruction fetch unit responsible &lt;span style="color:#c678dd">for&lt;/span> fetching cache lines &lt;span style="color:#56b6c2">(&lt;/span>or parts of lines from the I-cache interface&lt;span style="color:#56b6c2">)&lt;/span>.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- --- Fetch1::IcachePort - interface to the I-cache from Fetch1.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Fetch2 - line to instruction decomposition.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Decode - instruction to micro-op decomposition.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- Execute - instruction execution and data memory interface.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- --- LSQ - load store queue &lt;span style="color:#c678dd">for&lt;/span> memory ref. instructions.
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>--- --- --- LSQ::DcachePort - interface to the D-ache from Execute.
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>Gem5_o3_learning</title><link>https://VastCircle.github.io/2025/gem5_o3_learning/</link><pubDate>Mon, 10 Mar 2025 21:38:17 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5_o3_learning/</guid><description>&lt;p>阅读gem5 o3 cpu 的相关代码&lt;/p>
+&lt;h2 id="gem5-的启动流程">gem5 的启动流程&lt;/h2>
+&lt;p>&lt;figure 
+	
+		class="gallery-image" 
+		style="
+			flex-grow: 117; 
+			flex-basis: 280px"
+	>
+	&lt;a href="https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240.png" data-size="1214x1037">
+		&lt;img src="https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240.png"
+			width="1214"
+			height="1037"
+			srcset="https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240_hu18044602024549881621.png 480w, https://VastCircle.github.io/2025/gem5_o3_learning/image-20250311135207240_hu15724206339638623331.png 1024w"
+			loading="lazy"
+			>
+	&lt;/a>
+	
+&lt;/figure>&lt;/p></description></item><item><title>Gem5_修改扩展</title><link>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</link><pubDate>Wed, 11 Dec 2024 20:52:34 +0800</pubDate><guid>https://VastCircle.github.io/2024/gem5_%E4%BF%AE%E6%94%B9%E6%89%A9%E5%B1%95/</guid><description>&lt;h2 id="create-a-simple-simobject">create a simple simobject&lt;/h2>
 &lt;h3 id="create-a-python-class">create a python class&lt;/h3>
 &lt;p>每个 SimObject 都有一个与之关联的 Python 类。此 Python 类描述了 SimObject 的参数，这些参数可以通过 Python 配置文件进行控制.&lt;/p>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-python" data-lang="python">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">from&lt;/span> &lt;span style="color:#e06c75">m5.params&lt;/span> &lt;span style="color:#c678dd">import&lt;/span> &lt;span style="color:#56b6c2">*&lt;/span>
