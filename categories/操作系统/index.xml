@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>操作系统 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link><description>Recent content in 操作系统 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 14 Apr 2025 14:00:28 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/index.xml" rel="self" type="application/rss+xml"/><item><title>Mit操作系统</title><link>https://VastCircle.github.io/2025/mit%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link><pubDate>Mon, 14 Apr 2025 14:00:28 +0800</pubDate><guid>https://VastCircle.github.io/2025/mit%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</guid><description>&lt;p>关于 &lt;strong>OS 的目标&lt;/strong>：&lt;/p>
+&lt;ol>
+&lt;li>管理底层硬件&lt;/li>
+&lt;li>应用程序的并行&lt;/li>
+&lt;li>应用程序的隔离&lt;/li>
+&lt;li>应用程序的数据共享&lt;/li>
+&lt;li>多用户之间的访问控制（Access Control System）/安全性（Security）/权限系统Permission System&lt;/li>
+&lt;li>帮助应用程序获得高性能（Performance）。&lt;/li>
+&lt;li>能够支持大量不同的用户场景：文本编辑器，正在运行游戏，或许你的操作系统需要支持数据库服务器和云计算&lt;/li>
+&lt;/ol>
+&lt;h3 id="os-的结构">OS 的结构&lt;/h3>
+&lt;p>在这个架构的最上层，运行各种各样的应用程序，这里程序都运行在同一个空间中，这个空间通常会被称为用户空间（Userspace）&lt;/p></description></item></channel></rss>

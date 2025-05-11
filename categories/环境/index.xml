@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>环境 on VastCircle's blog</title><link>https://VastCircle.github.io/categories/%E7%8E%AF%E5%A2%83/</link><description>Recent content in 环境 on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Fri, 11 Apr 2025 00:47:15 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/%E7%8E%AF%E5%A2%83/index.xml" rel="self" type="application/rss+xml"/><item><title>Vscode_clang_todo_tree</title><link>https://VastCircle.github.io/2025/vscode_clang_todo_tree/</link><pubDate>Fri, 11 Apr 2025 00:47:15 +0800</pubDate><guid>https://VastCircle.github.io/2025/vscode_clang_todo_tree/</guid><description>&lt;h2 id="todo-tree">Todo tree&lt;/h2>
+&lt;p>配置参见以下博客&lt;/p>
+&lt;pre tabindex="0">&lt;code>feat 新增需求
+todo 待办事项
+hack 不确定标记
+ bug 有bug
+tag 打标签
+note 笔记
+xxx 随便写的
+info 信息
+&lt;/code>&lt;/pre>&lt;p>&lt;a class="link" href="https://blog.csdn.net/weixin_39100915/article/details/144085118?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522391a85bcb002094bfea04eefeaab0bbe%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;amp;request_id=391a85bcb002094bfea04eefeaab0bbe&amp;amp;biz_id=0&amp;amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-144085118-null-null.142" target="_blank" rel="noopener"
+ >todo tree 配置&lt;/a>&lt;/p></description></item></channel></rss>

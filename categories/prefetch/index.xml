@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Prefetch on VastCircle's blog</title><link>https://VastCircle.github.io/categories/prefetch/</link><description>Recent content in Prefetch on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 17 Apr 2025 13:42:24 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/categories/prefetch/index.xml" rel="self" type="application/rss+xml"/><item><title>硬件预取入门</title><link>https://VastCircle.github.io/2025/%E7%A1%AC%E4%BB%B6%E9%A2%84%E5%8F%96%E5%85%A5%E9%97%A8/</link><pubDate>Thu, 17 Apr 2025 13:42:24 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E7%A1%AC%E4%BB%B6%E9%A2%84%E5%8F%96%E5%85%A5%E9%97%A8/</guid><description>&lt;p>经典的预取策略需要在预取的激进型和准确性之间trade-off，评估包括两个指标：&lt;/p>
+&lt;ul>
+&lt;li>Coverage (覆盖率)
+&lt;ul>
+&lt;li>衡量预取成功占处理器请求的比例&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Accuracy （准确率）
+&lt;ul>
+&lt;li>衡量预取成功占所有预取请求的比例&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>放置预取的值&lt;/p></description></item></channel></rss>

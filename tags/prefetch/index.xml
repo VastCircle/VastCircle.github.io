@@ -1,4 +1,67 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Prefetch on VastCircle's blog</title><link>https://VastCircle.github.io/tags/prefetch/</link><description>Recent content in Prefetch on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 06 Feb 2025 20:42:37 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/tags/prefetch/index.xml" rel="self" type="application/rss+xml"/><item><title>Spatial_Memory_Streaming</title><link>https://VastCircle.github.io/2025/spatial_memory_streaming/</link><pubDate>Thu, 06 Feb 2025 20:42:37 +0800</pubDate><guid>https://VastCircle.github.io/2025/spatial_memory_streaming/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Prefetch on VastCircle's blog</title><link>https://VastCircle.github.io/tags/prefetch/</link><description>Recent content in Prefetch on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Mon, 14 Apr 2025 11:27:49 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/tags/prefetch/index.xml" rel="self" type="application/rss+xml"/><item><title>To_Cross_or_not_to_cross_pages_for_prefetch</title><link>https://VastCircle.github.io/2025/to_cross_or_not_to_cross_pages_for_prefetch/</link><pubDate>Mon, 14 Apr 2025 11:27:49 +0800</pubDate><guid>https://VastCircle.github.io/2025/to_cross_or_not_to_cross_pages_for_prefetch/</guid><description>&lt;h2 id="来自deepseek">来自deepseek&lt;/h2>
+&lt;h4 id="1-研究背景与问题">&lt;strong>1. 研究背景与问题&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>背景&lt;/strong>：现代处理器通过硬件预取（Prefetching）缓解内存墙问题。L1数据缓存（L1D）通常使用虚拟地址（VIPT缓存），允许预取器跨页边界操作。然而，学术界传统上专注于页面内的预取优化，而工业界虽支持跨页预取，但策略未公开。&lt;/li>
+&lt;li>&lt;strong>问题&lt;/strong>：跨页预取存在高风险高回报的特性：
+&lt;ul>
+&lt;li>&lt;strong>收益&lt;/strong>：准确预取可提升TLB和缓存命中率，减少页表遍历（Page Walk）开销。&lt;/li>
+&lt;li>&lt;strong>风险&lt;/strong>：错误预取会导致缓存/TLB污染、额外内存访问（最多5次无用访问），并增加能耗。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-核心发现">&lt;strong>2. 核心发现&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>静态策略的局限性&lt;/strong>：通过实验验证，静态策略（总是允许或禁止跨页预取）无法适应不同工作负载和执行阶段的需求。&lt;/li>
+&lt;li>&lt;strong>现有预取器的不足&lt;/strong>：Berti、IPCP、BOP等先进L1D预取器在跨页预取时准确率低（平均约50%无用预取），导致性能波动。&lt;/li>
+&lt;/ul>
+&lt;h4 id="3-解决方案moka框架与dripper">&lt;strong>3. 解决方案：MOKA框架与DRIPPER&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>MOKA框架设计&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>感知机预测器&lt;/strong>：基于程序特征（如PC、虚拟地址、Delta）预测跨页预取的有用性。&lt;/li>
+&lt;li>&lt;strong>系统状态感知预测器&lt;/strong>：结合TLB压力、缓存压力等动态调整决策。&lt;/li>
+&lt;li>&lt;strong>自适应阈值调整&lt;/strong>：通过运行时统计信息（如IPC、LLC压力）动态优化激活阈值。&lt;/li>
+&lt;li>&lt;strong>训练机制&lt;/strong>：利用虚拟更新缓冲区（vUB）和物理更新缓冲区（pUB）捕捉误判，更新权重。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>DRIPPER实现&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>特征选择&lt;/strong>：结合程序特征（如Delta、PC@Delta）和系统特征（sTLB MPKI、sTLB Miss Rate）。&lt;/li>
+&lt;li>&lt;strong>存储开销&lt;/strong>：仅1.44KB/核心，适用于实际硬件部署。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="4-实验验证">&lt;strong>4. 实验验证&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>实验设置&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>模拟器&lt;/strong>：ChampSim，支持多核、多级缓存和页表遍历建模。&lt;/li>
+&lt;li>&lt;strong>工作负载&lt;/strong>：396个内存密集型负载（含218个开发集、178个测试集），涵盖SPEC、GAP、PARSEC等。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>关键结果&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>单核性能&lt;/strong>：DRIPPER在Berti上相比静态策略（Permit PGC/Discard PGC）提升1.7%~2.5%（开发集）和1.2%~2.1%（测试集）。&lt;/li>
+&lt;li>&lt;strong>多核性能&lt;/strong>：在300个随机8核负载混合下，DRIPPER提升2.0%~3.3%。&lt;/li>
+&lt;li>&lt;strong>大页支持&lt;/strong>：在4KB和2MB混合页环境下，DRIPPER仍保持稳定收益。&lt;/li>
+&lt;li>&lt;strong>特征有效性&lt;/strong>：程序特征（Delta）和系统特征（sTLB压力）的协同作用显著提升预测精度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="5-创新与贡献">&lt;strong>5. 创新与贡献&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>首次系统分析&lt;/strong>：揭示跨页预取的动态特性，挑战学术界对页面内预取的单一优化假设。&lt;/li>
+&lt;li>&lt;strong>动态过滤机制&lt;/strong>：提出MOKA框架，结合程序特征、系统状态和自适应阈值，实现精准的跨页预取决策。&lt;/li>
+&lt;li>&lt;strong>广泛适用性&lt;/strong>：DRIPPER适配多种预取器（Berti、BOP、IPCP），且对未见工作负载和混合页场景表现稳健。&lt;/li>
+&lt;/ul>
+&lt;h4 id="6-局限性及未来方向">&lt;strong>6. 局限性及未来方向&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>存储开销&lt;/strong>：虽然DRIPPER仅需1.44KB，但在极端资源受限场景（如嵌入式系统）可能需要进一步优化。&lt;/li>
+&lt;li>&lt;strong>泛化能力&lt;/strong>：实验覆盖了多样化负载，但未来可扩展至更多工业级应用（如AI/ML负载）。&lt;/li>
+&lt;li>&lt;strong>安全考量&lt;/strong>：跨页预取可能引入侧信道攻击（如文献[90]），需结合安全机制。&lt;/li>
+&lt;/ul>
+&lt;h4 id="7-总结">&lt;strong>7. 总结&lt;/strong>&lt;/h4>
+&lt;p>该论文通过系统性分析和动态过滤机制，解决了跨页预取的高风险问题，提出了可落地的解决方案DRIPPER。其方法在性能、存储效率和泛化能力上均表现出色，为未来缓存预取设计提供了重要参考。&lt;/p></description></item><item><title>Spatial_Memory_Streaming</title><link>https://VastCircle.github.io/2025/spatial_memory_streaming/</link><pubDate>Thu, 06 Feb 2025 20:42:37 +0800</pubDate><guid>https://VastCircle.github.io/2025/spatial_memory_streaming/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
 &lt;p>先前的研究表明，应用程序的内存访问模式存在较大的空间变化。然而，现代内存系统使用小的固定大小的缓存块，因此无法利用这些变化。增加缓存块大小不仅会极大地增加引脚和互连带宽的需求，还会增加在共享内存多处理器中发生虚假共享的可能性。本文表明，商业工作负载中的内存访问通常表现出跨越大内存区域（例如，几kB）的重复布局，并且这些访问以可以通过基于代码的关联来预测的模式重复出现。我们提出了一种称为空间内存流的实用片上硬件技术，该技术识别代码相关的空间访问模式，并在需求缺失之前将预测的块流式传输到主缓存中。通过对商业和科学应用进行周期精确的全系统多处理器仿真，我们展示了空间内存流平均可以预测58%的L1缓存缺失和65%的芯片外缓存缺失，平均性能提高37%，最佳性能提升可达到307%。&lt;/p></description></item><item><title>Secure_prefetching_for_secure_cache_systems</title><link>https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/</link><pubDate>Sat, 14 Dec 2024 13:17:45 +0800</pubDate><guid>https://VastCircle.github.io/2024/secure_prefetching_for_secure_cache_systems/</guid><description>&lt;h2 id="摘要">摘要&lt;/h2>
 &lt;p>像Spectre及其变种这样的瞬态执行攻击可能通过缓存层次结构导致信息泄漏。缓解推测执行攻击的技术分为两类：基于延迟的技术和不可见推测技术。像GhostMinion这样的基于不可见推测的技术是高性能且安全的技术，可以缓解所有类型的推测执行攻击。与缓存系统类似，硬件预取器也可能导致推测性信息泄漏。为了解决这个问题，GhostMinion提倡在缓存系统中基于严格排序的提交时预取。我们的实验表明，GhostMinion缓存系统与硬件预取器之间的互动产生了负面影响，导致不同缓存层次之间的冗余流量。这些流量会引起争用，并增加丢失延迟，从而导致性能下降。接下来，我们观察到，由GhostMinion强制执行的提交时预取导致性能损失，因为它影响了预取器的及时性。我们首次对先进的预取技术和安全缓存系统之间的互动进行了彻底分析。在此基础上，我们提出了两种微架构解决方案，确保在设计安全预取器时能够提供高性能，同时保证安全的缓存系统。第一种解决方案通过非推测性更新缓存层次结构时检测和过滤冗余流量。第二种解决方案确保预取器的及时性，以弥补在提交时触发预取请求的延迟，从而实现既安全又高效的预取器。总体而言，我们的改进是安全的，并且在硬件预取器和安全缓存系统之间提供了协同作用。我们的实验表明，在使用先进的预取器的情况下，我们的过滤器始终能提高像GhostMinion这样的安全缓存系统的性能（对于单核系统提高1.9%，对于多核系统提高19.0%，使用的是性能最好的预取器）。我们还观察到过滤器与我们提出的安全预取器之间的协同效应，进一步提高了性能，单核和多核系统分别提高了6.3%和23.0%（相比于最好的预取器）。我们的改进极为轻量，每个核心的存储开销为0.59 KB。&lt;/p></description></item><item><title>An_Event_Triggered_Programmable_Prefetcher_for_Irregular_Workloads</title><link>https://VastCircle.github.io/2024/an_event_triggered_programmable_prefetcher_for_irregular_workloads/</link><pubDate>Fri, 29 Nov 2024 23:39:07 +0800</pubDate><guid>https://VastCircle.github.io/2024/an_event_triggered_programmable_prefetcher_for_irregular_workloads/</guid><description>&lt;h1 id="针对不规则工作负载的事件触发可编程预取器">针对不规则工作负载的事件触发可编程预取器&lt;/h1>
 &lt;h2 id="abstract">abstract&lt;/h2>

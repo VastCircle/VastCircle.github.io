@@ -1,40 +1,152 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Thu, 20 Mar 2025 14:06:30 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>加速器debug_linuboot</title><link>https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/</link><pubDate>Thu, 20 Mar 2025 14:06:30 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/</guid><description>&lt;p>&lt;figure 
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on VastCircle's blog</title><link>https://VastCircle.github.io/post/</link><description>Recent content in Posts on VastCircle's blog</description><generator>Hugo</generator><language>en-us</language><lastBuildDate>Sat, 26 Apr 2025 00:52:21 +0800</lastBuildDate><atom:link href="https://VastCircle.github.io/post/index.xml" rel="self" type="application/rss+xml"/><item><title>A_b_c</title><link>https://VastCircle.github.io/2025/a_b_c/</link><pubDate>Sat, 26 Apr 2025 00:52:21 +0800</pubDate><guid>https://VastCircle.github.io/2025/a_b_c/</guid><description>&lt;h2 id="analyzing-and-exploiting-memory-hierarchy-parallelism-with-mlp-stacks">《Analyzing and Exploiting Memory Hierarchy Parallelism with MLP Stacks》&lt;/h2>
+&lt;h3 id="1-研究背景与动机">1. &lt;strong>研究背景与动机&lt;/strong>&lt;/h3>
+&lt;p>现代CPU通过内存级并行（MLP）来隐藏内存访问的高延迟，从而提高指令吞吐量。然而，传统的MLP指标（如DRAM级别的平均MLP）无法全面反映内存层次结构中的并行性瓶颈。因此，作者提出了一种新的MLP分类法和可视化工具——MLP堆栈（MLP Stack），以更深入地分析MLP的组成及其对性能的影响。&lt;/p></description></item><item><title>硬件预取入门</title><link>https://VastCircle.github.io/2025/%E7%A1%AC%E4%BB%B6%E9%A2%84%E5%8F%96%E5%85%A5%E9%97%A8/</link><pubDate>Thu, 17 Apr 2025 13:42:24 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E7%A1%AC%E4%BB%B6%E9%A2%84%E5%8F%96%E5%85%A5%E9%97%A8/</guid><description>&lt;p>经典的预取策略需要在预取的激进型和准确性之间trade-off，评估包括两个指标：&lt;/p>
+&lt;ul>
+&lt;li>Coverage (覆盖率)
+&lt;ul>
+&lt;li>衡量预取成功占处理器请求的比例&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>Accuracy （准确率）
+&lt;ul>
+&lt;li>衡量预取成功占所有预取请求的比例&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;p>放置预取的值&lt;/p></description></item><item><title>SMT</title><link>https://VastCircle.github.io/2025/smt/</link><pubDate>Wed, 16 Apr 2025 10:13:16 +0800</pubDate><guid>https://VastCircle.github.io/2025/smt/</guid><description>&lt;h3 id="1概述">1、概述&lt;/h3>
+&lt;p>​ NVIDIA GPU称为它们的并行编程模型为SIMT(Single Instruction,Multiple Threads)。与我们熟知的&lt;a class="link" href="https://so.csdn.net/so/search?q=SIMD&amp;amp;spm=1001.2101.3001.7020" target="_blank" rel="noopener"
+ >SIMD&lt;/a>（Single Instruction,Multiple Data）以及SMT(Simultaneous Multithreading)相比，SIMT带来了一些新的特性，在并行机制上总结如下：&lt;/p></description></item><item><title>Mit操作系统</title><link>https://VastCircle.github.io/2025/mit%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</link><pubDate>Mon, 14 Apr 2025 14:00:28 +0800</pubDate><guid>https://VastCircle.github.io/2025/mit%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/</guid><description>&lt;p>关于 &lt;strong>OS 的目标&lt;/strong>：&lt;/p>
+&lt;ol>
+&lt;li>管理底层硬件&lt;/li>
+&lt;li>应用程序的并行&lt;/li>
+&lt;li>应用程序的隔离&lt;/li>
+&lt;li>应用程序的数据共享&lt;/li>
+&lt;li>多用户之间的访问控制（Access Control System）/安全性（Security）/权限系统Permission System&lt;/li>
+&lt;li>帮助应用程序获得高性能（Performance）。&lt;/li>
+&lt;li>能够支持大量不同的用户场景：文本编辑器，正在运行游戏，或许你的操作系统需要支持数据库服务器和云计算&lt;/li>
+&lt;/ol>
+&lt;h3 id="os-的结构">OS 的结构&lt;/h3>
+&lt;p>在这个架构的最上层，运行各种各样的应用程序，这里程序都运行在同一个空间中，这个空间通常会被称为用户空间（Userspace）&lt;/p></description></item><item><title>To_Cross_or_not_to_cross_pages_for_prefetch</title><link>https://VastCircle.github.io/2025/to_cross_or_not_to_cross_pages_for_prefetch/</link><pubDate>Mon, 14 Apr 2025 11:27:49 +0800</pubDate><guid>https://VastCircle.github.io/2025/to_cross_or_not_to_cross_pages_for_prefetch/</guid><description>&lt;h2 id="来自deepseek">来自deepseek&lt;/h2>
+&lt;h4 id="1-研究背景与问题">&lt;strong>1. 研究背景与问题&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>背景&lt;/strong>：现代处理器通过硬件预取（Prefetching）缓解内存墙问题。L1数据缓存（L1D）通常使用虚拟地址（VIPT缓存），允许预取器跨页边界操作。然而，学术界传统上专注于页面内的预取优化，而工业界虽支持跨页预取，但策略未公开。&lt;/li>
+&lt;li>&lt;strong>问题&lt;/strong>：跨页预取存在高风险高回报的特性：
+&lt;ul>
+&lt;li>&lt;strong>收益&lt;/strong>：准确预取可提升TLB和缓存命中率，减少页表遍历（Page Walk）开销。&lt;/li>
+&lt;li>&lt;strong>风险&lt;/strong>：错误预取会导致缓存/TLB污染、额外内存访问（最多5次无用访问），并增加能耗。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="2-核心发现">&lt;strong>2. 核心发现&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>静态策略的局限性&lt;/strong>：通过实验验证，静态策略（总是允许或禁止跨页预取）无法适应不同工作负载和执行阶段的需求。&lt;/li>
+&lt;li>&lt;strong>现有预取器的不足&lt;/strong>：Berti、IPCP、BOP等先进L1D预取器在跨页预取时准确率低（平均约50%无用预取），导致性能波动。&lt;/li>
+&lt;/ul>
+&lt;h4 id="3-解决方案moka框架与dripper">&lt;strong>3. 解决方案：MOKA框架与DRIPPER&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>MOKA框架设计&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>感知机预测器&lt;/strong>：基于程序特征（如PC、虚拟地址、Delta）预测跨页预取的有用性。&lt;/li>
+&lt;li>&lt;strong>系统状态感知预测器&lt;/strong>：结合TLB压力、缓存压力等动态调整决策。&lt;/li>
+&lt;li>&lt;strong>自适应阈值调整&lt;/strong>：通过运行时统计信息（如IPC、LLC压力）动态优化激活阈值。&lt;/li>
+&lt;li>&lt;strong>训练机制&lt;/strong>：利用虚拟更新缓冲区（vUB）和物理更新缓冲区（pUB）捕捉误判，更新权重。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>DRIPPER实现&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>特征选择&lt;/strong>：结合程序特征（如Delta、PC@Delta）和系统特征（sTLB MPKI、sTLB Miss Rate）。&lt;/li>
+&lt;li>&lt;strong>存储开销&lt;/strong>：仅1.44KB/核心，适用于实际硬件部署。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="4-实验验证">&lt;strong>4. 实验验证&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>实验设置&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>模拟器&lt;/strong>：ChampSim，支持多核、多级缓存和页表遍历建模。&lt;/li>
+&lt;li>&lt;strong>工作负载&lt;/strong>：396个内存密集型负载（含218个开发集、178个测试集），涵盖SPEC、GAP、PARSEC等。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;li>&lt;strong>关键结果&lt;/strong>：
+&lt;ul>
+&lt;li>&lt;strong>单核性能&lt;/strong>：DRIPPER在Berti上相比静态策略（Permit PGC/Discard PGC）提升1.7%~2.5%（开发集）和1.2%~2.1%（测试集）。&lt;/li>
+&lt;li>&lt;strong>多核性能&lt;/strong>：在300个随机8核负载混合下，DRIPPER提升2.0%~3.3%。&lt;/li>
+&lt;li>&lt;strong>大页支持&lt;/strong>：在4KB和2MB混合页环境下，DRIPPER仍保持稳定收益。&lt;/li>
+&lt;li>&lt;strong>特征有效性&lt;/strong>：程序特征（Delta）和系统特征（sTLB压力）的协同作用显著提升预测精度。&lt;/li>
+&lt;/ul>
+&lt;/li>
+&lt;/ul>
+&lt;h4 id="5-创新与贡献">&lt;strong>5. 创新与贡献&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>首次系统分析&lt;/strong>：揭示跨页预取的动态特性，挑战学术界对页面内预取的单一优化假设。&lt;/li>
+&lt;li>&lt;strong>动态过滤机制&lt;/strong>：提出MOKA框架，结合程序特征、系统状态和自适应阈值，实现精准的跨页预取决策。&lt;/li>
+&lt;li>&lt;strong>广泛适用性&lt;/strong>：DRIPPER适配多种预取器（Berti、BOP、IPCP），且对未见工作负载和混合页场景表现稳健。&lt;/li>
+&lt;/ul>
+&lt;h4 id="6-局限性及未来方向">&lt;strong>6. 局限性及未来方向&lt;/strong>&lt;/h4>
+&lt;ul>
+&lt;li>&lt;strong>存储开销&lt;/strong>：虽然DRIPPER仅需1.44KB，但在极端资源受限场景（如嵌入式系统）可能需要进一步优化。&lt;/li>
+&lt;li>&lt;strong>泛化能力&lt;/strong>：实验覆盖了多样化负载，但未来可扩展至更多工业级应用（如AI/ML负载）。&lt;/li>
+&lt;li>&lt;strong>安全考量&lt;/strong>：跨页预取可能引入侧信道攻击（如文献[90]），需结合安全机制。&lt;/li>
+&lt;/ul>
+&lt;h4 id="7-总结">&lt;strong>7. 总结&lt;/strong>&lt;/h4>
+&lt;p>该论文通过系统性分析和动态过滤机制，解决了跨页预取的高风险问题，提出了可落地的解决方案DRIPPER。其方法在性能、存储效率和泛化能力上均表现出色，为未来缓存预取设计提供了重要参考。&lt;/p></description></item><item><title>Vscode_clang_todo_tree</title><link>https://VastCircle.github.io/2025/vscode_clang_todo_tree/</link><pubDate>Fri, 11 Apr 2025 00:47:15 +0800</pubDate><guid>https://VastCircle.github.io/2025/vscode_clang_todo_tree/</guid><description>&lt;h2 id="todo-tree">Todo tree&lt;/h2>
+&lt;p>配置参见以下博客&lt;/p>
+&lt;pre tabindex="0">&lt;code>feat 新增需求
+todo 待办事项
+hack 不确定标记
+ bug 有bug
+tag 打标签
+note 笔记
+xxx 随便写的
+info 信息
+&lt;/code>&lt;/pre>&lt;p>&lt;a class="link" href="https://blog.csdn.net/weixin_39100915/article/details/144085118?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522391a85bcb002094bfea04eefeaab0bbe%2522%252C%2522scm%2522%253A%252220140713.130102334..%2522%257D&amp;amp;request_id=391a85bcb002094bfea04eefeaab0bbe&amp;amp;biz_id=0&amp;amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~top_positive~default-1-144085118-null-null.142" target="_blank" rel="noopener"
+ >todo tree 配置&lt;/a>&lt;/p></description></item><item><title>A_Top Down_Method_for_performance_analysis_and_couters_architecturee</title><link>https://VastCircle.github.io/2025/a_top-down_method_for_performance_analysis_and_couters_architecturee/</link><pubDate>Mon, 07 Apr 2025 10:39:59 +0800</pubDate><guid>https://VastCircle.github.io/2025/a_top-down_method_for_performance_analysis_and_couters_architecturee/</guid><description>&lt;h2 id="introduction">introduction&lt;/h2>
+&lt;p>在本文中，我们提出了一种自上而下的分析 - 一种可行、快速的方法，可以识别乱序 CPU 中的关键瓶颈，这个想法很简单 - 以分层方式进行结构化的深入研究，引导用户前往正确的区域进行调查。将权重分配给树中的节点，以指导用户将分析工作集中在确实重要的问题上，而忽略无关紧要的问题。例如，假设给定的应用程序受到指令获取问题的严重损害;该方法在树的最上层将其分类为 Frontend Bound。用户/工具应（仅）向下钻取层次结构的 Frontend 子树。递归执行向下钻取，直到到达树叶。叶可以指向工作负载的特定停顿，也可以表示具有常见微体系结构症状的问题子集，这些问题可能会限制应用程序的性能。&lt;/p></description></item><item><title>Meek:Re Superscar Processors</title><link>https://VastCircle.github.io/2025/meekre-superscar-processors/</link><pubDate>Fri, 04 Apr 2025 17:05:54 +0800</pubDate><guid>https://VastCircle.github.io/2025/meekre-superscar-processors/</guid><description>&lt;p>异构并行错误检测作为一种颇具前景的替代方案[22][23][2]，其核心思想是：利用强归纳法将运行在乱序执行超标量高性能核心（大核）上的软件程序划分为多个离散段（通过寄存器检查点/RCP实现），并在若干组能效比更高的小型核心（小核）上重新执行这些程序段以实现验证。为确保内存访问及其他不可重复操作的可重放性，系统会在大核的提交阶段从程序流中提取相关指令（如加载/存储操作）的地址与数据，生成分区式分布式加载存储操作日志。当某程序段的日志填满或达到指令超时阈值时，将触发新的寄存器检查点，对应的小核随即开始验证起始RCP（SRCP）与终止RCP（ERCP）之间的程序段。通过验证任务的流水线重叠执行，小核集群可提供充足的计算能力以匹配大核的执行速度，从而在低开销前提下实现全范围错误检测[22]。&lt;/p></description></item><item><title>C++友元，析构函数，类型转换</title><link>https://VastCircle.github.io/2025/c-%E5%8F%8B%E5%85%83%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0/</link><pubDate>Thu, 03 Apr 2025 19:11:11 +0800</pubDate><guid>https://VastCircle.github.io/2025/c-%E5%8F%8B%E5%85%83%E6%9E%90%E6%9E%84%E5%87%BD%E6%95%B0/</guid><description>&lt;h2 id="友元类">友元类&lt;/h2>
+&lt;p>在一个类中指明其他的类（或者）函数能够直接访问该类中的private和protected成员。&lt;/p>
+&lt;p>在类的成员函数外部直接访问对象的私有成员。&lt;/p></description></item><item><title>Ubuntu22.04网易云</title><link>https://VastCircle.github.io/2025/ubuntu22.04%E7%BD%91%E6%98%93%E4%BA%91/</link><pubDate>Thu, 03 Apr 2025 13:19:28 +0800</pubDate><guid>https://VastCircle.github.io/2025/ubuntu22.04%E7%BD%91%E6%98%93%E4%BA%91/</guid><description>&lt;p>主要是要修改bash 为&lt;/p>
+&lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">#!/bin/sh
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#e06c75">HERE&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#c678dd">$(&lt;/span>dirname &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#c678dd">$(&lt;/span>readlink -f &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#98c379">${&lt;/span>&lt;span style="color:#e06c75">0&lt;/span>&lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#c678dd">)&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#c678dd">)&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">export&lt;/span> &lt;span style="color:#e06c75">LD_LIBRARY_PATH&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#98c379">${&lt;/span>&lt;span style="color:#e06c75">HERE&lt;/span>&lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>/libs
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">export&lt;/span> &lt;span style="color:#e06c75">QT_PLUGIN_PATH&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#98c379">${&lt;/span>&lt;span style="color:#e06c75">HERE&lt;/span>&lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>/plugins 
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">export&lt;/span> &lt;span style="color:#e06c75">QT_QPA_PLATFORM_PLUGIN_PATH&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#98c379">${&lt;/span>&lt;span style="color:#e06c75">HERE&lt;/span>&lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>/plugins/platforms
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">cd&lt;/span> /lib/x86_64-linux/gnu/ &lt;span style="color:#7f848e">## 插入&lt;/span>
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#e5c07b">exec&lt;/span> &lt;span style="color:#98c379">&amp;#34;&lt;/span>&lt;span style="color:#98c379">${&lt;/span>&lt;span style="color:#e06c75">HERE&lt;/span>&lt;span style="color:#98c379">}&lt;/span>&lt;span style="color:#98c379">&amp;#34;&lt;/span>/netease-cloud-music &lt;span style="color:#e06c75">$@&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>性能优化阅读笔记</title><link>https://VastCircle.github.io/2025/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</link><pubDate>Tue, 01 Apr 2025 23:17:21 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/</guid><description>&lt;h2 id="页表">页表&lt;/h2>
+&lt;p>二级页表&lt;/p>
+&lt;p>将页表分为多个级别不会改变可寻址内存的总量。但是，嵌套方法不需要将整个页表存储为连续数组，也不分配没有描述符的块。这节省了内存空间，但增加了遍历页表的开销。&lt;/p></description></item><item><title>Gem5_dvr</title><link>https://VastCircle.github.io/2025/gem5_dvr/</link><pubDate>Thu, 27 Mar 2025 10:30:32 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5_dvr/</guid><description>&lt;h2 id="自定义指令">自定义指令&lt;/h2>
+&lt;h2 id="buffer">buffer&lt;/h2>
+&lt;p>buffer 存放什么&lt;/p>
+&lt;h2 id="向量化-imgv2-d80990389691ecf995ac935c9716f2cd_1440wjpg">向量化 &lt;figure 
 	
 		class="gallery-image" 
 		style="
-			flex-grow: 426; 
-			flex-basis: 1023px"
+			flex-grow: 203; 
+			flex-basis: 488px"
 	>
-	&lt;a href="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894.png" data-size="806x189">
-		&lt;img src="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894.png"
-			width="806"
-			height="189"
-			srcset="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894_hu14336320418883444527.png 480w, https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320140942894_hu13212996480659793648.png 1024w"
+	&lt;a href="https://VastCircle.github.io/2025/gem5_dvr/v2-d80990389691ecf995ac935c9716f2cd_1440w.jpg" data-size="1146x563">
+		&lt;img src="https://VastCircle.github.io/2025/gem5_dvr/v2-d80990389691ecf995ac935c9716f2cd_1440w.jpg"
+			width="1146"
+			height="563"
+			srcset="https://VastCircle.github.io/2025/gem5_dvr/v2-d80990389691ecf995ac935c9716f2cd_1440w_hu12150596438432355473.jpg 480w, https://VastCircle.github.io/2025/gem5_dvr/v2-d80990389691ecf995ac935c9716f2cd_1440w_hu3783731943989510660.jpg 1024w"
 			loading="lazy"
-			alt="image-20250320140942894">
+			alt="img">
 	&lt;/a>
 	
-	&lt;figcaption>image-20250320140942894&lt;/figcaption>
+	&lt;figcaption>img&lt;/figcaption>
 	
-&lt;/figure>&lt;/p>
-&lt;p>函数 free_area_init&lt;/p>
-&lt;p>&lt;figure 
-	
-		class="gallery-image" 
-		style="
-			flex-grow: 87; 
-			flex-basis: 210px"
-	>
-	&lt;a href="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231.png" data-size="928x1056">
-		&lt;img src="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231.png"
-			width="928"
-			height="1056"
-			srcset="https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231_hu18122165086033145151.png 480w, https://VastCircle.github.io/2025/%E5%8A%A0%E9%80%9F%E5%99%A8debug_linuboot/image-20250320141904231_hu16096835837496059074.png 1024w"
-			loading="lazy"
-			>
-	&lt;/a>
-	
-&lt;/figure>&lt;/p></description></item><item><title>Gem5创建一个新的cpu_model</title><link>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</link><pubDate>Thu, 20 Mar 2025 10:22:53 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</guid><description>&lt;ol>
+&lt;/figure>&lt;/h2>
+&lt;p>通过字段mop 支持3种访存模式 ,通过lumop 进行进一步划分访存详情&lt;/p></description></item><item><title>服务器打开图形化</title><link>https://VastCircle.github.io/2025/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%93%E5%BC%80%E5%9B%BE%E5%BD%A2%E5%8C%96/</link><pubDate>Thu, 27 Mar 2025 01:22:16 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%89%93%E5%BC%80%E5%9B%BE%E5%BD%A2%E5%8C%96/</guid><description>&lt;p>&lt;a class="link" href="https://www.cnblogs.com/aiweixiao/p/6576186.html" target="_blank" rel="noopener"
+ >https://www.cnblogs.com/aiweixiao/p/6576186.html&lt;/a>&lt;/p>
+&lt;p>&lt;a class="link" href="https://blog.csdn.net/zhoubo200/article/details/5773000" target="_blank" rel="noopener"
+ >https://blog.csdn.net/zhoubo200/article/details/5773000&lt;/a>&lt;/p>
+&lt;p>A登陆B&lt;/p>
+&lt;p>A端的设置&lt;/p>
+&lt;p>1 xhost + 允许其他用户在当前用户运行图形&lt;/p>
+&lt;p>2 vim /etc/ssh/ssh_config&lt;/p>
+&lt;pre>&lt;code>ForwardX11 yes
+&lt;/code>&lt;/pre>
+&lt;p>3 /etc/init.d/sshd restart&lt;/p>
+&lt;p>B端设置&lt;/p></description></item><item><title>Gem5创建一个新的cpu_model</title><link>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</link><pubDate>Thu, 20 Mar 2025 10:22:53 +0800</pubDate><guid>https://VastCircle.github.io/2025/gem5%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA%E6%96%B0%E7%9A%84cpu_model/</guid><description>&lt;ol>
 &lt;li>复制相应的基础文件到新的目录&lt;/li>
 &lt;/ol>
 &lt;div class="highlight">&lt;pre tabindex="0" style="color:#abb2bf;background-color:#282c34;-moz-tab-size:4;-o-tab-size:4;tab-size:4;">&lt;code class="language-shell" data-lang="shell">&lt;span style="display:flex;">&lt;span>cp -r minor derminor
@@ -53,7 +165,8 @@
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">type&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">class&lt;/span>&lt;span style="color:#56b6c2">-&lt;/span>&lt;span style="color:#e06c75">name&lt;/span> { }
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>
-&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">T&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">Stack&lt;/span> {
+&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">// 模板类 TimeBuffer&amp;lt;数据类型&amp;gt;
+&lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span>&lt;span style="color:#c678dd">template&lt;/span> &lt;span style="color:#56b6c2">&amp;lt;&lt;/span>&lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">T&lt;/span>&lt;span style="color:#56b6c2">&amp;gt;&lt;/span> &lt;span style="color:#c678dd">class&lt;/span> &lt;span style="color:#e5c07b">Stack&lt;/span> {
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#c678dd">public&lt;/span>&lt;span style="color:#56b6c2">:&lt;/span>
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#e06c75">Stack&lt;/span>();
 &lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span> &lt;span style="color:#56b6c2">~&lt;/span>&lt;span style="color:#e06c75">Stack&lt;/span>();
@@ -152,40 +265,7 @@ tasks.json是前置任务的配置文件，有几个重要参数：&lt;/p></desc
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">rob&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">gh_effective_rob_idx&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">jmp_unit&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">iresp&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">bits&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">uop&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">rob_idx&lt;/span> &lt;span style="color:#7f848e">// rob 
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">rob&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">gh_effective_valid&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">jmp_unit&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">iresp&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">valid&lt;/span> &lt;span style="color:#7f848e">// 是否有效
 &lt;/span>&lt;/span>&lt;/span>&lt;span style="display:flex;">&lt;span>&lt;span style="color:#7f848e">&lt;/span> &lt;span style="color:#e06c75">rob&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">io&lt;/span>&lt;span style="color:#56b6c2">.&lt;/span>&lt;span style="color:#e06c75">gh_effective_jalr_target&lt;/span> &lt;span style="color:#c678dd">:&lt;/span>&lt;span style="color:#56b6c2">=&lt;/span> &lt;span style="color:#e06c75">gh_effective_jalr_target_reg&lt;/span>
-&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>论文分享——3.2</title><link>https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/</link><pubDate>Sun, 02 Mar 2025 15:06:54 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/</guid><description>&lt;p>&lt;figure 
-	
-		class="gallery-image" 
-		style="
-			flex-grow: 212; 
-			flex-basis: 508px"
-	>
-	&lt;a href="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617.png" data-size="2356x1111">
-		&lt;img src="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617.png"
-			width="2356"
-			height="1111"
-			srcset="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617_hu16800427905387639098.png 480w, https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150708617_hu16455503131100045588.png 1024w"
-			loading="lazy"
-			>
-	&lt;/a>
-	
-&lt;/figure>&lt;/p>
-&lt;p>&lt;figure 
-	
-		class="gallery-image" 
-		style="
-			flex-grow: 181; 
-			flex-basis: 435px"
-	>
-	&lt;a href="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091.png" data-size="2332x1284">
-		&lt;img src="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091.png"
-			width="2332"
-			height="1284"
-			srcset="https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091_hu7394960301871068545.png 480w, https://VastCircle.github.io/2025/%E8%AE%BA%E6%96%87%E5%88%86%E4%BA%AB3.2/image-20250302150748091_hu14115954022698455156.png 1024w"
-			loading="lazy"
-			>
-	&lt;/a>
-	
-&lt;/figure>&lt;/p></description></item><item><title>Boom Lsu</title><link>https://VastCircle.github.io/2025/boom-lsu/</link><pubDate>Mon, 17 Feb 2025 22:54:00 +0800</pubDate><guid>https://VastCircle.github.io/2025/boom-lsu/</guid><description>&lt;h2 id="lsu">lsu&lt;/h2>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pr</description></item><item><title>Boom Lsu</title><link>https://VastCircle.github.io/2025/boom-lsu/</link><pubDate>Mon, 17 Feb 2025 22:54:00 +0800</pubDate><guid>https://VastCircle.github.io/2025/boom-lsu/</guid><description>&lt;h2 id="lsu">lsu&lt;/h2>
 &lt;p>&lt;figure 
 	
 		class="gallery-image" 
@@ -274,12 +354,7 @@ tasks.json是前置任务的配置文件，有几个重要参数：&lt;/p></desc
 &lt;p>var类型:在处理过程中可以多次重写&lt;/p>
 &lt;p>val类型:在处理过程中只能分配一次&lt;/p>
 &lt;p>例如，在表搜索中，考虑存储为 ID 和值对的类似散列的结构，并搜索与&lt;a class="link" href="http://d.hatena.ne.jp/keyword/%A5%CF%A5%C3%A5%B7%A5%E5%C3%CD" target="_blank" rel="noopener"
- >散列值&lt;/a>匹配的地址值。 如果同一个ID在表中多次存在，则表中地址较大的值优先。&lt;/p></description></item><item><title>A_Primer_on_Hardware_prefetching读书笔记1</title><link>https://VastCircle.github.io/2025/a_primer_on_hardware_prefetching%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B01/</link><pubDate>Sat, 25 Jan 2025 23:47:50 +0800</pubDate><guid>https://VastCircle.github.io/2025/a_primer_on_hardware_prefetching%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B01/</guid><description>&lt;h2 id="introduction">Introduction&lt;/h2>
-&lt;h2 id="附录">附录&lt;/h2>
-&lt;h3 id="参考文献">参考文献&lt;/h3>
-&lt;h3 id="版权信息">版权信息&lt;/h3>
-&lt;p>本文原载于 &lt;a class="link" href="https://vastcircle.github.io" target="_blank" rel="noopener"
- >vastcircle.github.io&lt;/a>，遵循 CC BY-NC-SA 4.0 协议，复制请保留原文出处。&lt;/p></description></item><item><title>香山邀请昆前端设计</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%98%86%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1/</link><pubDate>Sat, 25 Jan 2025 20:04:28 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%98%86%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1/</guid><description>&lt;p>&lt;figure 
+ >散列值&lt;/a>匹配的地址值。 如果同一个ID在表中多次存在，则表中地址较大的值优先。&lt;/p></description></item><item><title>香山邀请昆前端设计</title><link>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%98%86%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1/</link><pubDate>Sat, 25 Jan 2025 20:04:28 +0800</pubDate><guid>https://VastCircle.github.io/2025/%E9%A6%99%E5%B1%B1%E9%82%80%E8%AF%B7%E6%98%86%E5%89%8D%E7%AB%AF%E8%AE%BE%E8%AE%A1/</guid><description>&lt;p>&lt;figure 
 	
 		class="gallery-image" 
 		style="
